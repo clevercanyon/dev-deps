@@ -1,8 +1,6 @@
 ##
 # NPM ignore file.
 #
-# @since 1.0.0
-#
 # @note NPM is aware of this config file's location.
 # @note Run `npm pack --dry-run` to test configuration.
 #
@@ -224,27 +222,5 @@ tailwind.config.*
 ##
 # Customizations
 # <custom:start>
-
-!dev/
-!docs/
-!tests/
-
-!.*
-!__*/
-
-!*.ts
-!*.tsx
-!*.jsx
-!*.ejs
-!*.scss
-
-!*.test.*
-!*.spec.*
-!*.readme.*
-
-!tsconfig.*
-!wrangler.*
-!vite.config.*
-!tailwind.config.*
 
 # </custom:end>
