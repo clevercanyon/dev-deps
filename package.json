@@ -58,5 +58,8 @@
 	},
 	"publishConfig": {
 		"registry": "https://npm.pkg.github.com"
+	},
+	"devDependencies": {
+		"spawn-please": "^2.0.1"
 	}
 }
