@@ -17,6 +17,7 @@
 	},
 	"dependencies": {
 		"@clevercanyon/js-object-mc": "^1.8.4",
+		"@prettier/plugin-php": "^0.19.2",
 		"@prettier/plugin-xml": "^2.2.0",
 		"@types/lodash": "^4.14.191",
 		"@types/node": "^18.11.9",
