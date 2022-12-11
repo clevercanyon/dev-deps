@@ -1,6 +1,6 @@
 {
 	"private": false,
-	"version": "1.0.25",
+	"version": "1.0.26",
 	"license": "GPL-3.0-or-later",
 	"name": "@clevercanyon/skeleton-dev-deps",
 	"description": "Dev dependencies for `@clevercanyon/skeleton`.",
