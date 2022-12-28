@@ -19,6 +19,7 @@
     "@prettier/plugin-php": "^0.19.2",
     "@prettier/plugin-ruby": "^3.2.2",
     "@prettier/plugin-xml": "^2.2.0",
+    "@tailwindcss/typography": "^0.5.8",
     "@types/lodash": "^4.14.191",
     "@types/micromatch": "^4.0.2",
     "@types/node": "^18.11.9",
