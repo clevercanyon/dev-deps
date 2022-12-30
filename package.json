@@ -64,8 +64,5 @@
     "vite-plugin-ejs": "^1.6.4",
     "vite-plugin-minify": "^1.5.2",
     "yargs": "^17.6.2"
-  },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
   }
 }
