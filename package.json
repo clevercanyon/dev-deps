@@ -72,8 +72,8 @@
     "yargs": "^17.6.2"
   },
   "scripts": {
-    "update:project": "npm update --ignore-scripts --save",
-    "update:project:repos": "npm run update:project && git rev-parse --is-inside-work-tree &>/dev/null && date +'%s' > ./.gitchange && git add --all && git commit --message 'Robotic update.' && git push --set-upstream origin \"$(git symbolic-ref --short --quiet HEAD)\" && git push origin --tags",
-    "update:project:repos:pkgs": "npm run update:project:repos && git rev-parse --is-inside-work-tree &>/dev/null && [ \"$(git symbolic-ref --short --quiet HEAD)\" = main ] && npm version patch --ignore-scripts && date +'%s' > ./.gitchange && git add --all && git commit --message 'Robotic update.' && git push --set-upstream origin && git push origin --tags && npm publish --ignore-scripts"
+    "update:project": "npm update --ignore-scripts --save;",
+    "update:project:repos": "npm run update:project; if git rev-parse --is-inside-work-tree &>/dev/null; then if [ -n \"$(git status --short 2>/dev/null)\" ]; then git add --all && git commit --message 'Robotic update.'; fi; git push --set-upstream origin \"$(git symbolic-ref --short --quiet HEAD)\"; git push origin --tags; fi;",
+    "update:project:repos:pkgs": "npm run update:project:repos; if git rev-parse --is-inside-work-tree &>/dev/null && [ \"$(git symbolic-ref --short --quiet HEAD)\" = main ]; then npm version patch --ignore-scripts; npm publish --ignore-scripts; git push --set-upstream origin; git push origin --tags; fi;"
   }
 }
