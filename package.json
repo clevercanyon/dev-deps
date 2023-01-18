@@ -21,6 +21,7 @@
   "dependencies": {
     "@clevercanyon/split-cmd.fork": "^1.0.6",
     "@octokit/core": "^4.1.0",
+    "@octokit/plugin-paginate-rest": "^5.0.1",
     "@prettier/plugin-php": "^0.19.2",
     "@prettier/plugin-ruby": "^3.2.2",
     "@prettier/plugin-xml": "^2.2.0",
