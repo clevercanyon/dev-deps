@@ -3,7 +3,7 @@
   "publishConfig": {
     "access": "restricted"
   },
-  "version": "1.0.67",
+  "version": "1.0.68",
   "license": "GPL-3.0-or-later",
   "name": "@clevercanyon/skeleton-dev-deps",
   "description": "Dev dependencies for `@clevercanyon/skeleton`.",
