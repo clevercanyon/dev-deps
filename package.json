@@ -65,6 +65,7 @@
     "prettier-plugin-sh": "^0.12.8",
     "prettier-plugin-sql": "^0.12.1",
     "sass": "^1.57.1",
+    "semver": "^7.3.8",
     "shellcheck": "^1.1.0",
     "spawn-please": "^2.0.1",
     "stylelint": "^14.16.1",
