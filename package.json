@@ -53,6 +53,7 @@
     "install": "^0.13.0",
     "libsodium-wrappers": "^0.7.10",
     "lodash": "^4.17.21",
+    "madrun": "^9.0.7",
     "merge-change": "npm:@clevercanyon/merge-change.fork@^1.8.14",
     "micromatch": "npm:@clevercanyon/micromatch.fork@^4.0.9",
     "postcss": "^8.4.21",
