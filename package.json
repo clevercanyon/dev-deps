@@ -83,6 +83,7 @@
     "vite": "^4.0.4",
     "vite-plugin-ejs": "^1.6.4",
     "vite-plugin-minify": "^1.5.2",
+    "vite-plugin-zip-pack": "^1.0.5",
     "yargs": "^17.6.2"
   }
 }
