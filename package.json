@@ -3,7 +3,7 @@
 	"publishConfig": {
 		"access": "restricted"
 	},
-	"version": "1.0.88",
+	"version": "1.0.89",
 	"license": "GPL-3.0-or-later",
 	"name": "@clevercanyon/skeleton-dev-deps",
 	"description": "Dev dependencies for `@clevercanyon/skeleton`.",
@@ -105,9 +105,6 @@
 		"vite-plugin-ejs": "^1.6.4",
 		"vite-plugin-minify": "^1.5.2",
 		"yargs": "^17.6.2"
-	},
-	"devDependencies": {
-		"@clevercanyon/skeleton-dev-deps": "^1.0.87"
 	},
 	"overrides": {},
 	"cpu": ["x64", "arm64"],

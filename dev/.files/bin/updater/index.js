@@ -216,7 +216,7 @@ export default async ({ projDir, args }) => {
 			if (typeof jsonUpdates !== 'object') {
 				throw new Error('updater: Unable to parse `' + jsonUpdatesFile + '`.');
 			}
-			if ('./package.json' === relPath && isPkgRepo('clevercanyon/skeleton-dev-deps')) {
+			if ('./package.json' === relPath && (await isPkgRepo('clevercanyon/skeleton-dev-deps'))) {
 				if (jsonUpdates.devDependencies?.['@clevercanyon/skeleton-dev-deps']) {
 					delete jsonUpdates.devDependencies['@clevercanyon/skeleton-dev-deps'];
 				}
@@ -233,6 +233,8 @@ export default async ({ projDir, args }) => {
 	/**
 	 * Updates `@clevercanyon/skeleton-dev-deps` in project dir.
 	 */
-	log(chalk.green('Updating project to latest `@clevercanyon/skeleton-dev-deps`.'));
-	await spawn('npm', ['udpate', '@clevercanyon/skeleton-dev-deps', '--silent'], { cwd: projDir });
+	if (!(await isPkgRepo('clevercanyon/skeleton-dev-deps'))) {
+		log(chalk.green('Updating project to latest `@clevercanyon/skeleton-dev-deps`.'));
+		await spawn('npm', ['udpate', '@clevercanyon/skeleton-dev-deps', '--silent'], { cwd: projDir });
+	}
 };
