@@ -1,0 +1,57 @@
+[
+	"private",
+	"publishConfig.access",
+
+	"version",
+	"license",
+	"name",
+	"description",
+	"repository",
+	"homepage",
+	"bugs",
+	"funding",
+	"keywords",
+
+	"author",
+	"contributors",
+
+	"type",
+	"files",
+	"bin",
+	"imports",
+	"exports",
+	"sideEffects",
+	"module",
+	"main",
+	"browser",
+	"unpkg",
+	"types",
+	"typesVersions",
+
+	"dependencies",
+	"peerDependencies",
+	"peerDependenciesMeta",
+	"optionalDependencies",
+	"bundleDependencies",
+	"devDependencies",
+
+	"overrides",
+	"workspaces",
+
+	"cpu",
+	"os",
+	"engines.node",
+	"engines.npm",
+
+	"config.c10n.&.dotfiles.lock",
+
+	"config.c10n.&.build.appType",
+	"config.c10n.&.build.targetEnv",
+
+	"config.c10n.&.github.teams",
+	"config.c10n.&.github.labels",
+	"config.c10n.&.github.configVersion",
+	"config.c10n.&.github.envsVersion",
+
+	"config.c10n.&.npmjs.configVersions"
+]

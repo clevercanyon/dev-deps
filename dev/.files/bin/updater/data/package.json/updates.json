@@ -1,45 +1,74 @@
 {
-	"$unset": ["typings", "scripts"],
+	"$default": {
+		"private": true,
+		"publishConfig.access": "restricted",
 
-	"$set": {
+		"version": "1.0.0",
+		"license": "GPL-3.0-or-later",
+		"name": "@clevercanyon/project",
+		"description": "Another great project by Clever Canyon.",
+		"repository": "https://github.com/clevercanyon/project",
+		"homepage": "https://github.com/clevercanyon/project#readme",
+		"bugs": "https://github.com/clevercanyon/project/issues",
+		"funding": "https://github.com/sponsors/clevercanyon",
+		"keywords": ["clevercanyon"],
+
 		"author": {
 			"name": "Clever Canyon",
 			"url": "https://clevercanyon.com"
 		},
+		"contributors": [],
+
+		"type": "module",
+		"files": [],
+		"bin": {},
+		"imports": {},
+		"exports": [],
+		"sideEffects": [],
+		"module": "",
+		"main": "",
+		"browser": "",
+		"unpkg": "",
+		"types": "",
+		"typesVersions": {},
+
+		"dependencies": {},
+		"peerDependencies": {},
+		"peerDependenciesMeta": {},
+		"optionalDependencies": {},
+		"bundleDependencies": [],
+		"devDependencies": {},
+		"devDependencies.@clevercanyon/skeleton-dev-deps": "*",
+
+		"overrides": {},
+		"workspaces": [],
+
+		"cpu": [],
+		"os": [],
+		"engines": {},
+
+		"config.c10n.&.dotfiles.lock": [],
+
+		"config.c10n.&.build.appType": "cma",
+		"config.c10n.&.build.targetEnv": "any",
+
+		"config.c10n.&.github.teams": {},
+		"config.c10n.&.github.labels": {},
+
+		"config.c10n.&.github.configVersion": "",
+		"config.c10n.&.github.envsVersion": "",
+		"config.c10n.&.npmjs.configVersions": ""
+	},
+	"$set": {
 		"funding": "https://github.com/sponsors/clevercanyon",
+		"workspaces": [],
 
 		"cpu": ["x64", "arm64"],
 		"os": ["darwin", "linux"],
 		"engines": {
 			"node": "^19.2.0 || ^19.4.0",
 			"npm": "^8.19.3 || ^9.2.0"
-		},
-		"workspaces": []
-	},
-
-	"dependencies": {},
-	"peerDependencies": {},
-	"peerDependenciesMeta": {},
-	"optionalDependencies": {},
-	"$concat": { "bundleDependencies": [] },
-	"devDependencies": {
-		"$set": {
-			"@clevercanyon/skeleton-dev-deps": "^1.0.0"
 		}
 	},
-	"overrides": {},
-
-	"config": {
-		"c10n": {
-			"&": {
-				"dotfiles": {},
-				"build": {},
-				"github": {
-					"teams": {},
-					"labels": {}
-				},
-				"npmjs": {}
-			}
-		}
-	}
+	"$unset": ["typings", "scripts"]
 }
