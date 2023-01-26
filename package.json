@@ -20,7 +20,7 @@
   },
   "type": "module",
   "dependencies": {
-    "@clevercanyon/madrun": "^1.0.20",
+    "@clevercanyon/madrun": "^1.0.23",
     "@clevercanyon/split-cmd.fork": "^1.0.7",
     "@octokit/core": "^4.2.0",
     "@octokit/plugin-paginate-rest": "^5.0.1",
