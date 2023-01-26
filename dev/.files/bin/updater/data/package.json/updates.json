@@ -1,5 +1,6 @@
 {
 	"$unset": ["typings", "scripts"],
+
 	"$set": {
 		"author": {
 			"name": "Clever Canyon",
@@ -15,12 +16,19 @@
 		},
 		"workspaces": []
 	},
-	"overrides": {},
+
+	"dependencies": {},
+	"peerDependencies": {},
+	"peerDependenciesMeta": {},
+	"optionalDependencies": {},
+	"$concat": { "bundleDependencies": [] },
 	"devDependencies": {
 		"$set": {
 			"@clevercanyon/skeleton-dev-deps": "^1.0.0"
 		}
 	},
+	"overrides": {},
+
 	"config": {
 		"c10n": {
 			"&": {

@@ -36,18 +36,19 @@ const __dirname = dirname(import.meta.url);
 const binDir = path.resolve(__dirname, '..');
 const projDir = path.resolve(__dirname, '../../../..');
 
-const { pkgFile, pkgName, pkgPrivate, pkgRepository } = (() => {
+const { pkgFile, pkgName, pkgPrivate, pkgRepository, pkgBuildAppType } = (() => {
 	const pkgFile = path.resolve(projDir, './package.json');
 	const pkg = JSON.parse(fs.readFileSync(pkgFile).toString());
 
 	if (typeof pkg !== 'object') {
 		throw new Error('u: Unable to parse `./package.json`.');
 	}
-	const pkgName = pkg.name || '';
-	const pkgPrivate = pkg.private;
-	const pkgRepository = pkg.repository || '';
+	const pkgName = _.get(pkg, 'name', '');
+	const pkgPrivate = _.get(pkg, 'private', null);
+	const pkgRepository = _.get(pkg, 'repository', '');
+	const pkgBuildAppType = _.get(pkg, 'config.c10n.&.build.appType', '');
 
-	return { pkgFile, pkgName, pkgPrivate, pkgRepository };
+	return { pkgFile, pkgName, pkgPrivate, pkgRepository, pkgBuildAppType };
 })();
 const { log } = console; // Shorter reference.
 const echo = process.stdout.write.bind(process.stdout);
@@ -273,17 +274,14 @@ export default class u {
 
 	static async githubReleaseTag() {
 		const { owner, repo } = await u.githubOrigin();
-
-		// Created by Vite build process.
 		const distZipFile = path.resolve(projDir, './.~dist.zip');
-
-		if (!fs.existsSync(distZipFile)) {
-			throw new Error('u.githubReleaseTag: Missing `./.~dist.zip`.');
-		}
 		const pkg = await u.pkg(); // Parses current `./package.json` file.
 
 		if (!pkg.version) {
 			throw new Error('u.githubReleaseTag: Package version is empty.');
+		}
+		if ((await u.isViteBuild()) && !fs.existsSync(distZipFile)) {
+			throw new Error('u.githubReleaseTag: Missing `./.~dist.zip` archive.');
 		}
 		const r = await octokit.request('POST /repos/{owner}/{repo}/releases', {
 			owner,
@@ -299,17 +297,19 @@ export default class u {
 		if (typeof r !== 'object' || typeof r.data !== 'object' || !r.data.id || !r.data.upload_url) {
 			throw new Error('u.githubReleaseTag: Failed to acquire GitHub release data.');
 		}
-		await octokit.request({
-			method: 'POST',
-			url: r.data.upload_url,
+		if ((await u.isViteBuild()) && fs.existsSync(distZipFile)) {
+			await octokit.request({
+				method: 'POST',
+				url: r.data.upload_url,
 
-			name: 'dist.zip',
-			headers: {
-				'content-type': 'application/zip',
-				'content-length': fs.statSync(distZipFile).size,
-			},
-			data: fs.readFileSync(distZipFile),
-		});
+				name: 'dist.zip',
+				headers: {
+					'content-type': 'application/zip',
+					'content-length': fs.statSync(distZipFile).size,
+				},
+				data: fs.readFileSync(distZipFile),
+			});
+		}
 	}
 
 	static async githubCheckRepoOrgWideStandards(opts = { dryRun: false }) {
@@ -1066,6 +1066,10 @@ export default class u {
 	/*
 	 * Vite utilities.
 	 */
+
+	static async isViteBuild() {
+		return '' !== pkgBuildAppType;
+	}
 
 	static async viteBuild(opts = { mode: 'prod' }) {
 		await u.spawn('npx', ['vite', 'build', '--mode', opts.mode]);

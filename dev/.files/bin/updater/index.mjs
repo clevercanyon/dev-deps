@@ -11,27 +11,23 @@ import _ from 'lodash';
 
 import fs from 'node:fs';
 import path from 'node:path';
-import fsp from 'node:fs/promises';
-
 import { dirname } from 'desm';
-import { globbyStream } from 'globby';
+import fsp from 'node:fs/promises';
 
 import chalk from 'chalk';
 import mc from 'merge-change';
 import prettier from 'prettier';
 import spawn from 'spawn-please';
 
-import customRegexp from './data/custom-regexp.js';
-import coreProjects from '../includes/core-projects.js';
+import customRegexp from './data/custom-regexp.mjs';
 
 const { log } = console; // Shorter reference.
 
-export default async ({ projDir, args }) => {
+export default async ({ projDir }) => {
 	/**
 	 * Initializes vars.
 	 */
 	const __dirname = dirname(import.meta.url);
-	const projsDir = path.dirname(projDir); // One level up.
 	const skeletonDir = path.resolve(__dirname, '../../../..');
 
 	/**
@@ -152,29 +148,6 @@ export default async ({ projDir, args }) => {
 		}
 		await fsp.mkdir(path.dirname(path.resolve(projDir, relPath)), { recursive: true });
 		await fsp.writeFile(path.resolve(projDir, relPath), newFileContents);
-
-		if (args.skeletonUpdatesOthers && (await isPkgRepo('clevercanyon/skeleton')) && coreProjects.updates.skeletonOthers.files.includes(relPath)) {
-			const otherGlobs = coreProjects.updates.skeletonOthers.globs; // The “others” we'll update.
-			const globStream = globbyStream(otherGlobs, { expandDirectories: false, onlyDirectories: true, absolute: true, cwd: projsDir, dot: false });
-
-			for await (const projDir of globStream) {
-				if (!fs.existsSync(path.resolve(projDir, './package.json'))) {
-					continue; // False positive. No `package.json` file.
-				}
-				let newFileContents = ''; // Initialize.
-
-				if (fs.existsSync(path.resolve(projDir, relPath))) {
-					const oldFileContents = (await fsp.readFile(path.resolve(projDir, relPath))).toString();
-					const oldFileMatches = customRegexp.exec(oldFileContents); // See: `./data/custom-regexp.js`.
-					const oldFileCustomCode = oldFileMatches ? oldFileMatches[2] : ''; // We'll preserve any custom code.
-					newFileContents = (await fsp.readFile(path.resolve(skeletonDir, relPath))).toString().replace(customRegexp, ($_, $1, $2, $3) => $1 + oldFileCustomCode + $3);
-				} else {
-					newFileContents = (await fsp.readFile(path.resolve(skeletonDir, relPath))).toString();
-				}
-				await fsp.mkdir(path.dirname(path.resolve(projDir, relPath)), { recursive: true });
-				await fsp.writeFile(path.resolve(projDir, relPath), newFileContents);
-			}
-		}
 	}
 
 	/**

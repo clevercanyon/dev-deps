@@ -31,7 +31,7 @@ import pluginBasicSSL from '@vitejs/plugin-basic-ssl';
 import { ViteEjsPlugin as pluginEJS } from 'vite-plugin-ejs';
 import { ViteMinifyPlugin as pluginMinifyHTML } from 'vite-plugin-minify';
 
-import importAliases from './includes/aliases.js';
+import importAliases from './includes/aliases.mjs';
 
 import { createRequire } from 'node:module';
 const require = createRequire(import.meta.url);
