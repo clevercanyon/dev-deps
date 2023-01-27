@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 /**
  * Update CLI.
  *
@@ -17,6 +16,8 @@ import path from 'node:path';
 import { dirname } from 'desm';
 import fsp from 'node:fs/promises';
 
+import deeps from 'deeps';
+import mc from 'merge-change';
 import * as se from 'shescape';
 import spawn from 'spawn-please';
 
@@ -69,6 +70,27 @@ const npmjsConfigVersion = '1.0.0'; // Bump when config changes in routines belo
 
 const c10nLogo = path.resolve(__dirname, '../../assets/brands/c10n/logo.png');
 const c10nLogoDev = path.resolve(__dirname, '../../assets/brands/c10n/logo-dev.png');
+
+mc.addOperation('$default', (current, defaults) => {
+	const paths = Object.keys(defaults);
+
+	for (const path of paths) {
+		if (undefined === deeps.get(current, path, '.')) {
+			deeps.set(current, path, defaults[path], true, '.');
+		}
+	}
+	return paths.length > 0;
+});
+mc.addOperation('$ꓺdefault', (current, defaults) => {
+	const paths = Object.keys(defaults);
+
+	for (const path of paths) {
+		if (undefined === deeps.get(current, path, 'ꓺ')) {
+			deeps.set(current, path, defaults[path], true, 'ꓺ');
+		}
+	}
+	return paths.length > 0;
+});
 
 /**
  * Utilities.
@@ -158,14 +180,57 @@ export default class u {
 			throw new Error('u.pkgIncrementVersion: Failed to increment version: `' + origVersion + '`.');
 		}
 		if (!opts.dryRun) {
-			pkg.version = version; // Update to incremented version.
-			const pkgPrettierCfg = { ...(await prettier.resolveConfig(pkgFile)), parser: 'json' };
-			await fsp.writeFile(pkgFile, prettier.format(JSON.stringify(pkg, null, 4), pkgPrettierCfg));
+			await u.updatePkg({ version });
 		}
 	}
 
-	static async prettifyPkg() {
+	static async updatePkg(propsOrPath, value = undefined, delimiter = '.') {
 		const pkg = await u.pkg(); // Parses current `./package.json` file.
+
+		if (typeof propsOrPath === 'string') {
+			const path = propsOrPath; // String path.
+			deeps.set(pkg, path, value, true, delimiter);
+			//
+		} else if (typeof propsOrPath === 'object') {
+			const props = propsOrPath; // Object props.
+			mc.patch(pkg, props); // Potentially declarative ops.
+		} else {
+			throw new Error('u.updatePkg: Invalid arguments.');
+		}
+		await fsp.writeFile(pkgFile, JSON.stringify(pkg, null, 4));
+		await u.prettifyPkg(); // Sorts and runs prettier.
+	}
+
+	static async prettifyPkg() {
+		const pkg = {}; // Sorted `./package.json`; i.e., using insertion order.
+		const curPkg = await u.pkg(); // Parses current `./package.json` file.
+
+		const updatesFile = path.resolve(projDir, './dev/.files/bin/updater/data/package.json/updates.json');
+		const sortOrderFile = path.resolve(projDir, './dev/.files/bin/updater/data/package.json/sort-order.json');
+
+		const updates = JSON.parse((await fsp.readFile(updatesFile)).toString());
+		const sortOrder = JSON.parse((await fsp.readFile(sortOrderFile)).toString());
+
+		if (typeof updates !== 'object') {
+			throw new Error('u.prettifyPkg: Unable to parse `' + updatesFile + '`.');
+		}
+		if (!Array.isArray(sortOrder)) {
+			throw new Error('u.prettifyPkg: Unable to parse `' + sortOrderFile + '`.');
+		}
+		if (await u.isPkgRepo('clevercanyon/skeleton-dev-deps')) {
+			if (updates.$ꓺdefault?.['devDependenciesꓺ@clevercanyon/skeleton-dev-deps']) {
+				delete updates.$ꓺdefault['devDependenciesꓺ@clevercanyon/skeleton-dev-deps'];
+			}
+		}
+		mc.patch(curPkg, updates); // Potentially declarative ops.
+
+		for (const path of sortOrder) {
+			const value = deeps.get(curPkg, path, 'ꓺ');
+			if (undefined !== value) deeps.set(pkg, path, value, true, 'ꓺ');
+		}
+		for (const [path, value] of Object.entries(deeps.flatten(curPkg, 'ꓺ'))) {
+			if (undefined === deeps.get(pkg, path, 'ꓺ')) deeps.set(pkg, path, value, true, 'ꓺ');
+		}
 		const pkgPrettierCfg = { ...(await prettier.resolveConfig(pkgFile)), parser: 'json' };
 		await fsp.writeFile(pkgFile, prettier.format(JSON.stringify(pkg, null, 4), pkgPrettierCfg));
 	}
@@ -495,9 +560,7 @@ export default class u {
 			}
 		}
 		if (!opts.dryRun) {
-			_.set(pkg, 'config.c10n.&.github.configVersion', githubConfigVersion);
-			const pkgPrettierCfg = { ...(await prettier.resolveConfig(pkgFile)), parser: 'json' };
-			await fsp.writeFile(pkgFile, prettier.format(JSON.stringify(pkg, null, 4), pkgPrettierCfg));
+			await u.updatePkg('config.c10n.&.github.configVersion', githubConfigVersion);
 		}
 	}
 
@@ -557,9 +620,7 @@ export default class u {
 			}
 		}
 		if (!opts.dryRun) {
-			_.set(pkg, 'config.c10n.&.github.envsVersion', githubEnvsVersion);
-			const pkgPrettierCfg = { ...(await prettier.resolveConfig(pkgFile)), parser: 'json' };
-			await fsp.writeFile(pkgFile, prettier.format(JSON.stringify(pkg, null, 4), pkgPrettierCfg));
+			await u.updatePkg('config.c10n.&.github.envsVersion', githubEnvsVersion);
 		}
 	}
 
@@ -1028,9 +1089,7 @@ export default class u {
 			}
 		}
 		if (!opts.dryRun) {
-			_.set(pkg, 'config.c10n.&.npmjs.configVersions', githubConfigVersion + ',' + npmjsConfigVersion);
-			const pkgPrettierCfg = { ...(await prettier.resolveConfig(pkgFile)), parser: 'json' };
-			await fsp.writeFile(pkgFile, prettier.format(JSON.stringify(pkg, null, 4), pkgPrettierCfg));
+			await u.updatePkg('config.c10n.&.npmjs.configVersions', githubConfigVersion + ',' + npmjsConfigVersion);
 		}
 	}
 

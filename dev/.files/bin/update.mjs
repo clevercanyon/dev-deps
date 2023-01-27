@@ -128,7 +128,7 @@ class Dotfiles {
 
 		log(chalk.green('Running updater using latest `clevercanyon/skeleton`; `' + skeletonBranch + '` branch.'));
 		if (!this.args.dryRun) {
-			await (await import(path.resolve(skeletonRepoDir, './dev/.files/bin/updater/index.js'))).default({ projDir });
+			await (await import(path.resolve(skeletonRepoDir, './dev/.files/bin/updater/index.mjs'))).default({ projDir });
 		}
 
 		/**
@@ -543,7 +543,7 @@ void (async () => {
 							type: 'array',
 							requiresArg: true,
 							demandOption: false,
-							default: ['*'],
+							default: ['*', '.github'],
 							description:  // prettier-ignore
 								'Glob matching is relative to `' + projsDir + '` and finds directories only.' +
 								' Note: Globstars `**` are not allowed given the nature of this command and will therefore throw an error.' +

@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 /**
  * Core projects.
  *
@@ -10,31 +9,25 @@
 
 export default {
 	updates: {
-		ignore: [
-			'.*', //
-			'!.github',
-			'forks/',
-		],
+		ignore: [],
 		order: [
-			'forks/is-number.fork',
-			'forks/to-regex-range.fork',
-			'forks/fill-range.fork',
-			'forks/braces.fork',
-			'forks/picomatch.fork',
-			'forks/micromatch.fork',
-
-			'forks/split-cmd.fork',
-			'forks/merge-change.fork',
-			'forks/spawn-please.fork',
-			'forks/shescape.fork',
-
-			'*.fork',
-			'forks/*.fork',
-
-			'madrun', // Outlier.
-
 			'skeleton-dev-deps',
 			'skeleton',
+			'madrun',
+
+			'is-number.fork',
+			'to-regex-range.fork',
+			'fill-range.fork',
+			'braces.fork',
+			'picomatch.fork',
+			'micromatch.fork',
+
+			'split-cmd.fork',
+			'merge-change.fork',
+			'spawn-please.fork',
+			'shescape.fork',
+
+			'*.fork',
 
 			'utilities',
 			'utilities.php',
@@ -45,22 +38,13 @@ export default {
 			'utilities.node',
 			'utilities.cfw',
 			'utilities.cfp',
-			'utilities.*',
 
+			'utilities.*',
 			'skeleton.*',
 
-			'.github',
 			'private',
+			'.github',
 		],
-		skeletonOthers: {
-			globs: ['{*.fork,forks/*.fork}'],
-			files: [
-				'./.gitattributes', //
-				'./.gitignore',
-				'./.npmignore',
-				'./.npmrc',
-			],
-		},
 	},
 	skeleton: {
 		repoURL: 'https://github.com/clevercanyon/skeleton.git',

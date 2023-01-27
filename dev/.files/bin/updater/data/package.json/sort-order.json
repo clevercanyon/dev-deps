@@ -1,6 +1,6 @@
 [
 	"private",
-	"publishConfig.access",
+	"publishConfigꓺaccess",
 
 	"version",
 	"license",
@@ -40,18 +40,18 @@
 
 	"cpu",
 	"os",
-	"engines.node",
-	"engines.npm",
+	"enginesꓺnode",
+	"enginesꓺnpm",
 
-	"config.c10n.&.dotfiles.lock",
+	"configꓺc10nꓺ&ꓺdotfilesꓺlock",
 
-	"config.c10n.&.build.appType",
-	"config.c10n.&.build.targetEnv",
+	"configꓺc10nꓺ&ꓺbuildꓺappType",
+	"configꓺc10nꓺ&ꓺbuildꓺtargetEnv",
 
-	"config.c10n.&.github.teams",
-	"config.c10n.&.github.labels",
-	"config.c10n.&.github.configVersion",
-	"config.c10n.&.github.envsVersion",
+	"configꓺc10nꓺ&ꓺgithubꓺteams",
+	"configꓺc10nꓺ&ꓺgithubꓺlabels",
+	"configꓺc10nꓺ&ꓺgithubꓺconfigVersion",
+	"configꓺc10nꓺ&ꓺgithubꓺenvsVersion",
 
-	"config.c10n.&.npmjs.configVersions"
+	"configꓺc10nꓺ&ꓺnpmjsꓺconfigVersions"
 ]

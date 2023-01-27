@@ -11,18 +11,14 @@
 	"homepage": "https://github.com/clevercanyon/skeleton-dev-deps#readme",
 	"bugs": "https://github.com/clevercanyon/skeleton-dev-deps/issues",
 	"funding": "https://github.com/sponsors/clevercanyon",
-	"keywords": [
-		"clevercanyon"
-	],
+	"keywords": ["clevercanyon"],
 	"author": {
 		"name": "Clever Canyon",
 		"url": "https://clevercanyon.com"
 	},
 	"contributors": [],
 	"type": "module",
-	"files": [
-		"/dist"
-	],
+	"files": ["/dist"],
 	"bin": {},
 	"imports": {},
 	"exports": {
@@ -32,9 +28,7 @@
 			"types": "./dist/types/index.d.ts"
 		}
 	},
-	"sideEffects": [
-		"./src/*.{html,scss,css,tsx,ts,jsx,mjs,js}"
-	],
+	"sideEffects": ["./src/*.{html,scss,css,tsx,ts,jsx,mjs,js}"],
 	"module": "./dist/index.js",
 	"main": "./dist/index.umd.cjs",
 	"browser": "",
@@ -42,9 +36,7 @@
 	"types": "./dist/types/index.d.ts",
 	"typesVersions": {
 		">=3.1": {
-			"./*": [
-				"./dist/types/*"
-			]
+			"./*": ["./dist/types/*"]
 		}
 	},
 	"dependencies": {
@@ -115,20 +107,19 @@
 		"vite-plugin-minify": "^1.5.2",
 		"yargs": "^17.6.2"
 	},
+	"peerDependencies": {},
+	"peerDependenciesMeta": {},
+	"optionalDependencies": {},
+	"bundleDependencies": [],
+	"devDependencies": {},
 	"overrides": {},
-	"cpu": [
-		"x64",
-		"arm64"
-	],
-	"os": [
-		"darwin",
-		"linux"
-	],
+	"workspaces": [],
+	"cpu": ["x64", "arm64"],
+	"os": ["darwin", "linux"],
 	"engines": {
 		"node": "^19.2.0 || ^19.4.0",
 		"npm": "^8.19.3 || ^9.2.0"
 	},
-	"workspaces": [],
 	"config": {
 		"c10n": {
 			"&": {
@@ -145,7 +136,8 @@
 						"architects": "push"
 					},
 					"labels": {},
-					"configVersion": "1.0.1"
+					"configVersion": "1.0.1",
+					"envsVersion": ""
 				},
 				"npmjs": {
 					"configVersions": "1.0.1,1.0.0"
