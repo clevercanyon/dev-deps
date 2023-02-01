@@ -3,7 +3,7 @@
 	"publishConfig": {
 		"access": "restricted"
 	},
-	"version": "1.0.110",
+	"version": "1.0.111",
 	"license": "GPL-3.0-or-later",
 	"name": "@clevercanyon/skeleton-dev-deps",
 	"description": "Dev dependencies for `@clevercanyon/skeleton`.",
@@ -42,7 +42,7 @@
 	"dependencies": {
 		"@clevercanyon/madrun": "^1.0.49",
 		"@clevercanyon/utilities": "^1.0.90",
-		"@clevercanyon/utilities.node": "^1.0.45",
+		"@clevercanyon/utilities.node": "^1.0.46",
 		"@octokit/core": "^4.2.0",
 		"@octokit/plugin-paginate-rest": "^5.0.1",
 		"@prettier/plugin-php": "^0.19.3",
@@ -76,7 +76,6 @@
 		"eslint-plugin-react": "^7.32.2",
 		"eslint-plugin-react-hooks": "^4.6.0",
 		"ignore": "^5.2.4",
-		"install": "^0.13.0",
 		"libsodium-wrappers": "^0.7.10",
 		"lodash": "^4.17.21",
 		"postcss": "^8.4.21",
