@@ -3,7 +3,7 @@
 	"publishConfig": {
 		"access": "restricted"
 	},
-	"version": "1.0.112",
+	"version": "1.0.113",
 	"license": "GPL-3.0-or-later",
 	"name": "@clevercanyon/skeleton-dev-deps",
 	"description": "Dev dependencies for `@clevercanyon/skeleton`.",
@@ -11,18 +11,14 @@
 	"homepage": "https://github.com/clevercanyon/skeleton-dev-deps#readme",
 	"bugs": "https://github.com/clevercanyon/skeleton-dev-deps/issues",
 	"funding": "https://github.com/sponsors/clevercanyon",
-	"keywords": [
-		"clevercanyon"
-	],
+	"keywords": ["clevercanyon"],
 	"author": {
 		"name": "Clever Canyon",
 		"url": "https://clevercanyon.com"
 	},
 	"contributors": [],
 	"type": "module",
-	"files": [
-		"/dist"
-	],
+	"files": ["/dist"],
 	"bin": {},
 	"imports": {},
 	"exports": {
@@ -32,9 +28,7 @@
 			"types": "./dist/types/index.d.ts"
 		}
 	},
-	"sideEffects": [
-		"./src/*.{html,scss,ts,tsx}"
-	],
+	"sideEffects": ["./src/*.{html,scss,ts,tsx}"],
 	"module": "./dist/index.js",
 	"main": "./dist/index.umd.cjs",
 	"browser": "",
@@ -42,15 +36,13 @@
 	"types": "./dist/types/index.d.ts",
 	"typesVersions": {
 		">=3.1": {
-			"./*": [
-				"./dist/types/*"
-			]
+			"./*": ["./dist/types/*"]
 		}
 	},
 	"dependencies": {
-		"@clevercanyon/madrun": "^1.0.49",
-		"@clevercanyon/utilities": "^1.0.90",
-		"@clevercanyon/utilities.node": "^1.0.46",
+		"@clevercanyon/madrun": "^1.0.53",
+		"@clevercanyon/utilities": "^1.0.91",
+		"@clevercanyon/utilities.node": "^1.0.47",
 		"@octokit/core": "^4.2.0",
 		"@octokit/plugin-paginate-rest": "^5.0.1",
 		"@prettier/plugin-php": "^0.19.3",
@@ -96,7 +88,7 @@
 		"prettier-plugin-properties": "^0.2.0",
 		"prettier-plugin-sh": "^0.12.8",
 		"prettier-plugin-sql": "^0.12.1",
-		"sass": "^1.57.1",
+		"sass": "^1.58.0",
 		"semver": "^7.3.8",
 		"shellcheck": "^1.1.0",
 		"stylelint": "^14.16.1",
@@ -117,14 +109,8 @@
 	"devDependencies": {},
 	"overrides": {},
 	"workspaces": [],
-	"cpu": [
-		"x64",
-		"arm64"
-	],
-	"os": [
-		"darwin",
-		"linux"
-	],
+	"cpu": ["x64", "arm64"],
+	"os": ["darwin", "linux"],
 	"engines": {
 		"node": "^19.2.0 || ^19.4.0",
 		"npm": "^8.19.3 || ^9.2.0"
