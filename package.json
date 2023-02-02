@@ -3,7 +3,7 @@
 	"publishConfig": {
 		"access": "restricted"
 	},
-	"version": "1.0.114",
+	"version": "1.0.115",
 	"license": "GPL-3.0-or-later",
 	"name": "@clevercanyon/skeleton-dev-deps",
 	"description": "Dev dependencies for `@clevercanyon/skeleton`.",
@@ -40,9 +40,9 @@
 		}
 	},
 	"dependencies": {
-		"@clevercanyon/madrun": "^1.0.54",
-		"@clevercanyon/utilities": "^1.0.92",
-		"@clevercanyon/utilities.node": "^1.0.48",
+		"@clevercanyon/madrun": "^1.0.55",
+		"@clevercanyon/utilities": "^1.0.93",
+		"@clevercanyon/utilities.node": "^1.0.49",
 		"@octokit/core": "^4.2.0",
 		"@octokit/plugin-paginate-rest": "^5.0.1",
 		"@prettier/plugin-php": "^0.19.3",
@@ -98,7 +98,7 @@
 		"stylelint-scss": "^4.3.0",
 		"tailwindcss": "^3.2.4",
 		"typescript": "^4.9.5",
-		"vite": "^4.0.4",
+		"vite": "^4.1.1",
 		"vite-plugin-ejs": "^1.6.4",
 		"vite-plugin-minify": "^1.5.2"
 	},
