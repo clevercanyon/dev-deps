@@ -351,10 +351,11 @@ export default async ({ mode, command /*, ssrBuild */ }) => {
 		watch: false, // Disable watching by default.
 		forceRerunTriggers: ['**/package.json', '**/vitest.config.*', '**/vite.config.*'],
 
+		reporters: ['verbose', 'html'], // Default reporters.
 		outputFile: {
 			json: path.resolve(logsDir, './tests/vitest.json'),
 			junit: path.resolve(logsDir, './tests/vitest.junit'),
-			html: path.resolve(logsDir, './tests/vitest.html'),
+			html: path.resolve(logsDir, './tests/vitest/index.html'),
 		},
 		typecheck: {
 			include: vitestTypecheckIncludes,

@@ -25,7 +25,7 @@ export default async (/* {cmd, args, ctx} */) => {
 		'tests': async ({ args }) => 'npx vitest run' + (args.mode ? '' : ' --mode=dev') + ' {{@}}',
 
 		'jest': 'npx jest {{@}}', // Runs project Jest tests.
-		'vitest': 'npx vitest {{@}}', // Runs project Vitest tests.
+		'vitest': async ({ args }) => 'npx vitest' + (args.mode ? '' : ' --mode=dev') + ' {{@}}',
 		'wrangler': 'CLOUDFLARE_API_TOKEN="${USER_CLOUDFLARE_TOKEN:-}" npx wrangler {{@}}',
 
 		...events, // e.g., `on::madrun:default:new`.

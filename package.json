@@ -3,7 +3,7 @@
 	"publishConfig": {
 		"access": "restricted"
 	},
-	"version": "1.0.126",
+	"version": "1.0.127",
 	"license": "GPL-3.0-or-later",
 	"name": "@clevercanyon/skeleton-dev-deps",
 	"description": "Dev dependencies for `@clevercanyon/skeleton`.",
@@ -58,6 +58,7 @@
 		"@typescript-eslint/eslint-plugin": "^5.51.0",
 		"@typescript-eslint/parser": "^5.51.0",
 		"@vitejs/plugin-basic-ssl": "^1.0.1",
+		"@vitest/coverage-c8": "^0.28.4",
 		"@vitest/ui": "^0.28.4",
 		"archiver": "^5.3.1",
 		"chalk": "^5.2.0",
