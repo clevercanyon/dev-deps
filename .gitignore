@@ -49,10 +49,6 @@
 *.code-search
 *.code-workspace
 
-# NPM.
-
-npm-debug.log
-
 # Dists (must exclude).
 # May contain `APP_` env vars.
 

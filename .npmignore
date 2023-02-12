@@ -57,10 +57,6 @@
 *.code-search
 *.code-workspace
 
-# NPM.
-
-npm-debug.log
-
 # Dists (must exclude).
 # May contain `APP_` env vars.
 
@@ -204,67 +200,108 @@ Temporary Items
 # These are in addition to what we have in `.gitignore`.
 ##
 
+# Dist (allow).
+
+!dist
+
+# Config files.
+
+.*
+
+.github
+jsconfig.*
+tsconfig.*
+wrangler.*
+jest.config.*
+vite.config.*
+vitest.config.*
+tailwind.config.*
+.env.project
+
+# Source.
+
+*.scss
+*.less
+
+*.ejs
+*.jsx
+
+*.ts
+!*.d.ts
+
+*.tsx
+!*.d.tsx
+
+*.cts
+!*.d.cts
+
+*.ctsx
+!*.d.ctsx
+
+*.mts
+!*.d.mts
+
+*.mtsx
+!*.d.mtsx
+
 # Dev.
 
 dev
+__dev__
 
 # Docs.
 
 doc
 docs
+__doc__
+__docs__
+*.doc.*
+*.docs.*
+*.readme.*
+*.readmes.*
 
 # Tests.
 
 test
 tests
+__test__
+__tests__
+*.test.*
+*.tests.*
+*.test-d.*
+*.tests-d.*
+
+# Specs.
+
+spec
+specs
+__spec__
+__specs__
+*.spec.*
+*.specs.*
+*.spec-d.*
+*.specs-d.*
 
 # Examples.
 
 example
 examples
+__example__
+__examples__
+*.example.*
+*.examples.*
 
 # Benchmarks.
 
 bench
 benchmark
 benchmarks
-
-# Dotenv.
-
-.env.vault
-.env.project
-
-# GitHub.
-
-.github
-
-# Dists.
-
-!dist
-
-# Source.
-
-.*
-__*
-
-*.ts
-*.tsx
-!*.d.ts
-*.jsx
-*.ejs
-
-*.scss
-*.less
-
-*.test.*
-*.spec.*
-*.readme.*
-
-jsconfig.*
-tsconfig.*
-wrangler.*
-vite.config.*
-tailwind.config.*
+__bench__
+__benchmark__
+__benchmarks__
+*.bench.*
+*.benchmark.*
+*.benchmarks.*
 
 ##
 # There are also a few items always included and/or excluded by NPM.

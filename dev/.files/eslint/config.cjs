@@ -54,7 +54,8 @@ const baseConfig = {
 		'plugin:prettier/recommended', // Must come last.
 	],
 	ignorePatterns: [
-		'!**/.*', // Applied globally.
+		'!**/.*', //
+		'**/.git/**',
 		'**/dist/**',
 		'**/.yarn/**',
 		'**/vendor/**',

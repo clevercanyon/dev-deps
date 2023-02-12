@@ -27,7 +27,7 @@ import { ViteMinifyPlugin as pluginMinifyHTML } from 'vite-plugin-minify';
 import u from '../bin/includes/utilities.mjs';
 import { $obj, $mm } from '@clevercanyon/utilities';
 import { $glob } from '@clevercanyon/utilities.node';
-import importAliases from './includes/aliases.mjs';
+import importAliases from './includes/import-aliases.mjs';
 
 import { createRequire } from 'node:module';
 const require = createRequire(import.meta.url);
@@ -47,11 +47,13 @@ export default async ({ mode, command /*, ssrBuild */ }) => {
 	const projDir = path.resolve(__dirname, '../../..');
 
 	const srcDir = path.resolve(__dirname, '../../../src');
-	const envsDir = path.resolve(__dirname, '../../../dev/.envs');
 	const cargoDir = path.resolve(__dirname, '../../../src/cargo');
+	const envsDir = path.resolve(__dirname, '../../../dev/.envs');
 
 	const distDir = path.resolve(__dirname, '../../../dist');
 	const a16sDir = path.resolve(__dirname, '../../../dist/assets/a16s');
+
+	const reportsDir = path.resolve(__dirname, '../../../dev/.#reports');
 
 	/**
 	 * Package-related vars.
@@ -294,6 +296,94 @@ export default async ({ mode, command /*, ssrBuild */ }) => {
 	const importedWorkerRollupConfig = { ..._.omit(rollupConfig, ['input']) };
 
 	/**
+	 * Vitest config for Vite.
+	 */
+	const vitestExcludes = [
+		'**/.*', //
+		'**/dev/**',
+		'**/dist/**',
+		'**/.yarn/**',
+		'**/vendor/**',
+		'**/node_modules/**',
+		'**/jspm_packages/**',
+		'**/bower_components/**',
+		'**/*.d.{ts,tsx,cts,ctsx,mts,mtsx}',
+	];
+	const vitestIncludes = [
+		'**/*.{test|tests|spec|specs}.{js,jsx,cjs,cjsx,node,mjs,mjsx,ts,tsx,cts,ctsx,mts,mtsx}',
+		'**/{__test__,__tests__,__spec__,__specs__}/**/*.{js,jsx,cjs,cjsx,node,mjs,mjsx,ts,tsx,cts,ctsx,mts,mtsx}',
+	];
+	const vitestBenchIncludes = [
+		'**/*.{bench|benchmark|benchmarks}.{js,jsx,cjs,cjsx,node,mjs,mjsx,ts,tsx,cts,ctsx,mts,mtsx}',
+		'**/{__bench__,__benchmark__,__benchmarks__}/**/*.{js,jsx,cjs,cjsx,node,mjs,mjsx,ts,tsx,cts,ctsx,mts,mtsx}',
+	];
+	const vitestTypecheckIncludes = [
+		'**/*.{test|tests|spec|specs}-d.{ts,tsx,cts,ctsx,mts,mtsx}', //
+	];
+	const vitestExtensions = ['.js', '.jsx', '.cjs', '.cjsx', '.json', '.node', '.mjs', '.mjsx', '.ts', '.tsx', '.cts', '.ctsx', '.mts', '.mtsx'];
+
+	const vitestConfig = {
+		root: projDir,
+
+		include: vitestIncludes,
+		css: { include: /.+/u },
+
+		exclude: vitestExcludes,
+		watchExclude: vitestExcludes,
+
+		// @todo Enhance miniflare support.
+		// @todo Add support for testing web workers.
+		environment: ['web'].includes(targetEnv) ? 'jsdom' // <https://o5p.me/Gf9Cy5>.
+			: ['cfp', 'cfw'].includes(targetEnv) ? 'miniflare' // <https://o5p.me/TyF9Ot>.
+			: ['node', 'any'].includes(targetEnv) ? 'node' // <https://o5p.me/Gf9Cy5>.
+			: 'node', // prettier-ignore
+
+		deps: { external: ['**/dist/**', '**/node_modules/**'].concat(rollupConfig.external) },
+
+		// See: <https://vitest.dev/api/#test-only>
+		// See: <https://vitest.dev/api/#bench-only>
+		// See: <https://vitest.dev/api/#describe-only>
+		allowOnly: true, // Allows `describe.only`, `test.only`, `bench.only`.
+		passWithNoTests: true, // Pass if there are no tests to run.
+
+		watch: false, // Disable watching by default.
+		forceRerunTriggers: ['**/package.json', '**/vitest.config.*', '**/vite.config.*'],
+
+		outputFile: {
+			json: path.resolve(reportsDir, './tests/vitest.json'),
+			junit: path.resolve(reportsDir, './tests/vitest.junit'),
+			html: path.resolve(reportsDir, './tests/vitest.html'),
+		},
+		coverage: {
+			all: true,
+			src: srcDir,
+			include: ['**'],
+			exclude: vitestExcludes //
+				.concat(vitestIncludes)
+				.concat(vitestBenchIncludes)
+				.concat(vitestTypecheckIncludes),
+			extension: vitestExtensions,
+			reporter: ['text', 'html', 'clover', 'json'],
+			reportsDirectory: path.resolve(reportsDir, './coverage/vitest'),
+		},
+		benchmark: {
+			include: vitestBenchIncludes,
+			includeSource: vitestIncludes,
+			exclude: vitestExcludes,
+
+			outputFile: {
+				json: path.resolve(reportsDir, './benchmarks/vitest.json'),
+				junit: path.resolve(reportsDir, './benchmarks/vitest.junit'),
+				html: path.resolve(reportsDir, './benchmarks/vitest.html'),
+			},
+		},
+		typecheck: {
+			include: vitestTypecheckIncludes,
+			exclude: vitestExcludes,
+		},
+	};
+
+	/**
 	 * Base config for Vite.
 	 *
 	 * @see https://vitejs.dev/config/
@@ -313,7 +403,7 @@ export default async ({ mode, command /*, ssrBuild */ }) => {
 		base: appBasePath + '/', // Analagous to `<base href="/">` — leading & trailing slash.
 
 		appType: isCMA ? 'custom' : 'mpa', // See: <https://o5p.me/ZcTkEv>.
-		resolve: { alias: importAliases }, // Matches TypeScript config.
+		resolve: { alias: importAliases }, // Matches TypeScript config import aliases.
 
 		envDir: path.relative(srcDir, envsDir), // Relative to `root` directory.
 		envPrefix: appEnvPrefix, // Environment vars w/ this prefix become a part of the app.
@@ -360,6 +450,7 @@ export default async ({ mode, command /*, ssrBuild */ }) => {
 				: {}),
 			rollupOptions: rollupConfig, // See: <https://o5p.me/5Vupql>.
 		},
+		test: vitestConfig, // Vitest configuration options.
 	};
 
 	/**
