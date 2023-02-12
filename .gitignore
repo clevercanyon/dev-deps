@@ -17,6 +17,7 @@
 # Logs.
 
 *.log
+*.logs
 
 # Backups.
 
@@ -91,6 +92,7 @@ typings
 # Vite.
 
 .vite
+.vitest
 
 # Wrangler.
 
