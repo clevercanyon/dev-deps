@@ -7,6 +7,10 @@
 #
 #     $ npm pack --dry-run
 #
+# Please keep in mind that if `files` is used in `./package.json`,
+# the `files` setting will **not** be altered by an `./.npmignore` in the
+# main project directory. In such a case, `./.npmignore` is meaningless.
+#
 # @note CUSTOM EDITS ONLY PLEASE!
 # @note In the future this file will be updated automatically.
 # @note Only `<custom:start.../custom:end>` will be preserved below.
@@ -59,7 +63,7 @@
 *.code-workspace
 
 # Dists (must exclude).
-# May contain `APP_` env vars.
+# May contain APP_ env vars.
 
 dist
 
@@ -206,45 +210,58 @@ Temporary Items
 
 !dist
 
-# Config files.
+# Configs.
 
 .*
 
-.github
-jsconfig.*
-tsconfig.*
-wrangler.*
-jest.config.*
-vite.config.*
-vitest.config.*
-tailwind.config.*
-.env.project
+*config.*
+!dist/**/*config.*
 
-# Source.
+*.config.*
+!dist/**/*.config.*
+
+wrangler.*
+!dist/**/wrangler.*
+
+# Uncompiled sources.
+
+src
 
 *.scss
+!dist/**/*.scss
+
 *.less
+!dist/**/*.less
 
 *.ejs
+!dist/**/*.ejs
+
 *.jsx
+!dist/**/*.jsx
 
 *.ts
 !*.d.ts
+!dist/**/*.ts
 
 *.tsx
 !*.d.tsx
+!dist/**/*.tsx
 
 *.cts
 !*.d.cts
+!dist/**/*.cts
 
 *.ctsx
 !*.d.ctsx
+!dist/**/*.ctsx
 
 *.mts
 !*.d.mts
+!dist/**/*.mts
 
 *.mtsx
 !*.d.mtsx
+!dist/**/*.mtsx
 
 # Dev.
 

@@ -93,7 +93,7 @@ module.exports = {
 				jsdocLineWrappingStyle: 'greedy',
 				jsdocPreferCodeFences: false,
 				jsdocPrintWidth: 120,
-				jsdocSeparateReturnsFromParam: true,
+				jsdocSeparateReturnsFromParam: false,
 				jsdocSeparateTagGroups: true,
 				jsdocSingleLineComment: false,
 				jsdocSpaces: 1,
