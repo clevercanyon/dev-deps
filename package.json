@@ -3,7 +3,7 @@
 	"publishConfig": {
 		"access": "restricted"
 	},
-	"version": "1.0.129",
+	"version": "1.0.130",
 	"license": "GPL-3.0-or-later",
 	"name": "@clevercanyon/skeleton-dev-deps",
 	"description": "Dev dependencies for `@clevercanyon/skeleton`.",
@@ -39,9 +39,9 @@
 		}
 	},
 	"dependencies": {
-		"@clevercanyon/madrun": "^1.0.60",
-		"@clevercanyon/utilities": "^1.0.103",
-		"@clevercanyon/utilities.node": "^1.0.58",
+		"@clevercanyon/madrun": "^1.0.61",
+		"@clevercanyon/utilities": "^1.0.107",
+		"@clevercanyon/utilities.node": "^1.0.61",
 		"@octokit/core": "^4.2.0",
 		"@octokit/plugin-paginate-rest": "^5.0.1",
 		"@prettier/plugin-php": "^0.19.4",
@@ -81,7 +81,7 @@
 		"postcss-preset-env": "^7.8.3",
 		"postcss-safe-parser": "^6.0.0",
 		"postcss-scss": "^4.0.6",
-		"prettier": "^2.8.4",
+		"prettier": "^2.8.5",
 		"prettier-plugin-ini": "^1.1.0",
 		"prettier-plugin-jsdoc": "^0.4.2",
 		"prettier-plugin-properties": "^0.2.0",
@@ -96,7 +96,7 @@
 		"stylelint-scss": "^4.5.0",
 		"tailwindcss": "^3.2.7",
 		"typescript": "^4.9.5",
-		"vite": "^4.2.0",
+		"vite": "^4.2.1",
 		"vite-plugin-ejs": "^1.6.4",
 		"vite-plugin-minify": "^1.5.2",
 		"vitest": "^0.28.4",
