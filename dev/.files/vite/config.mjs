@@ -125,11 +125,8 @@ export default async ({ mode, command /*, ssrBuild */ }) => {
 
 	updatePkg.type = 'module'; // ES module; always.
 	updatePkg.exports = {}; // Exports object initialization.
-	updatePkg.sideEffects = ['./src/*.{html,scss,ts,tsx}']; // <https://o5p.me/xVY39g>.
+	updatePkg.sideEffects = []; // <https://o5p.me/xVY39g>.
 
-	if (fs.existsSync(path.resolve(projDir, './src/resources/init-env.ts'))) {
-		updatePkg.sideEffects.push('./src/resources/init-env.ts');
-	}
 	if (isCMA && (isSSR || cmaEntries.length > 1)) {
 		updatePkg.exports = {
 			'.': {
@@ -159,6 +156,8 @@ export default async ({ mode, command /*, ssrBuild */ }) => {
 				},
 			});
 		}
+		updatePkg.sideEffects = ['./src/*.{html,scss,ts,tsx}'];
+		//
 	} else if (isCMA) {
 		updatePkg.exports = {
 			'.': {
@@ -175,10 +174,16 @@ export default async ({ mode, command /*, ssrBuild */ }) => {
 
 		updatePkg.types = './dist/types/' + cmaEntryIndexSubpathNoExt + '.d.ts';
 		updatePkg.typesVersions = { '>=3.1': { './*': ['./dist/types/*'] } };
-	} else {
+
+		updatePkg.sideEffects = ['./src/*.{html,scss,ts,tsx}'];
+		//
+	} /* Multipage app. */ else {
 		updatePkg.type = 'module'; // Always a module when building with Vite.
 		updatePkg.module = updatePkg.main = updatePkg.browser = updatePkg.unpkg = updatePkg.types = '';
 		(updatePkg.exports = null), (updatePkg.sideEffects = []), (updatePkg.typesVersions = {});
+	}
+	if (fs.existsSync(path.resolve(projDir, './src/resources/init-env.ts'))) {
+		updatePkg.sideEffects.push('./src/resources/init-env.ts');
 	}
 
 	/**
@@ -267,9 +272,10 @@ export default async ({ mode, command /*, ssrBuild */ }) => {
 	/**
 	 * Configures rollup for Vite.
 	 *
-	 * @see https://vitejs.dev/config/build-options.html#build-rollupoptions
 	 * @see https://rollupjs.org/guide/en/#big-list-of-options
+	 * @see https://vitejs.dev/config/build-options.html#build-rollupoptions
 	 */
+	const rollupChunkCounters = new Map();
 	const rollupConfig = {
 		input: isCMA // Absolute paths.
 			? cmaEntries
@@ -288,15 +294,34 @@ export default async ({ mode, command /*, ssrBuild */ }) => {
 			noConflict: true, // Like `jQuery.noConflict()`.
 			compact: 'prod' === mode, // Minify auto-generated snippets.
 
+			// By default, in library mode, Vite ignores `build.assetsDir`.
+			// This prevents that by enforcing a consistent location for chunks and assets.
+			chunkFileNames: (chunk) => {
+				// This function doesn’t have access to the current output format, unfortunately.
+				// However, we are setting `build.lib.formats` explicitly in the configuration below.
+				// Therefore, we know `es` comes first, followed by either `cjs` or `umd` output chunks.
+				// So, chunk counters make it possible to infer build output format, based on sequence.
+
+				const chunkKey = JSON.stringify(chunk); // JSON serialization.
+				const chunkCounter = Number(rollupChunkCounters.get(chunkKey) || 0) + 1;
+
+				const chunkFormat = chunkCounter > 1 ? 'cjs|umd' : 'es';
+				const chunkExt = 'cjs|umd' === chunkFormat ? 'cjs' : 'js';
+
+				rollupChunkCounters.set(chunkKey, chunkCounter); // Updates counter.
+				return path.join(path.relative(distDir, a16sDir), '[name]-[hash].' + chunkExt);
+			},
+			assetFileNames: (/* asset */) => path.join(path.relative(distDir, a16sDir), '[name]-[hash].[ext]'),
+
 			// Preserves module structure in CMAs built explicitly as dependencies.
 			// The expectation is that peers will build w/ this flag set as false, which is
 			// recommended, because preserving module structure in a final build has performance costs.
 			// However, in builds that are not final (e.g., CMAs with peer dependencies), preserving modules
 			// has performance benefits, as it allows for tree-shaking optimization in final builds.
-			preserveModules: isCMA && Object.keys(pkg.peerDependencies || {}).length > 0,
+			preserveModules: isCMA && cmaEntries.length > 1 && Object.keys(pkg.peerDependencies || {}).length > 0,
 
 			// Cannot inline dynamic imports when `preserveModules` is enabled, so set as `false` explicitly.
-			...(isCMA && Object.keys(pkg.peerDependencies || {}).length > 0 ? { inlineDynamicImports: false } : {}),
+			...(isCMA && cmaEntries.length > 1 && Object.keys(pkg.peerDependencies || {}).length > 0 ? { inlineDynamicImports: false } : {}),
 		},
 	};
 	// <https://vitejs.dev/guide/features.html#web-workers>
@@ -413,6 +438,7 @@ export default async ({ mode, command /*, ssrBuild */ }) => {
 	 */
 	const baseConfig = {
 		c10n: { pkg, updatePkg },
+
 		define: /* Static replacements. */ {
 			$$__APP_PKG_NAME__$$: JSON.stringify(pkg.name || ''),
 			$$__APP_PKG_VERSION__$$: JSON.stringify(pkg.version || ''),
