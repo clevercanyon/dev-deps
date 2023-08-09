@@ -47,7 +47,7 @@ env.dev.build.command = "npx @clevercanyon/madrun build --mode=dev"
 # Customizations.
 # <custom:start>
 
-name = "clevercanyon-skeleton"
-routes = ["clevercanyon.skeleton/*"]
+name = "skeleton-dev-deps"
+routes = ["skeleton-dev-deps.hop.gdn/*"]
 
 # </custom:end>
