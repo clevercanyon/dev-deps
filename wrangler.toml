@@ -48,6 +48,6 @@ env.dev.build.command = "npx @clevercanyon/madrun build --mode=dev"
 # <custom:start>
 
 name = "skeleton-dev-deps"
-routes = ["skeleton-dev-deps.hop.gdn/*"]
+route = { pattern = "skeleton-dev-deps.hop.gdn", custom_domain = true }
 
 # </custom:end>
