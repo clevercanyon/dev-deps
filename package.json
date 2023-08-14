@@ -3,7 +3,7 @@
 	"publishConfig": {
 		"access": "restricted"
 	},
-	"version": "1.0.150",
+	"version": "1.0.151",
 	"license": "GPL-3.0-or-later",
 	"name": "@clevercanyon/skeleton-dev-deps",
 	"description": "Dev dependencies for `@clevercanyon/skeleton`.",
@@ -64,7 +64,7 @@
 		"@typescript-eslint/eslint-plugin": "^5.62.0",
 		"@typescript-eslint/parser": "^5.62.0",
 		"@vitejs/plugin-basic-ssl": "^1.0.1",
-		"@vitest/coverage-c8": "^0.28.5",
+		"@vitest/coverage-v8": "^0.34.1",
 		"@vitest/ui": "^0.28.5",
 		"dotenv": "^16.3.1",
 		"dotenv-vault": "^1.25.0",
@@ -106,7 +106,7 @@
 		"vite": "^4.4.9",
 		"vite-plugin-ejs": "^1.6.4",
 		"vite-plugin-minify": "^1.5.2",
-		"vitest": "^0.28.4",
+		"vitest": "^0.34.1",
 		"vitest-environment-miniflare": "^2.14.0",
 		"wrangler": "^3.5.0"
 	},
