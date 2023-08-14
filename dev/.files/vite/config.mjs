@@ -35,7 +35,7 @@ const require = createRequire(import.meta.url);
  *
  * @returns      Vite configuration object properties.
  */
-export default async ({ mode, command /*, ssrBuild */ }) => {
+export default async ({ mode, command, ssrBuild }) => {
 	/**
 	 * Directory vars.
 	 */
@@ -70,52 +70,43 @@ export default async ({ mode, command /*, ssrBuild */ }) => {
 	/**
 	 * App type, target, path, and related vars.
 	 */
-	const appType = $obp.get(pkg, 'config.c10n.&.build.appType') || 'cma';
-	const targetEnv = $obp.get(pkg, 'config.c10n.&.build.targetEnv') || 'any';
+	let appLibName = (pkg.name || '').toLowerCase();
+	appLibName = appLibName.replace(/\bclevercanyon\b/gu, 'c10n');
+	appLibName = appLibName.replace(/@/gu, '').replace(/\./gu, '-').replace(/\/+/gu, '.');
+	appLibName = appLibName.replace(/[^a-z.0-9]([^.])/gu, (m0, m1) => m1.toUpperCase());
+	appLibName = appLibName.replace(/^\.|\.$/u, '');
+
+	const appType = $obp.get(pkg, 'config.c10n.&.' + (ssrBuild ? 'ssrBuild' : 'build') + '.appType') || 'cma';
+	const targetEnv = $obp.get(pkg, 'config.c10n.&.' + (ssrBuild ? 'ssrBuild' : 'build') + '.targetEnv') || 'any';
+	const entryFiles = $obp.get(pkg, 'config.c10n.&.' + (ssrBuild ? 'ssrBuild' : 'build') + '.entryFiles') || [];
 	const appBasePath = env.APP_BASE_PATH || ''; // From environment vars.
 
-	const isMPA = 'mpa' === appType;
-	const isCMA = 'cma' === appType || !isMPA;
+	const appDefaultEntryFiles = ['spa', 'mpa'].includes(appType) ? ['./src/**/index.html'] : ['./src/*.{ts,tsx}'];
+	const appEntryFiles = (entryFiles.length ? entryFiles : appDefaultEntryFiles).map((v) => $str.lTrim(v, './'));
+	const appEntries = appEntryFiles.length ? await $glob.promise(appEntryFiles, { cwd: projDir }) : [];
 
-	let cmaName = (pkg.name || '').toLowerCase();
-	cmaName = cmaName.replace(/\bclevercanyon\b/gu, 'c10n');
-	cmaName = cmaName.replace(/@/gu, '').replace(/\./gu, '-').replace(/\/+/gu, '.');
-	cmaName = cmaName.replace(/[^a-z.0-9]([^.])/gu, (m0, m1) => m1.toUpperCase());
-	cmaName = cmaName.replace(/^\.|\.$/u, '');
-
-	const mpaIndexes = await $glob.promise('**/index.html', { cwd: srcDir });
-	const mpaIndexesSubPaths = mpaIndexes.map((absPath) => path.relative(srcDir, absPath));
-
-	const cmaEntries = await $glob.promise('*.{ts,tsx}', { cwd: srcDir });
-	const cmaEntriesRelPaths = cmaEntries.map((absPath) => './' + path.relative(srcDir, absPath));
-	const cmaEntriesSubpaths = cmaEntries.map((absPath) => path.relative(srcDir, absPath));
-	const cmaEntriesSubpathsNoExt = cmaEntriesSubpaths.map((subpath) => subpath.replace(/\.[^.]+$/u, ''));
-
-	const mpaEntryIndexSubpath = mpaIndexesSubPaths.find((subpath) => $str.mm.isMatch(subpath, 'index.html'));
-	const cmaEntryIndexSubpath = cmaEntriesSubpaths.find((subpath) => $str.mm.isMatch(subpath, 'index.{ts,tsx}'));
-	const cmaEntryIndexSubpathNoExt = cmaEntryIndexSubpath.replace(/\.[^.]+$/u, '');
-
-	const isSSR = ['cfw', 'node'].includes(targetEnv);
-	const isSSRNoExternals = isSSR && ['cfw'].includes(targetEnv);
-	const isSSRWorker = isSSR && ['cfw'].includes(targetEnv);
+	const appEntriesAsProjRelPaths = appEntries.map((absPath) => './' + path.relative(projDir, absPath));
+	const appEntriesAsSrcRelPaths = appEntries.map((absPath) => './' + path.relative(srcDir, absPath));
+	const appEntriesAsSrcSubpaths = appEntries.map((absPath) => path.relative(srcDir, absPath));
+	const appEntriesAsSrcSubpathsNoExt = appEntriesAsSrcSubpaths.map((subpath) => subpath.replace(/\.[^.]+$/u, ''));
 
 	/**
 	 * Validates all of the above.
 	 */
+	if (!pkg.name || !appLibName) {
+		throw new Error('Apps must have a name.');
+	}
 	if (!['dev', 'ci', 'stage', 'prod'].includes(mode)) {
 		throw new Error('Required `mode` is missing or invalid. Expecting `dev|ci|stage|prod`.');
 	}
-	if ((!isMPA && !isCMA) || !['mpa', 'cma'].includes(appType)) {
+	if (!['spa', 'mpa', 'cma'].includes(appType)) {
 		throw new Error('Must have a valid `config.c10n.&.build.appType` in `package.json`.');
 	}
 	if (!['any', 'node', 'cfw', 'cfp', 'web', 'webw'].includes(targetEnv)) {
 		throw new Error('Must have a valid `config.c10n.&.build.targetEnv` in `package.json`.');
 	}
-	if (isMPA && !mpaEntryIndexSubpath) {
-		throw new Error('Multipage apps must have an `./index.html` entry point.');
-	}
-	if (isCMA && !cmaEntryIndexSubpath) {
-		throw new Error('Custom apps must have an `./index.{ts,tsx}` entry point.');
+	if (!appEntryFiles.length || !appEntries.length) {
+		throw new Error('Apps must have at least one entry point.');
 	}
 
 	/**
@@ -123,68 +114,97 @@ export default async ({ mode, command /*, ssrBuild */ }) => {
 	 */
 	const updatePkg = {}; // Initialize.
 
-	updatePkg.type = 'module'; // ES module; always.
-	updatePkg.exports = {}; // Exports object initialization.
-	updatePkg.sideEffects = []; // <https://o5p.me/xVY39g>.
+	if (ssrBuild) {
+		updatePkg.type = 'module'; // ESM; always.
+		updatePkg.sideEffects = pkg.sideEffects || []; // <https://o5p.me/xVY39g>.
+	} else {
+		updatePkg.type = 'module'; // ESM; always.
+		updatePkg.exports = {}; // Exports object initialization.
+		updatePkg.sideEffects = []; // <https://o5p.me/xVY39g>.
 
-	if (isCMA && (isSSR || cmaEntries.length > 1)) {
-		updatePkg.exports = {
-			'.': {
-				import: './dist/' + cmaEntryIndexSubpathNoExt + '.js',
-				require: './dist/' + cmaEntryIndexSubpathNoExt + '.cjs',
-				types: './dist/types/' + cmaEntryIndexSubpathNoExt + '.d.ts',
-			},
-		};
-		updatePkg.module = './dist/' + cmaEntryIndexSubpathNoExt + '.js';
-		updatePkg.main = './dist/' + cmaEntryIndexSubpathNoExt + '.cjs';
+		switch (true /* Conditional case handlers. */) {
+			case ['cma'].includes(appType): {
+				const appEntryIndexAsSrcSubpath = appEntriesAsSrcSubpaths.find((subpath) => $str.mm.isMatch(subpath, 'index.{ts,tsx}'));
+				const appEntryIndexAsSrcSubpathNoExt = appEntryIndexAsSrcSubpath.replace(/\.[^.]+$/u, '');
 
-		updatePkg.browser = ['web', 'webw'].includes(targetEnv) ? updatePkg.module : '';
-		updatePkg.unpkg = updatePkg.module;
+				if (!appEntryIndexAsSrcSubpath || !appEntryIndexAsSrcSubpathNoExt) {
+					throw new Error('Custom apps must have an `./index.{ts,tsx}` entry point.');
+				}
+				if (['cfw', 'node'].includes(targetEnv) || appEntries.length > 1) {
+					updatePkg.exports = {
+						'.': {
+							import: './dist/' + appEntryIndexAsSrcSubpathNoExt + '.js',
+							require: './dist/' + appEntryIndexAsSrcSubpathNoExt + '.cjs',
+							types: './dist/types/' + appEntryIndexAsSrcSubpathNoExt + '.d.ts',
+						},
+					};
+					updatePkg.module = './dist/' + appEntryIndexAsSrcSubpathNoExt + '.js';
+					updatePkg.main = './dist/' + appEntryIndexAsSrcSubpathNoExt + '.cjs';
 
-		updatePkg.types = './dist/types/' + cmaEntryIndexSubpathNoExt + '.d.ts';
-		updatePkg.typesVersions = { '>=3.1': { './*': ['./dist/types/*'] } };
+					updatePkg.browser = ['web', 'webw'].includes(targetEnv) ? updatePkg.module : '';
+					updatePkg.unpkg = updatePkg.module;
 
-		for (const cmaEntrySubPathNoExt of cmaEntriesSubpathsNoExt) {
-			if (cmaEntrySubPathNoExt === cmaEntryIndexSubpathNoExt) {
-				continue; // Don't remap the entry index.
+					updatePkg.types = './dist/types/' + appEntryIndexAsSrcSubpathNoExt + '.d.ts';
+					updatePkg.typesVersions = { '>=3.1': { './*': ['./dist/types/*'] } };
+
+					for (const appEntryAsSrcSubpathNoExt of appEntriesAsSrcSubpathsNoExt) {
+						if (appEntryAsSrcSubpathNoExt === appEntryIndexAsSrcSubpathNoExt) {
+							continue; // Don't remap the entry index.
+						}
+						$obj.patchDeep(updatePkg.exports, {
+							['./' + appEntryAsSrcSubpathNoExt]: {
+								import: './dist/' + appEntryAsSrcSubpathNoExt + '.js',
+								require: './dist/' + appEntryAsSrcSubpathNoExt + '.cjs',
+								types: './dist/types/' + appEntryAsSrcSubpathNoExt + '.d.ts',
+							},
+						});
+					}
+				} /* CMA with a UMD bundle. */ else {
+					updatePkg.exports = {
+						'.': {
+							import: './dist/' + appEntryIndexAsSrcSubpathNoExt + '.js',
+							require: './dist/' + appEntryIndexAsSrcSubpathNoExt + '.umd.cjs',
+							types: './dist/types/' + appEntryIndexAsSrcSubpathNoExt + '.d.ts',
+						},
+					};
+					updatePkg.module = './dist/' + appEntryIndexAsSrcSubpathNoExt + '.js';
+					updatePkg.main = './dist/' + appEntryIndexAsSrcSubpathNoExt + '.umd.cjs';
+
+					updatePkg.browser = ['web', 'webw'].includes(targetEnv) ? updatePkg.main : '';
+					updatePkg.unpkg = updatePkg.main;
+
+					updatePkg.types = './dist/types/' + appEntryIndexAsSrcSubpathNoExt + '.d.ts';
+					updatePkg.typesVersions = { '>=3.1': { './*': ['./dist/types/*'] } };
+				}
+				break; // Stop here.
 			}
-			$obj.patchDeep(updatePkg.exports, {
-				['./' + cmaEntrySubPathNoExt]: {
-					import: './dist/' + cmaEntrySubPathNoExt + '.js',
-					require: './dist/' + cmaEntrySubPathNoExt + '.cjs',
-					types: './dist/types/' + cmaEntrySubPathNoExt + '.d.ts',
-				},
-			});
+			case ['spa', 'mpa'].includes(appType): {
+				const appEntryIndexAsSrcSubpath = appEntriesAsSrcSubpaths.find((subpath) => $str.mm.isMatch(subpath, 'index.html'));
+				const appEntryIndexAsSrcSubpathNoExt = appEntryIndexAsSrcSubpath.replace(/\.[^.]+$/u, '');
+
+				if (['spa'].includes(appType) && (!appEntryIndexAsSrcSubpath || !appEntryIndexAsSrcSubpathNoExt)) {
+					throw new Error('Single-page apps must have an `./index.html` entry point.');
+					//
+				} else if (['mpa'].includes(appType) && (!appEntryIndexAsSrcSubpath || !appEntryIndexAsSrcSubpathNoExt)) {
+					throw new Error('Multipage apps must have an `./index.html` entry point.');
+				}
+				(updatePkg.exports = null), (updatePkg.typesVersions = {});
+				updatePkg.module = updatePkg.main = updatePkg.browser = updatePkg.unpkg = updatePkg.types = '';
+
+				break; // Stop here.
+			}
+			default: {
+				throw new Error('Unexpected `appType`. Failed to update `./package.json` properties.');
+			}
 		}
-		updatePkg.sideEffects = ['./src/*.{html,scss,ts,tsx}'];
-		//
-	} else if (isCMA) {
-		updatePkg.exports = {
-			'.': {
-				import: './dist/' + cmaEntryIndexSubpathNoExt + '.js',
-				require: './dist/' + cmaEntryIndexSubpathNoExt + '.umd.cjs',
-				types: './dist/types/' + cmaEntryIndexSubpathNoExt + '.d.ts',
-			},
-		};
-		updatePkg.module = './dist/' + cmaEntryIndexSubpathNoExt + '.js';
-		updatePkg.main = './dist/' + cmaEntryIndexSubpathNoExt + '.umd.cjs';
-
-		updatePkg.browser = ['web', 'webw'].includes(targetEnv) ? updatePkg.main : '';
-		updatePkg.unpkg = updatePkg.main;
-
-		updatePkg.types = './dist/types/' + cmaEntryIndexSubpathNoExt + '.d.ts';
-		updatePkg.typesVersions = { '>=3.1': { './*': ['./dist/types/*'] } };
-
-		updatePkg.sideEffects = ['./src/*.{html,scss,ts,tsx}'];
-		//
-	} /* Multipage app. */ else {
-		updatePkg.type = 'module'; // Always a module when building with Vite.
-		updatePkg.module = updatePkg.main = updatePkg.browser = updatePkg.unpkg = updatePkg.types = '';
-		(updatePkg.exports = null), (updatePkg.sideEffects = []), (updatePkg.typesVersions = {});
+		if (fs.existsSync(path.resolve(projDir, './src/resources/init-env.ts'))) {
+			updatePkg.sideEffects.push('./src/resources/init-env.ts');
+		}
 	}
-	if (fs.existsSync(path.resolve(projDir, './src/resources/init-env.ts'))) {
-		updatePkg.sideEffects.push('./src/resources/init-env.ts');
+	for (const appEntryAsProjRelPath of appEntriesAsProjRelPaths) {
+		updatePkg.sideEffects.push(appEntryAsProjRelPath.replace(/\.html$/gu, '.tsx'));
 	}
+	updatePkg.sideEffects = [...new Set(updatePkg.sideEffects)]; // Unique array.
 
 	/**
 	 * Pre-updates `package.json` properties impacting build process.
@@ -199,6 +219,7 @@ export default async ({ mode, command /*, ssrBuild */ }) => {
 	 * @see https://github.com/zhuweiyou/vite-plugin-minify
 	 */
 	const pluginBasicSSLConfig = pluginBasicSSL();
+
 	const pluginEJSConfig = pluginEJS(
 		{ $build: { require, pkg, mode, env, projDir } },
 		{
@@ -238,26 +259,33 @@ export default async ({ mode, command /*, ssrBuild */ }) => {
 				/**
 				 * Updates `package.json`.
 				 */
-				await u.updatePkg({ $set: updatePkg });
+				if (!ssrBuild) await u.updatePkg({ $set: updatePkg });
 
 				/**
 				 * Copies `./.env.vault` to dist directory.
 				 */
-				if (fs.existsSync(path.resolve(projDir, './.env.vault'))) {
+				if (!ssrBuild && fs.existsSync(path.resolve(projDir, './.env.vault'))) {
 					await fsp.copyFile(path.resolve(projDir, './.env.vault'), path.resolve(distDir, './.env.vault'));
+				}
+
+				/**
+				 * Generates SSR build on-the-fly internally.
+				 */
+				if ('build' === command && !ssrBuild && $obp.get(pkg, 'config.c10n.&.ssrBuild.appType')) {
+					await u.spawn('npx', ['vite', 'build', '--mode', mode, '--ssr']);
 				}
 
 				/**
 				 * Generates typescript type declaration file(s).
 				 */
-				if ('build' === command) {
+				if ('build' === command && !ssrBuild) {
 					await u.spawn('npx', ['tsc', '--emitDeclarationOnly']);
 				}
 
 				/**
 				 * Generates a zip archive containing `./dist` directory.
 				 */
-				if ('build' === command) {
+				if ('build' === command && !ssrBuild) {
 					const archive = $fs.archiver('zip', { zlib: { level: 9 } });
 					archive.pipe(fs.createWriteStream(path.resolve(projDir, './.~dist.zip')));
 					archive.directory(distDir + '/', false);
@@ -277,13 +305,11 @@ export default async ({ mode, command /*, ssrBuild */ }) => {
 	 */
 	const rollupChunkCounters = new Map();
 	const rollupConfig = {
-		input: isCMA // Absolute paths.
-			? cmaEntries
-			: mpaIndexes,
+		input: appEntries,
 
 		external: [
 			'__STATIC_CONTENT_MANIFEST', // Cloudflare workers use this for static assets.
-			...Object.keys(pkg.peerDependencies || {}).map((k) => new RegExp('^' + $str.escRegExp(k) + '(?:$|/)')),
+			...Object.keys(pkg.peerDependencies || {}).map((k) => new RegExp('^' + $str.escRegExp(k) + '(?:$|[/?])')),
 		],
 		output: {
 			interop: 'auto', // Matches TypeScript config.
@@ -318,10 +344,10 @@ export default async ({ mode, command /*, ssrBuild */ }) => {
 			// recommended, because preserving module structure in a final build has performance costs.
 			// However, in builds that are not final (e.g., CMAs with peer dependencies), preserving modules
 			// has performance benefits, as it allows for tree-shaking optimization in final builds.
-			preserveModules: isCMA && cmaEntries.length > 1 && Object.keys(pkg.peerDependencies || {}).length > 0,
+			preserveModules: ['cma'].includes(appType) && appEntries.length > 1 && Object.keys(pkg.peerDependencies || {}).length > 0,
 
 			// Cannot inline dynamic imports when `preserveModules` is enabled, so set as `false` explicitly.
-			...(isCMA && cmaEntries.length > 1 && Object.keys(pkg.peerDependencies || {}).length > 0 ? { inlineDynamicImports: false } : {}),
+			...(['cma'].includes(appType) && appEntries.length > 1 && Object.keys(pkg.peerDependencies || {}).length > 0 ? { inlineDynamicImports: false } : {}),
 		},
 	};
 	// <https://vitejs.dev/guide/features.html#web-workers>
@@ -365,15 +391,15 @@ export default async ({ mode, command /*, ssrBuild */ }) => {
 		watchExclude: vitestExcludes,
 
 		// @todo Enhance miniflare support.
-		// @todo Add support for testing web workers.
-		environment: ['web', 'cfp'].includes(targetEnv) ? 'jsdom' // <https://o5p.me/Gf9Cy5>.
+		// @todo Enhance web worker support.
+		environment: ['cfp', 'web', 'webw'].includes(targetEnv) ? 'jsdom' // <https://o5p.me/Gf9Cy5>.
 			: ['cfw'].includes(targetEnv) ? 'miniflare' // <https://o5p.me/TyF9Ot>.
 			: ['node'].includes(targetEnv) ? 'node' // <https://o5p.me/Gf9Cy5>.
 			: 'node', // prettier-ignore
 
 		// See: <https://o5p.me/8Pjw1d> for `environment`, `environmentMatchGlobs` precedence.
 		environmentMatchGlobs: [
-			['**/*.{web,cfp}.{test,tests,spec,specs}.{' + vitestExtensions.map((e) => e.slice(1)).join(',') + '}', 'jsdom'],
+			['**/*.{cfp,web,webw}.{test,tests,spec,specs}.{' + vitestExtensions.map((e) => e.slice(1)).join(',') + '}', 'jsdom'],
 			['**/*.cfw.{test,tests,spec,specs}.{' + vitestExtensions.map((e) => e.slice(1)).join(',') + '}', 'miniflare'],
 			['**/*.node.{test,tests,spec,specs}.{' + vitestExtensions.map((e) => e.slice(1)).join(',') + '}', 'node'],
 		],
@@ -447,10 +473,10 @@ export default async ({ mode, command /*, ssrBuild */ }) => {
 			$$__APP_PKG_BUGS__$$: JSON.stringify(pkg.bugs || ''),
 		},
 		root: srcDir, // Absolute. Where entry indexes live.
-		publicDir: path.relative(srcDir, cargoDir), // Relative to `root` directory.
+		publicDir: ssrBuild ? false : path.relative(srcDir, cargoDir), // Relative to `root` directory.
 		base: appBasePath + '/', // Analagous to `<base href="/">` — leading & trailing slash.
 
-		appType: isCMA ? 'custom' : 'mpa', // See: <https://o5p.me/ZcTkEv>.
+		appType: ['spa', 'mpa'].includes(appType) ? appType : 'custom', // See: <https://o5p.me/ZcTkEv>.
 		resolve: { alias: importAliases }, // Matches TypeScript config import aliases.
 
 		envDir: path.relative(srcDir, envsDir), // Relative to `root` directory.
@@ -459,11 +485,11 @@ export default async ({ mode, command /*, ssrBuild */ }) => {
 		server: { open: true, https: true }, // Vite dev server.
 		plugins, // Additional Vite plugins that were configured above.
 
-		...(isSSR // <https://vitejs.dev/config/ssr-options.html>.
+		...(['cfw', 'node'].includes(targetEnv) // <https://vitejs.dev/config/ssr-options.html>.
 			? {
 					ssr: {
-						noExternal: isSSRNoExternals,
-						target: isSSRWorker ? 'webworker' : 'node',
+						noExternal: ['cfw'].includes(targetEnv),
+						target: ['cfw'].includes(targetEnv) ? 'webworker' : 'node',
 					},
 			  }
 			: {}),
@@ -474,26 +500,26 @@ export default async ({ mode, command /*, ssrBuild */ }) => {
 		},
 		build: /* <https://vitejs.dev/config/build-options.html> */ {
 			target: 'es2021', // Matches TypeScript config.
-			emptyOutDir: true, // Must set as `true` explicitly.
 
+			emptyOutDir: ssrBuild ? false : true, // Not during SSR builds.
 			outDir: path.relative(srcDir, distDir), // Relative to `root` directory.
 			assetsDir: path.relative(distDir, a16sDir), // Relative to `outDir` directory.
 			// Note: `a16s` = numeronym for 'acquired resources'.
 
-			ssr: isSSR, // Server-side rendering?
-			...(isSSR ? { ssrManifest: 'dev' === mode } : {}),
+			ssr: ['cfw', 'node'].includes(targetEnv), // Server-side rendering?
+			...(['cfw', 'node'].includes(targetEnv) ? { ssrManifest: 'dev' === mode } : {}),
 
 			sourcemap: 'dev' === mode, // Enables creation of sourcemaps.
 			manifest: 'dev' === mode, // Enables creation of manifest for assets.
 			minify: 'dev' === mode ? false : 'esbuild', // See: <https://o5p.me/ZyQ4sv>.
 
-			...(isCMA // Custom-made apps = library code.
+			...(['cma'].includes(appType) // Custom-made apps = library code.
 				? {
 						lib: {
-							name: cmaName,
-							entry: cmaEntriesRelPaths,
+							name: appLibName,
+							entry: appEntriesAsSrcRelPaths,
 							// Default formats explicitly. See: <https://o5p.me/v0FR3s>.
-							formats: cmaEntries.length > 1 ? ['es', 'cjs'] : ['es', 'umd'],
+							formats: appEntries.length > 1 ? ['es', 'cjs'] : ['es', 'umd'],
 						},
 				  }
 				: {}),
