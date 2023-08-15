@@ -23,7 +23,7 @@ import { ViteMinifyPlugin as pluginMinifyHTML } from 'vite-plugin-minify';
 import u from '../bin/includes/utilities.mjs';
 import importAliases from './includes/import-aliases.mjs';
 import { $fs, $glob } from '../../../node_modules/@clevercanyon/utilities.node/dist/index.js';
-import { $str, $obj, $obp } from '../../../node_modules/@clevercanyon/utilities/dist/index.js';
+import { $is, $str, $obj, $obp, $http, $time } from '../../../node_modules/@clevercanyon/utilities/dist/index.js';
 
 import { createRequire } from 'node:module';
 const require = createRequire(import.meta.url);
@@ -67,9 +67,25 @@ export default async ({ mode, command, ssrBuild }) => {
 	const appEnvPrefix = 'APP_'; // Part of app.
 	const env = loadEnv(mode, envsDir, appEnvPrefix);
 
+	const staticDefs = {
+		['$$__' + appEnvPrefix + 'PKG_NAME__$$']: pkg.name || '',
+		['$$__' + appEnvPrefix + 'PKG_VERSION__$$']: pkg.version || '',
+		['$$__' + appEnvPrefix + 'PKG_REPOSITORY__$$']: pkg.repository || '',
+		['$$__' + appEnvPrefix + 'PKG_HOMEPAGE__$$']: pkg.homepage || '',
+		['$$__' + appEnvPrefix + 'PKG_BUGS__$$']: pkg.bugs || '',
+	};
+	staticDefs['$$__' + appEnvPrefix + 'BUILD_TIME_YMD__$$'] = $time.parse('now').toSQLDate() || '';
+
+	Object.keys(env) // Add string env vars to static defines.
+		.filter((key) => new RegExp('^' + $str.escRegExp(appEnvPrefix), 'u').test(key))
+		.forEach((key) => ($is.string(env[key]) ? (staticDefs['$$__' + key + '__$$'] = env[key]) : null));
+
 	/**
 	 * App type, target, path, and related vars.
 	 */
+	const appBaseURL = env.APP_BASE_URL || ''; // e.g., `https://example.com/base`.
+	const appBasePath = env.APP_BASE_PATH || ''; // e.g., `/base`.
+
 	let appLibName = (pkg.name || '').toLowerCase();
 	appLibName = appLibName.replace(/\bclevercanyon\b/gu, 'c10n');
 	appLibName = appLibName.replace(/@/gu, '').replace(/\./gu, '-').replace(/\/+/gu, '.');
@@ -79,9 +95,8 @@ export default async ({ mode, command, ssrBuild }) => {
 	const appType = $obp.get(pkg, 'config.c10n.&.' + (ssrBuild ? 'ssrBuild' : 'build') + '.appType') || 'cma';
 	const targetEnv = $obp.get(pkg, 'config.c10n.&.' + (ssrBuild ? 'ssrBuild' : 'build') + '.targetEnv') || 'any';
 	const entryFiles = $obp.get(pkg, 'config.c10n.&.' + (ssrBuild ? 'ssrBuild' : 'build') + '.entryFiles') || [];
-	const appBasePath = env.APP_BASE_PATH || ''; // From environment vars.
 
-	const appDefaultEntryFiles = ['spa', 'mpa'].includes(appType) ? ['./src/**/index.html'] : ['./src/*.{ts,tsx}'];
+	const appDefaultEntryFiles = ['spa'].includes(appType) ? ['./src/index.html'] : ['mpa'].includes(appType) ? ['./src/**/index.html'] : ['./src/*.{ts,tsx}'];
 	const appEntryFiles = (entryFiles.length ? entryFiles : appDefaultEntryFiles).map((v) => $str.lTrim(v, './'));
 	const appEntries = appEntryFiles.length ? await $glob.promise(appEntryFiles, { cwd: projDir }) : [];
 
@@ -101,6 +116,9 @@ export default async ({ mode, command, ssrBuild }) => {
 	}
 	if (!['spa', 'mpa', 'cma'].includes(appType)) {
 		throw new Error('Must have a valid `config.c10n.&.build.appType` in `package.json`.');
+	}
+	if (['spa', 'mpa'].includes(appType) && !appBaseURL) {
+		throw new Error('Must have a valid `APP_BASE_URL` environment variable.');
 	}
 	if (!['any', 'node', 'cfw', 'cfp', 'web', 'webw'].includes(targetEnv)) {
 		throw new Error('Must have a valid `config.c10n.&.build.targetEnv` in `package.json`.');
@@ -257,35 +275,72 @@ export default async ({ mode, command, ssrBuild }) => {
 				postProcessed = true;
 
 				/**
+				 * Not during SSR builds.
+				 */
+				if (ssrBuild) return;
+
+				/**
 				 * Updates `package.json`.
 				 */
-				if (!ssrBuild) await u.updatePkg({ $set: updatePkg });
+				await u.updatePkg({ $set: updatePkg });
 
 				/**
 				 * Copies `./.env.vault` to dist directory.
 				 */
-				if (!ssrBuild && fs.existsSync(path.resolve(projDir, './.env.vault'))) {
+				if (fs.existsSync(path.resolve(projDir, './.env.vault'))) {
 					await fsp.copyFile(path.resolve(projDir, './.env.vault'), path.resolve(distDir, './.env.vault'));
+				}
+
+				/**
+				 * Updates a few files that configure apps running on Cloudflare Pages.
+				 */
+				if ('build' === command && ['spa', 'mpa'].includes(appType) && ['cfp'].includes(targetEnv)) {
+					for (const file of await $glob.promise(['_headers', '_redirects', '_routes.json', 'robots.txt', 'sitemap.xml', 'sitemaps/**/*.xml'], { cwd: distDir })) {
+						const fileExt = $str.trim(path.extname(file), '.');
+						const fileRelPath = path.relative(distDir, file);
+
+						let fileContents = fs.readFileSync(file).toString(); // Reads file contents.
+
+						for (const key of Object.keys(staticDefs) /* Replaces all static definition tokens. */) {
+							fileContents = fileContents.replace(new RegExp($str.escRegExp(key), 'gu'), staticDefs[key]);
+						}
+						if (['_headers'].includes(fileRelPath)) {
+							const cfpDefaultHeaders = $http.prepareCFPDefaultHeaders({ appType, isC10n: env.APP_IS_C10N || false });
+							fileContents = fileContents.replace('$$__APP_CFP_DEFAULT_HEADERS__$$', cfpDefaultHeaders);
+						}
+						if (['_headers', '_redirects', 'robots.txt'].includes(fileRelPath)) {
+							fileContents = fileContents.replace(/^#[^\n]*\n/gmu, '');
+							//
+						} else if (['json'].includes(fileExt)) {
+							fileContents = fileContents.replace(/\/\*[\s\S]*?\*\/\n?/gu, '');
+							//
+						} else if (['xml'].includes(fileExt)) {
+							fileContents = fileContents.replace(/<!--[\s\S]*?-->\n?/gu, '');
+						}
+						fileContents = $str.trim(fileContents.replace(/\n{3,}/gu, '\n\n'));
+
+						await fsp.writeFile(file, fileContents);
+					}
 				}
 
 				/**
 				 * Generates SSR build on-the-fly internally.
 				 */
-				if ('build' === command && !ssrBuild && $obp.get(pkg, 'config.c10n.&.ssrBuild.appType')) {
+				if ('build' === command && $obp.get(pkg, 'config.c10n.&.ssrBuild.appType')) {
 					await u.spawn('npx', ['vite', 'build', '--mode', mode, '--ssr']);
 				}
 
 				/**
 				 * Generates typescript type declaration file(s).
 				 */
-				if ('build' === command && !ssrBuild) {
+				if ('build' === command) {
 					await u.spawn('npx', ['tsc', '--emitDeclarationOnly']);
 				}
 
 				/**
 				 * Generates a zip archive containing `./dist` directory.
 				 */
-				if ('build' === command && !ssrBuild) {
+				if ('build' === command) {
 					const archive = $fs.archiver('zip', { zlib: { level: 9 } });
 					archive.pipe(fs.createWriteStream(path.resolve(projDir, './.~dist.zip')));
 					archive.directory(distDir + '/', false);
@@ -390,8 +445,8 @@ export default async ({ mode, command, ssrBuild }) => {
 		exclude: vitestExcludes,
 		watchExclude: vitestExcludes,
 
-		// @todo Enhance miniflare support.
 		// @todo Enhance web worker support.
+		// @todo Fix and enhance miniflare support.
 		environment: ['cfp', 'web', 'webw'].includes(targetEnv) ? 'jsdom' // <https://o5p.me/Gf9Cy5>.
 			: ['cfw'].includes(targetEnv) ? 'miniflare' // <https://o5p.me/TyF9Ot>.
 			: ['node'].includes(targetEnv) ? 'node' // <https://o5p.me/Gf9Cy5>.
@@ -403,19 +458,9 @@ export default async ({ mode, command, ssrBuild }) => {
 			['**/*.cfw.{test,tests,spec,specs}.{' + vitestExtensions.map((e) => e.slice(1)).join(',') + '}', 'miniflare'],
 			['**/*.node.{test,tests,spec,specs}.{' + vitestExtensions.map((e) => e.slice(1)).join(',') + '}', 'node'],
 		],
-		deps: {
-			interopDefault: true,
-			external: ['**/dist/**', '**/node_modules/**'].concat(rollupConfig.external),
-		},
+		server: { deps: { external: ['**/dist/**', '**/node_modules/**'].concat(rollupConfig.external) } },
 		cache: { dir: path.resolve(projDir, './node_modules/.vitest') },
 
-		transformMode: {
-			web: [], // See: <https://o5p.me/Nf6MGy> for further details.
-			ssr: [new RegExp('\\.(?:' + vitestExtensions.map((e) => $str.escRegExp(e.slice(1))).join('|') + ')$')],
-		},
-		// See: <https://vitest.dev/api/#test-only>
-		// See: <https://vitest.dev/api/#bench-only>
-		// See: <https://vitest.dev/api/#describe-only>
 		allowOnly: true, // Allows `describe.only`, `test.only`, `bench.only`.
 		passWithNoTests: true, // Pass if there are no tests to run.
 
@@ -434,7 +479,6 @@ export default async ({ mode, command, ssrBuild }) => {
 		},
 		coverage: {
 			all: true,
-			src: srcDir,
 			include: ['**'],
 			exclude: vitestExcludes //
 				.concat(vitestIncludes)
@@ -464,14 +508,8 @@ export default async ({ mode, command, ssrBuild }) => {
 	 */
 	const baseConfig = {
 		c10n: { pkg, updatePkg },
+		define: $obj.map(staticDefs, (v) => JSON.stringify(v)),
 
-		define: /* Static replacements. */ {
-			$$__APP_PKG_NAME__$$: JSON.stringify(pkg.name || ''),
-			$$__APP_PKG_VERSION__$$: JSON.stringify(pkg.version || ''),
-			$$__APP_PKG_REPOSITORY__$$: JSON.stringify(pkg.repository || ''),
-			$$__APP_PKG_HOMEPAGE__$$: JSON.stringify(pkg.homepage || ''),
-			$$__APP_PKG_BUGS__$$: JSON.stringify(pkg.bugs || ''),
-		},
 		root: srcDir, // Absolute. Where entry indexes live.
 		publicDir: ssrBuild ? false : path.relative(srcDir, cargoDir), // Relative to `root` directory.
 		base: appBasePath + '/', // Analagous to `<base href="/">` — leading & trailing slash.

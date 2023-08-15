@@ -10,7 +10,6 @@
  * @see  https://www.typescriptlang.org/tsconfig
  * @see  https://vitejs.dev/guide/features.html#typescript-compiler-options
  */
-
 {
 	"include": [
 		"../../../src/**/*", //
@@ -26,7 +25,7 @@
 		"types": ["vite/client"],
 
 		"jsx": "react-jsx",
-		"jsxImportSource": "react",
+		"jsxImportSource": "preact",
 
 		"module": "node16",
 		"moduleResolution": "node16",
@@ -42,7 +41,9 @@
 
 		"paths": {
 			// Note: Use just a single array item for Vite/Jest compatibility.
-			"@:src/*": ["./*"] // Relative to `baseUrl`.
+			"@:src/*": ["./*"], // Relative to `baseUrl`.
+			"react": ["../node_modules/preact/compat"],
+			"react-dom": ["../node_modules/preact/compat"]
 		},
 		"declaration": true,
 		"declarationMap": false,

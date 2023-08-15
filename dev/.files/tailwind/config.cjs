@@ -41,9 +41,9 @@ module.exports = {
 	content: [
 		path.resolve(projDir, './src/**/*.{' + contentExtns.join(',') + '}'),
 
-		// If this package is using `@clevercanyon/utilities` we can also scan react files.
-		...(fs.existsSync(path.resolve(projDir, './node_modules/@clevercanyon/utilities/dist/react'))
-			? [path.resolve(projDir, './node_modules/@clevercanyon/utilities/dist/react/**/*.{' + contentExtns.join(',') + '}')]
+		// If this package is using `@clevercanyon/utilities` we can also scan preact files.
+		...(fs.existsSync(path.resolve(projDir, './node_modules/@clevercanyon/utilities/dist/preact'))
+			? [path.resolve(projDir, './node_modules/@clevercanyon/utilities/dist/preact/**/*.{' + contentExtns.join(',') + '}')]
 			: []),
 
 		// If this package is using `@clevercanyon/utilities` we can also scan EJS views.

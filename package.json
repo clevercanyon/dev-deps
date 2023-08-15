@@ -3,7 +3,7 @@
 	"publishConfig": {
 		"access": "restricted"
 	},
-	"version": "1.0.155",
+	"version": "1.0.156",
 	"license": "GPL-3.0-or-later",
 	"name": "@clevercanyon/skeleton-dev-deps",
 	"description": "Dev dependencies for `@clevercanyon/skeleton`.",
@@ -40,7 +40,7 @@
 	},
 	"dependencies": {
 		"@clevercanyon/madrun": "^1.0.74",
-		"@clevercanyon/utilities": "^1.0.129",
+		"@clevercanyon/utilities": "^1.0.130",
 		"@clevercanyon/utilities.node": "^1.0.71",
 		"@cloudflare/workers-types": "^4.20230814.0",
 		"@octokit/core": "^4.2.4",
