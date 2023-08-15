@@ -3,7 +3,7 @@
 	"publishConfig": {
 		"access": "restricted"
 	},
-	"version": "1.0.156",
+	"version": "1.0.157",
 	"license": "GPL-3.0-or-later",
 	"name": "@clevercanyon/skeleton-dev-deps",
 	"description": "Dev dependencies for `@clevercanyon/skeleton`.",
@@ -39,8 +39,8 @@
 		}
 	},
 	"dependencies": {
-		"@clevercanyon/madrun": "^1.0.74",
-		"@clevercanyon/utilities": "^1.0.130",
+		"@clevercanyon/madrun": "^1.0.75",
+		"@clevercanyon/utilities": "^1.0.131",
 		"@clevercanyon/utilities.node": "^1.0.71",
 		"@cloudflare/workers-types": "^4.20230814.0",
 		"@octokit/core": "^4.2.4",
@@ -56,6 +56,7 @@
 		"@types/luxon": "^3.3.1",
 		"@types/micromatch": "^4.0.2",
 		"@types/node": "^18.17.5",
+		"@types/prettier": "^2.7.3",
 		"@types/semver": "^7.5.0",
 		"@types/yargs": "^17.0.24",
 		"@types/yargs-parser": "^21.0.0",
