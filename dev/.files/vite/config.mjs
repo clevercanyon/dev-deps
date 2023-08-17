@@ -35,7 +35,7 @@ const require = createRequire(import.meta.url);
  *
  * @returns      Vite configuration object properties.
  */
-export default async ({ mode, command, ssrBuild }) => {
+export default async ({ mode, command, ssrBuild: isSSRBuild }) => {
 	/**
 	 * Directory vars.
 	 */
@@ -92,9 +92,9 @@ export default async ({ mode, command, ssrBuild }) => {
 	appLibName = appLibName.replace(/[^a-z.0-9]([^.])/gu, (m0, m1) => m1.toUpperCase());
 	appLibName = appLibName.replace(/^\.|\.$/u, '');
 
-	const appType = $obp.get(pkg, 'config.c10n.&.' + (ssrBuild ? 'ssrBuild' : 'build') + '.appType') || 'cma';
-	const targetEnv = $obp.get(pkg, 'config.c10n.&.' + (ssrBuild ? 'ssrBuild' : 'build') + '.targetEnv') || 'any';
-	const entryFiles = $obp.get(pkg, 'config.c10n.&.' + (ssrBuild ? 'ssrBuild' : 'build') + '.entryFiles') || [];
+	const appType = $obp.get(pkg, 'config.c10n.&.' + (isSSRBuild ? 'ssrBuild' : 'build') + '.appType') || 'cma';
+	const targetEnv = $obp.get(pkg, 'config.c10n.&.' + (isSSRBuild ? 'ssrBuild' : 'build') + '.targetEnv') || 'any';
+	const entryFiles = $obp.get(pkg, 'config.c10n.&.' + (isSSRBuild ? 'ssrBuild' : 'build') + '.entryFiles') || [];
 
 	const appDefaultEntryFiles = ['spa'].includes(appType) ? ['./src/index.html'] : ['mpa'].includes(appType) ? ['./src/**/index.html'] : ['./src/*.{ts,tsx}'];
 	const appEntryFiles = (entryFiles.length ? entryFiles : appDefaultEntryFiles).map((v) => $str.lTrim(v, './'));
@@ -105,11 +105,21 @@ export default async ({ mode, command, ssrBuild }) => {
 	const appEntriesAsSrcSubpaths = appEntries.map((absPath) => path.relative(srcDir, absPath));
 	const appEntriesAsSrcSubpathsNoExt = appEntriesAsSrcSubpaths.map((subpath) => subpath.replace(/\.[^.]+$/u, ''));
 
+	const isTargetEnvSSR = ['cfw', 'node'].includes(targetEnv); // Target environment requires server-side rendering?
+	const shouldPreserveModules = ['cma'].includes(appType) && appEntries.length > 1 && Object.keys(pkg.peerDependencies || {}).length > 0;
+	const shouldMinify = 'dev' === mode || shouldPreserveModules ? false : true; // Should minify output files?
+
 	/**
 	 * Validates all of the above.
 	 */
 	if (!pkg.name || !appLibName) {
 		throw new Error('Apps must have a name.');
+	}
+	if (!appEntryFiles.length || !appEntries.length) {
+		throw new Error('Apps must have at least one entry point.');
+	}
+	if (isSSRBuild && !isTargetEnvSSR) {
+		throw new Error('SSR builds must target an SSR environment.');
 	}
 	if (!['dev', 'ci', 'stage', 'prod'].includes(mode)) {
 		throw new Error('Required `mode` is missing or invalid. Expecting `dev|ci|stage|prod`.');
@@ -123,16 +133,13 @@ export default async ({ mode, command, ssrBuild }) => {
 	if (!['any', 'node', 'cfw', 'cfp', 'web', 'webw'].includes(targetEnv)) {
 		throw new Error('Must have a valid `config.c10n.&.build.targetEnv` in `package.json`.');
 	}
-	if (!appEntryFiles.length || !appEntries.length) {
-		throw new Error('Apps must have at least one entry point.');
-	}
 
 	/**
 	 * Prepares `package.json` build-related properties.
 	 */
 	const updatePkg = {}; // Initialize.
 
-	if (ssrBuild) {
+	if (isSSRBuild) {
 		updatePkg.type = 'module'; // ESM; always.
 		updatePkg.sideEffects = pkg.sideEffects || []; // <https://o5p.me/xVY39g>.
 	} else {
@@ -148,7 +155,7 @@ export default async ({ mode, command, ssrBuild }) => {
 				if (!appEntryIndexAsSrcSubpath || !appEntryIndexAsSrcSubpathNoExt) {
 					throw new Error('Custom apps must have an `./index.{ts,tsx}` entry point.');
 				}
-				if (['cfw', 'node'].includes(targetEnv) || appEntries.length > 1) {
+				if (isTargetEnvSSR || appEntries.length > 1) {
 					updatePkg.exports = {
 						'.': {
 							import: './dist/' + appEntryIndexAsSrcSubpathNoExt + '.js',
@@ -277,7 +284,7 @@ export default async ({ mode, command, ssrBuild }) => {
 				/**
 				 * Not during SSR builds.
 				 */
-				if (ssrBuild) return;
+				if (isSSRBuild) return;
 
 				/**
 				 * Updates `package.json`.
@@ -372,8 +379,8 @@ export default async ({ mode, command, ssrBuild }) => {
 			esModule: true, // Matches TypeScript config.
 
 			extend: true, // i.e., UMD global `||` checks.
-			noConflict: true, // Like `jQuery.noConflict()`.
-			compact: 'prod' === mode, // Minify auto-generated snippets.
+			noConflict: true, // Behaves the same as `jQuery.noConflict()`.
+			compact: shouldMinify ? true : false, // Minify auto-generated snippets?
 
 			// By default, in library mode, Vite ignores `build.assetsDir`.
 			// This prevents that by enforcing a consistent location for chunks and assets.
@@ -399,10 +406,10 @@ export default async ({ mode, command, ssrBuild }) => {
 			// recommended, because preserving module structure in a final build has performance costs.
 			// However, in builds that are not final (e.g., CMAs with peer dependencies), preserving modules
 			// has performance benefits, as it allows for tree-shaking optimization in final builds.
-			preserveModules: ['cma'].includes(appType) && appEntries.length > 1 && Object.keys(pkg.peerDependencies || {}).length > 0,
+			...(shouldPreserveModules ? { preserveModules: true } : {}),
 
 			// Cannot inline dynamic imports when `preserveModules` is enabled, so set as `false` explicitly.
-			...(['cma'].includes(appType) && appEntries.length > 1 && Object.keys(pkg.peerDependencies || {}).length > 0 ? { inlineDynamicImports: false } : {}),
+			...(shouldPreserveModules ? { inlineDynamicImports: false } : {}),
 		},
 	};
 	// <https://vitejs.dev/guide/features.html#web-workers>
@@ -511,7 +518,7 @@ export default async ({ mode, command, ssrBuild }) => {
 		define: $obj.map(staticDefs, (v) => JSON.stringify(v)),
 
 		root: srcDir, // Absolute. Where entry indexes live.
-		publicDir: ssrBuild ? false : path.relative(srcDir, cargoDir), // Relative to `root` directory.
+		publicDir: isSSRBuild ? false : path.relative(srcDir, cargoDir), // Relative to `root` directory.
 		base: appBasePath + '/', // Analagous to `<base href="/">` — leading & trailing slash.
 
 		appType: ['spa', 'mpa'].includes(appType) ? appType : 'custom', // See: <https://o5p.me/ZcTkEv>.
@@ -523,7 +530,7 @@ export default async ({ mode, command, ssrBuild }) => {
 		server: { open: true, https: true }, // Vite dev server.
 		plugins, // Additional Vite plugins that were configured above.
 
-		...(['cfw', 'node'].includes(targetEnv) // <https://vitejs.dev/config/ssr-options.html>.
+		...(isTargetEnvSSR // <https://vitejs.dev/config/ssr-options.html>.
 			? {
 					ssr: {
 						noExternal: ['cfw'].includes(targetEnv),
@@ -539,17 +546,17 @@ export default async ({ mode, command, ssrBuild }) => {
 		build: /* <https://vitejs.dev/config/build-options.html> */ {
 			target: 'es2021', // Matches TypeScript config.
 
-			emptyOutDir: ssrBuild ? false : true, // Not during SSR builds.
+			emptyOutDir: isSSRBuild ? false : true, // Not during SSR builds.
 			outDir: path.relative(srcDir, distDir), // Relative to `root` directory.
 			assetsDir: path.relative(distDir, a16sDir), // Relative to `outDir` directory.
 			// Note: `a16s` = numeronym for 'acquired resources'.
 
-			ssr: ['cfw', 'node'].includes(targetEnv), // Server-side rendering?
-			...(['cfw', 'node'].includes(targetEnv) ? { ssrManifest: 'dev' === mode } : {}),
+			ssr: isTargetEnvSSR ? true : false, // Server-side rendering?
+			...(isTargetEnvSSR ? { ssrManifest: 'dev' === mode || ['spa', 'mpa'].includes(appType) } : {}),
 
 			sourcemap: 'dev' === mode, // Enables creation of sourcemaps.
 			manifest: 'dev' === mode, // Enables creation of manifest for assets.
-			minify: 'dev' === mode ? false : 'esbuild', // See: <https://o5p.me/ZyQ4sv>.
+			minify: shouldMinify ? 'esbuild' : false, // See: <https://o5p.me/ZyQ4sv>.
 
 			...(['cma'].includes(appType) // Custom-made apps = library code.
 				? {
