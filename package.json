@@ -3,7 +3,7 @@
 	"publishConfig": {
 		"access": "restricted"
 	},
-	"version": "1.0.161",
+	"version": "1.0.162",
 	"license": "GPL-3.0-or-later",
 	"name": "@clevercanyon/skeleton-dev-deps",
 	"description": "Dev dependencies for `@clevercanyon/skeleton`.",
@@ -39,10 +39,10 @@
 		}
 	},
 	"dependencies": {
-		"@clevercanyon/madrun": "^1.0.75",
-		"@clevercanyon/utilities": "^1.0.166",
+		"@clevercanyon/madrun": "^1.0.76",
+		"@clevercanyon/utilities": "^1.0.167",
 		"@clevercanyon/utilities.cfp": "^1.0.58",
-		"@clevercanyon/utilities.node": "^1.0.75",
+		"@clevercanyon/utilities.node": "^1.0.76",
 		"@cloudflare/workers-types": "^4.20230821.0",
 		"@octokit/core": "^4.2.4",
 		"@octokit/plugin-paginate-rest": "^5.0.1",
