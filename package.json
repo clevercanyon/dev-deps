@@ -3,7 +3,7 @@
 	"publishConfig": {
 		"access": "restricted"
 	},
-	"version": "1.0.162",
+	"version": "1.0.163",
 	"license": "GPL-3.0-or-later",
 	"name": "@clevercanyon/skeleton-dev-deps",
 	"description": "Dev dependencies for `@clevercanyon/skeleton`.",
@@ -39,10 +39,10 @@
 		}
 	},
 	"dependencies": {
-		"@clevercanyon/madrun": "^1.0.76",
-		"@clevercanyon/utilities": "^1.0.167",
-		"@clevercanyon/utilities.cfp": "^1.0.58",
-		"@clevercanyon/utilities.node": "^1.0.76",
+		"@clevercanyon/madrun": "^1.0.77",
+		"@clevercanyon/utilities": "^1.0.173",
+		"@clevercanyon/utilities.cfp": "^1.0.59",
+		"@clevercanyon/utilities.node": "^1.0.77",
 		"@cloudflare/workers-types": "^4.20230821.0",
 		"@octokit/core": "^4.2.4",
 		"@octokit/plugin-paginate-rest": "^5.0.1",
@@ -56,7 +56,7 @@
 		"@types/libsodium-wrappers": "^0.7.10",
 		"@types/luxon": "^3.3.1",
 		"@types/micromatch": "^4.0.2",
-		"@types/node": "^18.17.7",
+		"@types/node": "^18.17.8",
 		"@types/prettier": "^2.7.3",
 		"@types/semver": "^7.5.0",
 		"@types/yargs": "^17.0.24",
@@ -99,6 +99,7 @@
 		"stylelint-config-standard-scss": "^6.1.0",
 		"stylelint-scss": "^4.7.0",
 		"tailwindcss": "^3.3.3",
+		"terser": "^5.19.2",
 		"typescript": "^4.9.5",
 		"vite": "^4.4.9",
 		"vite-plugin-ejs": "^1.6.4",

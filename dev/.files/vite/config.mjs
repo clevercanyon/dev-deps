@@ -26,6 +26,9 @@ import { $fs, $glob } from '../../../node_modules/@clevercanyon/utilities.node/d
 import { $http as $cfpꓺhttp } from '../../../node_modules/@clevercanyon/utilities.cfp/dist/index.js';
 import { $is, $str, $obj, $obp, $time } from '../../../node_modules/@clevercanyon/utilities/dist/index.js';
 
+import $preactꓺ404 from '../../../node_modules/@clevercanyon/utilities/dist/preact/components/404.js';
+import { renderToString as $preactꓺrenderToString } from '../../../node_modules/@clevercanyon/utilities/dist/preact/apis/ssr.js';
+
 import { createRequire } from 'node:module';
 const require = createRequire(import.meta.url);
 
@@ -331,6 +334,10 @@ export default async ({ mode, command, ssrBuild: isSSRBuild }) => {
 							const cfpDefaultHeaders = $cfpꓺhttp.prepareDefaultHeaders({ appType, isC10n: env.APP_IS_C10N || false });
 							fileContents = fileContents.replace('$$__APP_CFP_DEFAULT_HEADERS__$$', cfpDefaultHeaders);
 						}
+						if (['404.html'].includes(fileRelPath)) {
+							const cfpDefault404 = '<!DOCTYPE html>' + $preactꓺrenderToString($preactꓺ404);
+							fileContents = fileContents.replace('$$__APP_CFP_DEFAULT_404_HTML__$$', cfpDefault404);
+						}
 						if (['_headers', '_redirects', 'robots.txt'].includes(fileRelPath)) {
 							fileContents = fileContents.replace(/^#[^\n]*\n/gmu, '');
 							//
@@ -367,6 +374,17 @@ export default async ({ mode, command, ssrBuild: isSSRBuild }) => {
 	})();
 	const plugins = [pluginBasicSSLConfig, pluginEJSConfig, pluginMinifyHTMLConfig, pluginC10NPostProcessConfig];
 	const importedWorkerPlugins = []; // <https://vitejs.dev/guide/features.html#web-workers>.
+
+	/**
+	 * Configures esbuild for Vite.
+	 *
+	 * @see https://o5p.me/XOFuJp
+	 */
+	const esbuildConfig = {
+		jsxFactory: 'h',
+		jsxFragment: 'Fragment',
+		jsxInject: `import { h, Fragment } from 'preact'`,
+	};
 
 	/**
 	 * Configures rollup for Vite.
@@ -611,6 +629,7 @@ export default async ({ mode, command, ssrBuild: isSSRBuild }) => {
 				: {}),
 			rollupOptions: rollupConfig, // See: <https://o5p.me/5Vupql>.
 		},
+		esbuild: esbuildConfig, // esBuild config options.
 		test: vitestConfig, // Vitest configuration options.
 	};
 
