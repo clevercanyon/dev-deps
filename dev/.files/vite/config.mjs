@@ -112,8 +112,8 @@ export default async ({ mode, command, ssrBuild: isSSRBuild }) => {
 	const appEntriesAsSrcSubpathsNoExt = appEntriesAsSrcSubpaths.map((subpath) => subpath.replace(/\.[^.]+$/u, ''));
 
 	const isTargetEnvSSR = ['cfw', 'node'].includes(targetEnv); // Target environment requires server-side rendering?
-	const shouldPreserveModules = ['cma'].includes(appType) && appEntries.length > 1 && Object.keys(pkg.peerDependencies || {}).length > 0;
-	const shouldMinify = 'dev' === mode || shouldPreserveModules ? false : true; // Should minify output files?
+	const isLib = ['cma'].includes(appType) && appEntries.length > 1 && Object.keys(pkg.peerDependencies || {}).length > 0;
+	const shouldMinify = 'dev' === mode || isLib ? false : true; // Should minify output files?
 
 	/**
 	 * Validates all of the above.
@@ -161,7 +161,23 @@ export default async ({ mode, command, ssrBuild: isSSRBuild }) => {
 				if (!appEntryIndexAsSrcSubpath || !appEntryIndexAsSrcSubpathNoExt) {
 					throw new Error('Custom apps must have an `./index.{ts,tsx}` entry point.');
 				}
-				if (isTargetEnvSSR || appEntries.length > 1) {
+				if (!isTargetEnvSSR && isLib && 1 === appEntries.length) {
+					updatePkg.exports = {
+						'.': {
+							import: './dist/' + appEntryIndexAsSrcSubpathNoExt + '.js',
+							require: './dist/' + appEntryIndexAsSrcSubpathNoExt + '.umd.cjs',
+							types: './dist/types/' + appEntryIndexAsSrcSubpathNoExt + '.d.ts',
+						},
+					};
+					updatePkg.module = './dist/' + appEntryIndexAsSrcSubpathNoExt + '.js';
+					updatePkg.main = './dist/' + appEntryIndexAsSrcSubpathNoExt + '.umd.cjs';
+
+					updatePkg.browser = ['web', 'webw'].includes(targetEnv) ? updatePkg.main : '';
+					updatePkg.unpkg = updatePkg.main;
+
+					updatePkg.types = './dist/types/' + appEntryIndexAsSrcSubpathNoExt + '.d.ts';
+					updatePkg.typesVersions = { '>=3.1': { './*': ['./dist/types/*'] } };
+				} else {
 					updatePkg.exports = {
 						'.': {
 							import: './dist/' + appEntryIndexAsSrcSubpathNoExt + '.js',
@@ -190,22 +206,6 @@ export default async ({ mode, command, ssrBuild: isSSRBuild }) => {
 							},
 						});
 					}
-				} /* CMA with a UMD bundle. */ else {
-					updatePkg.exports = {
-						'.': {
-							import: './dist/' + appEntryIndexAsSrcSubpathNoExt + '.js',
-							require: './dist/' + appEntryIndexAsSrcSubpathNoExt + '.umd.cjs',
-							types: './dist/types/' + appEntryIndexAsSrcSubpathNoExt + '.d.ts',
-						},
-					};
-					updatePkg.module = './dist/' + appEntryIndexAsSrcSubpathNoExt + '.js';
-					updatePkg.main = './dist/' + appEntryIndexAsSrcSubpathNoExt + '.umd.cjs';
-
-					updatePkg.browser = ['web', 'webw'].includes(targetEnv) ? updatePkg.main : '';
-					updatePkg.unpkg = updatePkg.main;
-
-					updatePkg.types = './dist/types/' + appEntryIndexAsSrcSubpathNoExt + '.d.ts';
-					updatePkg.typesVersions = { '>=3.1': { './*': ['./dist/types/*'] } };
 				}
 				break; // Stop here.
 			}
@@ -310,7 +310,7 @@ export default async ({ mode, command, ssrBuild: isSSRBuild }) => {
 				 * Deletes a few files that interfere with apps running on Cloudflare Pages.
 				 */
 				if ('build' === command && ['spa', 'mpa'].includes(appType) && ['cfp'].includes(targetEnv)) {
-					for (const fileOrDir of await $glob.promise(['types', '.env.vault', 'manifest.json', 'index.*'], { cwd: distDir, onlyFiles: false })) {
+					for (const fileOrDir of await $glob.promise(['types', '.env.vault', 'index.*'], { cwd: distDir, onlyFiles: false })) {
 						await fsp.rm(fileOrDir, { force: true, recursive: true });
 					}
 				}
@@ -381,9 +381,12 @@ export default async ({ mode, command, ssrBuild: isSSRBuild }) => {
 	 * @see https://o5p.me/XOFuJp
 	 */
 	const esbuildConfig = {
-		jsxFactory: 'h',
+		// See <https://o5p.me/Wk8Fm9>.
+		jsxFactory: 'h', // Required preact config.
 		jsxFragment: 'Fragment',
 		jsxInject: `import { h, Fragment } from 'preact'`,
+
+		legalComments: 'none', // See <https://o5p.me/DZKXwX>.
 	};
 
 	/**
@@ -458,15 +461,15 @@ export default async ({ mode, command, ssrBuild: isSSRBuild }) => {
 			},
 			assetFileNames: (/* asset */) => path.join(path.relative(distDir, a16sDir), '[name]-[hash].[ext]'),
 
-			// Preserves module structure in CMAs built explicitly as dependencies.
+			// Preserves module structure in CMAs built explicitly as libraries.
 			// The expectation is that peers will build w/ this flag set as false, which is
 			// recommended, because preserving module structure in a final build has performance costs.
 			// However, in builds that are not final (e.g., CMAs with peer dependencies), preserving modules
 			// has performance benefits, as it allows for tree-shaking optimization in final builds.
-			...(shouldPreserveModules ? { preserveModules: true } : {}),
+			...(isLib ? { preserveModules: true } : {}),
 
 			// Cannot inline dynamic imports when `preserveModules` is enabled, so set as `false` explicitly.
-			...(shouldPreserveModules ? { inlineDynamicImports: false } : {}),
+			...(isLib ? { inlineDynamicImports: false } : {}),
 		},
 	};
 	// <https://vitejs.dev/guide/features.html#web-workers>
@@ -618,12 +621,12 @@ export default async ({ mode, command, ssrBuild: isSSRBuild }) => {
 			minify: shouldMinify ? 'esbuild' : false, // See: <https://o5p.me/ZyQ4sv>.
 			...(isTargetEnvSSR ? { modulePreload: { resolveDependencies: () => [] } } : {}),
 
-			...(['cma'].includes(appType) // Custom-made apps = library code.
+			...(isLib // Custom-made app built as a library consumed by others.
 				? {
 						lib: {
 							name: appLibName, // Name of UMD window global var.
 							entry: appEntries, // Should match up with `rollupOptions.input`.
-							formats: isSSRBuild ? ['es'] : appEntries.length > 1 ? ['es', 'cjs'] : ['es', 'umd'],
+							formats: isSSRBuild ? ['es'] : 1 === appEntries.length ? ['es', 'umd'] : ['es', 'cjs'],
 						},
 				  }
 				: {}),

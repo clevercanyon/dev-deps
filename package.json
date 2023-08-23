@@ -3,7 +3,7 @@
 	"publishConfig": {
 		"access": "restricted"
 	},
-	"version": "1.0.163",
+	"version": "1.0.164",
 	"license": "GPL-3.0-or-later",
 	"name": "@clevercanyon/skeleton-dev-deps",
 	"description": "Dev dependencies for `@clevercanyon/skeleton`.",
@@ -23,15 +23,15 @@
 	"exports": {
 		".": {
 			"import": "./dist/index.js",
-			"require": "./dist/index.umd.cjs",
+			"require": "./dist/index.cjs",
 			"types": "./dist/types/index.d.ts"
 		}
 	},
 	"sideEffects": ["./src/index.ts"],
 	"module": "./dist/index.js",
-	"main": "./dist/index.umd.cjs",
+	"main": "./dist/index.cjs",
 	"browser": "",
-	"unpkg": "./dist/index.umd.cjs",
+	"unpkg": "./dist/index.js",
 	"types": "./dist/types/index.d.ts",
 	"typesVersions": {
 		">=3.1": {
@@ -40,7 +40,7 @@
 	},
 	"dependencies": {
 		"@clevercanyon/madrun": "^1.0.77",
-		"@clevercanyon/utilities": "^1.0.173",
+		"@clevercanyon/utilities": "^1.0.175",
 		"@clevercanyon/utilities.cfp": "^1.0.59",
 		"@clevercanyon/utilities.node": "^1.0.77",
 		"@cloudflare/workers-types": "^4.20230821.0",
@@ -56,7 +56,7 @@
 		"@types/libsodium-wrappers": "^0.7.10",
 		"@types/luxon": "^3.3.1",
 		"@types/micromatch": "^4.0.2",
-		"@types/node": "^18.17.8",
+		"@types/node": "^18.17.9",
 		"@types/prettier": "^2.7.3",
 		"@types/semver": "^7.5.0",
 		"@types/yargs": "^17.0.24",
@@ -99,7 +99,6 @@
 		"stylelint-config-standard-scss": "^6.1.0",
 		"stylelint-scss": "^4.7.0",
 		"tailwindcss": "^3.3.3",
-		"terser": "^5.19.2",
 		"typescript": "^4.9.5",
 		"vite": "^4.4.9",
 		"vite-plugin-ejs": "^1.6.4",
