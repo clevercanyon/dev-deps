@@ -541,6 +541,7 @@ export default async ({ mode, command, ssrBuild: isSSRBuild }) => {
 		passWithNoTests: true, // Pass if there are no tests to run.
 
 		watch: false, // Disable watching by default.
+		open: false, // Disable opening of UI by default.
 		forceRerunTriggers: ['**/package.json', '**/vitest.config.*', '**/vite.config.*'],
 
 		reporters: ['verbose'], // Verbose reporting.
