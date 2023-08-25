@@ -1,3 +1,3 @@
-# @clevercanyon/skeleton-dev-deps
+# @clevercanyon/dev-deps
 
-Dev dependencies required by the `@clevercanyon/skeleton`.
+Dev dependencies required by Clever Canyon projects.

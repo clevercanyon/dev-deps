@@ -3,13 +3,13 @@
 	"publishConfig": {
 		"access": "restricted"
 	},
-	"version": "1.0.165",
+	"version": "1.0.166",
 	"license": "GPL-3.0-or-later",
-	"name": "@clevercanyon/skeleton-dev-deps",
-	"description": "Dev dependencies for `@clevercanyon/skeleton`.",
-	"repository": "https://github.com/clevercanyon/skeleton-dev-deps",
-	"homepage": "https://github.com/clevercanyon/skeleton-dev-deps#readme",
-	"bugs": "https://github.com/clevercanyon/skeleton-dev-deps/issues",
+	"name": "@clevercanyon/dev-deps",
+	"description": "Dev dependencies for Clever Canyon projects.",
+	"repository": "https://github.com/clevercanyon/dev-deps",
+	"homepage": "https://github.com/clevercanyon/dev-deps#readme",
+	"bugs": "https://github.com/clevercanyon/dev-deps/issues",
 	"funding": "https://github.com/sponsors/clevercanyon",
 	"keywords": ["clevercanyon"],
 	"author": {
