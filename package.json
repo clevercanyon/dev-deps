@@ -1,9 +1,9 @@
 {
 	"private": false,
 	"publishConfig": {
-		"access": "restricted"
+		"access": "public"
 	},
-	"version": "1.0.167",
+	"version": "1.0.168",
 	"license": "GPL-3.0-or-later",
 	"name": "@clevercanyon/dev-deps",
 	"description": "Dev dependencies for Clever Canyon projects.",
@@ -39,10 +39,10 @@
 		}
 	},
 	"dependencies": {
-		"@clevercanyon/madrun": "^1.0.78",
-		"@clevercanyon/utilities": "^1.0.198",
-		"@clevercanyon/utilities.cfp": "^1.0.67",
-		"@clevercanyon/utilities.node": "^1.0.78",
+		"@clevercanyon/madrun": "^1.0.79",
+		"@clevercanyon/utilities": "^1.0.199",
+		"@clevercanyon/utilities.cfp": "^1.0.68",
+		"@clevercanyon/utilities.node": "^1.0.79",
 		"@cloudflare/workers-types": "^4.20230821.0",
 		"@octokit/core": "^4.2.4",
 		"@octokit/plugin-paginate-rest": "^5.0.1",
