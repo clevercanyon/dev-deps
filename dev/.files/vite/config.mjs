@@ -541,7 +541,6 @@ export default async ({ mode, command, ssrBuild: isSSRBuild }) => {
 		passWithNoTests: true, // Pass if there are no tests to run.
 
 		watch: false, // Disable watching by default.
-		open: false, // Disable opening of UI by default.
 		forceRerunTriggers: ['**/package.json', '**/vitest.config.*', '**/vite.config.*'],
 
 		reporters: ['verbose'], // Verbose reporting.
@@ -597,7 +596,7 @@ export default async ({ mode, command, ssrBuild: isSSRBuild }) => {
 		envDir: path.relative(srcDir, envsDir), // Relative to `root` directory.
 		envPrefix: appEnvPrefixes, // Env vars w/ these prefixes become part of the app.
 
-		server: { open: true, https: true }, // Vite dev server.
+		server: { open: false, https: true }, // Vite dev server.
 		plugins, // Additional Vite plugins that were configured above.
 
 		...(targetEnvIsServer // Target environment is server-side?
