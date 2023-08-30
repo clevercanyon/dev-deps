@@ -3,7 +3,7 @@
 	"publishConfig": {
 		"access": "public"
 	},
-	"version": "1.0.180",
+	"version": "1.0.181",
 	"license": "GPL-3.0-or-later",
 	"name": "@clevercanyon/dev-deps",
 	"description": "Dev dependencies for Clever Canyon projects.",
@@ -40,8 +40,8 @@
 	},
 	"dependencies": {
 		"@clevercanyon/madrun": "^1.0.84",
-		"@clevercanyon/utilities": "^1.0.208",
-		"@clevercanyon/utilities.cfp": "^1.0.74",
+		"@clevercanyon/utilities": "^1.0.210",
+		"@clevercanyon/utilities.cfp": "^1.0.77",
 		"@clevercanyon/utilities.node": "^1.0.86",
 		"@cloudflare/workers-types": "^4.20230821.0",
 		"@octokit/core": "^4.2.4",
@@ -79,7 +79,7 @@
 		"jsdom": "^21.1.2",
 		"libsodium-wrappers": "^0.7.11",
 		"madge": "^6.1.0",
-		"postcss": "^8.4.28",
+		"postcss": "^8.4.29",
 		"postcss-preset-env": "^7.8.3",
 		"postcss-safe-parser": "^6.0.0",
 		"postcss-scss": "^4.0.7",
