@@ -3,7 +3,7 @@
 	"publishConfig": {
 		"access": "public"
 	},
-	"version": "1.0.185",
+	"version": "1.0.186",
 	"license": "GPL-3.0-or-later",
 	"name": "@clevercanyon/dev-deps",
 	"description": "Dev dependencies for Clever Canyon projects.",
@@ -40,8 +40,8 @@
 	},
 	"dependencies": {
 		"@clevercanyon/madrun": "^1.0.87",
-		"@clevercanyon/utilities": "^1.0.225",
-		"@clevercanyon/utilities.cfp": "^1.0.83",
+		"@clevercanyon/utilities": "^1.0.226",
+		"@clevercanyon/utilities.cfp": "^1.0.84",
 		"@clevercanyon/utilities.node": "^1.0.90",
 		"@cloudflare/workers-types": "^4.20230821.0",
 		"@octokit/core": "^4.2.4",
@@ -107,7 +107,7 @@
 		"vite-plugin-minify": "^1.5.2",
 		"vitest": "^0.34.3",
 		"vitest-environment-miniflare": "^2.14.1",
-		"webdriverio": "^8.16.2",
+		"webdriverio": "^8.16.3",
 		"wrangler": "^3.6.0"
 	},
 	"peerDependencies": {},
