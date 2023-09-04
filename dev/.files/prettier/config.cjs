@@ -23,7 +23,6 @@ const baseConfig = {
 	 */
 	pluginSearchDirs: false,
 	plugins: [
-		'prettier-plugin-jsdoc', //
 		'prettier-plugin-ini',
 		'prettier-plugin-properties',
 		'@prettier/plugin-xml',
@@ -75,30 +74,6 @@ module.exports = {
 			files: ['*.json'],
 			options: {
 				parser: 'json', // Not `json-stringify`.
-			},
-		},
-		{
-			/**
-			 * JSDoc plugin options.
-			 *
-			 * @see https://o5p.me/dTTfse
-			 */
-			files: ['*.{js,jsx,cjs,cjsx,node,mjs,mjsx,ts,tsx,cts,ctsx,mts,mtsx}'],
-			options: {
-				jsdocAddDefaultToDescription: false,
-				jsdocCapitalizeDescription: true,
-				jsdocDescriptionTag: false,
-				jsdocDescriptionWithDot: true,
-				jsdocKeepUnParseAbleExampleIndent: false,
-				jsdocLineWrappingStyle: 'greedy',
-				jsdocPreferCodeFences: false,
-				jsdocPrintWidth: 120,
-				jsdocSeparateReturnsFromParam: false,
-				jsdocSeparateTagGroups: true,
-				jsdocSingleLineComment: false,
-				jsdocSpaces: 1,
-				jsdocVerticalAlignment: true,
-				tsdoc: false,
 			},
 		},
 		{
