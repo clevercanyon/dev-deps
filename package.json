@@ -3,7 +3,7 @@
 	"publishConfig": {
 		"access": "public"
 	},
-	"version": "1.0.192",
+	"version": "1.0.193",
 	"license": "GPL-3.0-or-later",
 	"name": "@clevercanyon/dev-deps",
 	"description": "Dev dependencies for Clever Canyon projects.",
@@ -87,7 +87,7 @@
 		"preact": "^10.17.1",
 		"prettier": "^3.0.3",
 		"prettier-plugin-ini": "^1.1.0",
-		"prettier-plugin-jsdoc": "^1.0.2",
+		"prettier-plugin-jsdoc": "1.0.1",
 		"prettier-plugin-properties": "^0.2.0",
 		"prettier-plugin-sh": "^0.13.1",
 		"prettier-plugin-sql": "^0.15.1",
