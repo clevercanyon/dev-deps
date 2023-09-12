@@ -3,7 +3,7 @@
 	"publishConfig": {
 		"access": "public"
 	},
-	"version": "1.0.198",
+	"version": "1.0.199",
 	"license": "GPL-3.0-or-later",
 	"name": "@clevercanyon/dev-deps",
 	"description": "Dev dependencies for Clever Canyon projects.",
@@ -27,7 +27,7 @@
 			"types": "./dist/types/index.d.ts"
 		}
 	},
-	"sideEffects": ["./src/index.ts"],
+	"sideEffects": ["./src/resources/init-env.ts", "./src/index.ts"],
 	"module": "./dist/index.js",
 	"main": "./dist/index.umd.cjs",
 	"browser": "",
@@ -50,7 +50,7 @@
 		"@prefresh/vite": "^2.4.1",
 		"@prettier/plugin-php": "^0.20.1",
 		"@prettier/plugin-ruby": "^4.0.2",
-		"@prettier/plugin-xml": "^3.2.0",
+		"@prettier/plugin-xml": "^3.2.1",
 		"@tailwindcss/forms": "^0.5.6",
 		"@tailwindcss/typography": "^0.5.10",
 		"@testing-library/preact": "^3.2.3",
