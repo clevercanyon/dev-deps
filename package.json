@@ -3,7 +3,7 @@
 	"publishConfig": {
 		"access": "public"
 	},
-	"version": "1.0.204",
+	"version": "1.0.205",
 	"license": "GPL-3.0-or-later",
 	"name": "@clevercanyon/dev-deps",
 	"description": "Dev dependencies for Clever Canyon projects.",
@@ -101,6 +101,11 @@
 		"remark": "^14.0.3",
 		"remark-directive": "^2.0.1",
 		"remark-gfm": "^3.0.1",
+		"remark-lint": "^9.1.2",
+		"remark-preset-lint-consistent": "^5.1.2",
+		"remark-preset-lint-markdown-style-guide": "^5.1.3",
+		"remark-preset-lint-recommended": "^6.1.3",
+		"remark-preset-prettier": "^2.0.1",
 		"sass": "^1.66.1",
 		"shellcheck": "^1.1.0",
 		"stylelint": "^15.10.3",
@@ -115,7 +120,7 @@
 		"vitest": "^0.34.4",
 		"vitest-environment-miniflare": "^2.14.1",
 		"webdriverio": "^8.16.7",
-		"wrangler": "^3.7.0"
+		"wrangler": "^3.8.0"
 	},
 	"peerDependencies": {},
 	"peerDependenciesMeta": {},
