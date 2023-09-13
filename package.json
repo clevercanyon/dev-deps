@@ -3,7 +3,7 @@
 	"publishConfig": {
 		"access": "public"
 	},
-	"version": "1.0.201",
+	"version": "1.0.202",
 	"license": "GPL-3.0-or-later",
 	"name": "@clevercanyon/dev-deps",
 	"description": "Dev dependencies for Clever Canyon projects.",
@@ -39,12 +39,14 @@
 		}
 	},
 	"dependencies": {
-		"@clevercanyon/madrun": "^1.0.91",
-		"@clevercanyon/utilities": "^1.0.230",
-		"@clevercanyon/utilities.cfp": "^1.0.87",
-		"@clevercanyon/utilities.node": "^1.0.96",
+		"@clevercanyon/madrun": "^1.0.92",
+		"@clevercanyon/utilities": "^1.0.231",
+		"@clevercanyon/utilities.cfp": "^1.0.88",
+		"@clevercanyon/utilities.node": "^1.0.97",
 		"@cloudflare/workers-types": "^4.20230904.0",
 		"@eslint/js": "^8.48.0",
+		"@mdx-js/mdx": "^2.3.0",
+		"@mdx-js/rollup": "^2.3.0",
 		"@octokit/core": "^4.2.4",
 		"@octokit/plugin-paginate-rest": "^5.0.1",
 		"@prefresh/vite": "^2.4.1",
@@ -95,6 +97,8 @@
 		"prettier-plugin-tailwindcss": "^0.5.4",
 		"react": "npm:@preact/compat@^17.1.2",
 		"react-dom": "npm:@preact/compat@^17.1.2",
+		"remark": "^14.0.3",
+		"remark-gfm": "^3.0.1",
 		"sass": "^1.66.1",
 		"shellcheck": "^1.1.0",
 		"stylelint": "^15.10.3",
@@ -108,7 +112,7 @@
 		"vite-plugin-minify": "^1.5.2",
 		"vitest": "^0.34.4",
 		"vitest-environment-miniflare": "^2.14.1",
-		"webdriverio": "^8.16.6",
+		"webdriverio": "^8.16.7",
 		"wrangler": "^3.7.0"
 	},
 	"peerDependencies": {},
