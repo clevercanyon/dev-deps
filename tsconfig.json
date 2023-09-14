@@ -15,7 +15,7 @@
 
 	"compilerOptions": {
 		"lib": ["es2022"],
-		"types": ["vite/client"]
+		"types": ["vite/client", "@types/mdx"]
 	}
 	/* </custom:end> */
 }
