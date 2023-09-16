@@ -1,5 +1,5 @@
 /**
- * Typescript config file.
+ * Typescript types config file.
  *
  * Typescript is aware of this config file's location.
  *

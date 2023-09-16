@@ -21,6 +21,49 @@ const projDir = path.resolve(__dirname, '../../..');
 const projsDir = path.resolve(__dirname, '../../../..');
 
 /**
+ * TSConfig command.
+ */
+class TSConfig {
+	/**
+	 * Constructor.
+	 */
+	constructor(args) {
+		this.args = args;
+	}
+
+	/**
+	 * Runs CMD.
+	 */
+	async run() {
+		await this.update();
+
+		if (this.args.dryRun) {
+			u.log($chalk.cyanBright('Dry run. This was all a simulation.'));
+		}
+	}
+
+	/**
+	 * Runs update.
+	 */
+	async update() {
+		/**
+		 * Recompiles `./tsconfig.json` file.
+		 */
+
+		u.log($chalk.green('Updating `./tsconfig.json`.'));
+		if (!this.args.dryRun) {
+			await (await import(path.resolve(projDir, './dev/.files/bin/tsconfig/index.mjs'))).default({ projDir });
+		}
+
+		/**
+		 * Signals completion with success.
+		 */
+
+		u.log(await u.finaleBox('Success', 'TypeScript config update complete.'));
+	}
+}
+
+/**
  * Dotfiles command.
  */
 class Dotfiles {
@@ -433,6 +476,31 @@ await (async () => {
 			version: (await u.pkg()).version,
 		})
 	)
+		.command({
+			command: ['tsconfig'],
+			describe: 'Updates project `./tsconfig.json`.',
+			builder: (yargs) => {
+				return yargs
+					.options({
+						dryRun: {
+							type: 'boolean',
+							requiresArg: false,
+							demandOption: false,
+							default: false,
+							description: 'Dry run?',
+						},
+					})
+					.check(async (/* args */) => {
+						if (!(await u.isInteractive())) {
+							throw new Error('This *must* be performed interactively.');
+						}
+						return true;
+					});
+			},
+			handler: async (args) => {
+				await new TSConfig(args).run();
+			},
+		})
 		.command({
 			command: ['dotfiles'],
 			describe: 'Updates project dotfiles.',
