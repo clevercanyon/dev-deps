@@ -7,10 +7,10 @@
  * @note This entire file will be updated automatically.
  * @note Instead of editing here, please review `./tsconfig.mjs`.
  *
- * Last generated using `./tsconfig.mjs` Sat, Sep 16, 2023, 6:19:57 AM EDT.
+ * Last generated using `./tsconfig.mjs` Sat, Sep 16, 2023, 8:23:48 AM EDT.
  */
 {
-	"include": ["./src/**/*", "./ts-types.d.ts"],
+	"include": ["./*.d.ts", "./src/**/*"],
 	"exclude": [
 		"**/._*/**",
 		"**/.~*/**",
@@ -41,14 +41,10 @@
 		"**/.svn/**",
 		"**/_svn/**",
 		"**/.svnignore/**",
-		"**/CVS/**",
-		"**/.cvsignore/**",
 		"**/.bzr/**",
 		"**/.bzrignore/**",
 		"**/.hg/**",
 		"**/.hgignore/**",
-		"**/SCCS/**",
-		"**/RCS/**",
 		"**/Thumbs.db/**",
 		"**/ehthumbs.db/**",
 		"**/Desktop.ini/**",

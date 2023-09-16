@@ -49,8 +49,8 @@ export default async () => {
 	 */
 	const baseConfig = {
 		include: [
-			'./' + path.relative(projDir, path.resolve(projDir, './src')) + '/**/*', //
-			'./' + path.relative(projDir, path.resolve(projDir, './ts-types.d.ts')),
+			'./' + path.relative(projDir, path.resolve(projDir, './*.d.ts')), //
+			'./' + path.relative(projDir, path.resolve(projDir, './src')) + '/**/*',
 		],
 		exclude: exclusions.asRelativeGlobs(projDir, [
 			...new Set([

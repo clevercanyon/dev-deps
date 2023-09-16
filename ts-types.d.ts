@@ -20,6 +20,11 @@ declare const $$__APP_BUILD_TIME_YMD__$$: string;
 
 /*
  * Customizations.
+ *
+ * Declare project-specific types in this file, or add types using `./tsconfig.mjs`.
+ * This file is best suited for project-specific types, while `./tsconfig.mjs`
+ * is best when adding `@types/*` packages that your project depends on.
+ *
  * <custom:start> */
 
 /* </custom:end> */

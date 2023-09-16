@@ -65,15 +65,6 @@ export default async ({ projDir }) => {
 	};
 
 	/**
-	 * Tests `pkgRepository` to see if it’s a fork.
-	 *
-	 * @returns {boolean} True if current package repo is a fork.
-	 */
-	const isPkgRepoFork = async () => {
-		return /[:/][^/]+\/[^/]+\.fork(?:\.git)?$/iu.test(pkgRepository);
-	};
-
-	/**
 	 * Checks dotfile locks.
 	 *
 	 * @param   {string}  relPath Relative dotfile path.
@@ -136,6 +127,9 @@ export default async ({ projDir }) => {
 		'./tsconfig.json',
 		'./tsconfig.mjs',
 
+		'./wrangler.toml',
+		'./wrangler.mjs',
+
 		'./.browserslistrc',
 		'./.prettierignore',
 		'./.remarkrc.mjs',
@@ -148,7 +142,6 @@ export default async ({ projDir }) => {
 		'./stylelint.config.mjs',
 		'./tailwind.config.mjs',
 		'./vite.config.mjs',
-		'./wrangler.toml',
 	]) {
 		if (await isLocked(relPath)) {
 			continue; // Locked 🔒.
@@ -229,4 +222,11 @@ export default async ({ projDir }) => {
 
 	log($chalk.green('Recompiling `./tsconfig.json` using latest dotfiles.'));
 	await (await import(path.resolve(projDir, './dev/.files/bin/tsconfig/index.mjs'))).default({ projDir });
+
+	/**
+	 * Recompiles `./wrangler.toml`; i.e., following update.
+	 */
+
+	log($chalk.green('Recompiling `./wrangler.toml` using latest dotfiles.'));
+	await (await import(path.resolve(projDir, './dev/.files/bin/wrangler/index.mjs'))).default({ projDir });
 };

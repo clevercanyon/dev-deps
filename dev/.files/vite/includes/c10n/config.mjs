@@ -76,33 +76,39 @@ export default async ({ mode, command, isSSRBuild, projDir, distDir, pkg, env, a
 			 * intend to enforce our standards. For further details {@see https://o5p.me/MuskgW}.
 			 */
 			if ('build' === command && 'prod' === mode) {
-				for (const fileOrDir of await $glob.promise(exclusions.defaultNPMIgnores, { cwd: distDir, onlyFiles: false, ignoreCase: true })) {
-					const projRelPath = path.relative(projDir, fileOrDir);
+				for (let globOpts = [{ onlyDirectories: true }, { onlyFiles: false }], i = 0; i < globOpts.length; i++) {
+					for (const fileOrDir of await $glob.promise(exclusions.defaultNPMIgnores, { cwd: distDir, ignoreCase: true, ...globOpts[i] })) {
+						const projRelPath = path.relative(projDir, fileOrDir);
 
-					if (
-						// These things we expect to prune regularly.
-						// Anything else warrants more attention (see below).
-						$str.matches(
-							projRelPath,
-							[
-								...exclusions.devIgnores, //
-								...exclusions.sandboxIgnores,
-								...exclusions.exampleIgnores,
-								...exclusions.docIgnores,
-								...exclusions.testIgnores,
-								...exclusions.specIgnores,
-								...exclusions.benchIgnores,
-							],
-							{ ignoreCase: true },
-						)
-					) {
-						// These things we expect to prune regularly.
-						u.log($chalk.gray('Pruning `./' + projRelPath + '`.'));
-					} else {
-						// Anything else warrants more attention (yellow).
-						u.log($chalk.yellow('Pruning `./' + projRelPath + '`.'));
+						if (!fs.existsSync(fileOrDir)) {
+							continue; // Already pruned this in a previous iteration.
+							// e.g., when we get directory parents first, then it’s leaves.
+						}
+						if (
+							// These things we expect to prune regularly.
+							// Anything else warrants more attention (see below).
+							$str.matches(
+								projRelPath,
+								[
+									...exclusions.devIgnores, //
+									...exclusions.sandboxIgnores,
+									...exclusions.exampleIgnores,
+									...exclusions.docIgnores,
+									...exclusions.testIgnores,
+									...exclusions.specIgnores,
+									...exclusions.benchIgnores,
+								],
+								{ ignoreCase: true },
+							)
+						) {
+							// These things we expect to prune regularly.
+							u.log($chalk.gray('Pruning `./' + projRelPath + '`.'));
+						} else {
+							// Anything else warrants more attention (yellow).
+							u.log($chalk.yellow('Pruning `./' + projRelPath + '`.'));
+						}
+						await fsp.rm(fileOrDir, { force: true, recursive: true });
 					}
-					await fsp.rm(fileOrDir, { force: true, recursive: true });
 				}
 			}
 

@@ -18,6 +18,11 @@ import { $obj } from './node_modules/@clevercanyon/utilities/dist/index.js';
 
 /*
  * Customizations.
+ *
+ * Add TypeScript libs and/or types that your project depends on.
+ * This file is best suited for `@types/*` packages, while `./ts.types.d.ts`
+ * is best when declaring project-specific types that you need globally.
+ *
  * <custom:start> */
 
 export default await (async () => {
