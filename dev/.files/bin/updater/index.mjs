@@ -11,7 +11,7 @@ import fsp from 'node:fs/promises';
 import path from 'node:path';
 import { $chalk, $fs, $prettier } from '../../../../node_modules/@clevercanyon/utilities.node/dist/index.js';
 import { $is, $json, $obj, $obp, $str } from '../../../../node_modules/@clevercanyon/utilities/dist/index.js';
-import customRegexp from './data/custom-regexp.mjs';
+import customRegExp from './data/custom-regexp.mjs';
 
 export default async ({ projDir }) => {
 	/**
@@ -150,9 +150,9 @@ export default async ({ projDir }) => {
 
 		if (fs.existsSync(path.resolve(projDir, relPath))) {
 			const oldFileContents = (await fsp.readFile(path.resolve(projDir, relPath))).toString();
-			const oldFileMatches = customRegexp.exec(oldFileContents); // See: `./data/custom-regexp.js`.
+			const oldFileMatches = customRegExp.exec(oldFileContents); // See: `./data/custom-regexp.js`.
 			const oldFileCustomCode = oldFileMatches ? oldFileMatches[2] : ''; // We'll preserve any custom code.
-			newFileContents = (await fsp.readFile(path.resolve(skeletonDir, relPath))).toString().replace(customRegexp, ($_, $1, $2, $3) => $1 + oldFileCustomCode + $3);
+			newFileContents = (await fsp.readFile(path.resolve(skeletonDir, relPath))).toString().replace(customRegExp, ($_, $1, $2, $3) => $1 + oldFileCustomCode + $3);
 		} else {
 			newFileContents = (await fsp.readFile(path.resolve(skeletonDir, relPath))).toString();
 		}
@@ -217,16 +217,38 @@ export default async ({ projDir }) => {
 	}
 
 	/**
+	 * Recompiles `./.gitattributes`; i.e., following update.
+	 */
+	log($chalk.green('Recompiling `./.gitattributes` using latest dotfiles.'));
+	await (await import(path.resolve(projDir, './dev/.files/bin/gitattributes/index.mjs'))).default({ projDir });
+
+	/**
+	 * Recompiles `./.gitignore`; i.e., following update.
+	 */
+	log($chalk.green('Recompiling `./.gitignore` using latest dotfiles.'));
+	await (await import(path.resolve(projDir, './dev/.files/bin/gitignore/index.mjs'))).default({ projDir });
+
+	/**
+	 * Recompiles `./.npmignore`; i.e., following update.
+	 */
+	log($chalk.green('Recompiling `./.npmignore` using latest dotfiles.'));
+	await (await import(path.resolve(projDir, './dev/.files/bin/npmignore/index.mjs'))).default({ projDir });
+
+	/**
+	 * Recompiles `./.prettierignore`; i.e., following update.
+	 */
+	log($chalk.green('Recompiling `./.prettierignore` using latest dotfiles.'));
+	await (await import(path.resolve(projDir, './dev/.files/bin/prettierignore/index.mjs'))).default({ projDir });
+
+	/**
 	 * Recompiles `./tsconfig.json`; i.e., following update.
 	 */
-
 	log($chalk.green('Recompiling `./tsconfig.json` using latest dotfiles.'));
 	await (await import(path.resolve(projDir, './dev/.files/bin/tsconfig/index.mjs'))).default({ projDir });
 
 	/**
 	 * Recompiles `./wrangler.toml`; i.e., following update.
 	 */
-
 	log($chalk.green('Recompiling `./wrangler.toml` using latest dotfiles.'));
 	await (await import(path.resolve(projDir, './dev/.files/bin/wrangler/index.mjs'))).default({ projDir });
 };
