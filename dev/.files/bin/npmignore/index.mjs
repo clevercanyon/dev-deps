@@ -47,7 +47,7 @@ export default async ({ projDir }) => {
 	 * Defines `.npmignore` config file contents.
 	 */
 	const oldFileContents = fs.readFileSync(npmIgnoreFile).toString();
-	const gitAttributesFileContents = oldFileContents.replace(
+	const npmIgnoreFileContents = oldFileContents.replace(
 		generatedRegExp,
 		($_, $1, $2, $3) =>
 			$1 + //
@@ -60,5 +60,5 @@ export default async ({ projDir }) => {
 	/**
 	 * Compiles `.npmignore` configuration file.
 	 */
-	fs.writeFileSync(npmIgnoreFile, gitAttributesFileContents);
+	fs.writeFileSync(npmIgnoreFile, npmIgnoreFileContents);
 };

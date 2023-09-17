@@ -60,7 +60,7 @@ export default async ({ projDir }) => {
 	 * Defines `.prettierignore` config file contents.
 	 */
 	const oldFileContents = fs.readFileSync(prettierIgnoreFile).toString();
-	const gitAttributesFileContents = oldFileContents.replace(
+	const prettierIgnoreFileContents = oldFileContents.replace(
 		generatedRegExp,
 		($_, $1, $2, $3) =>
 			$1 + //
@@ -73,5 +73,5 @@ export default async ({ projDir }) => {
 	/**
 	 * Compiles `.prettierignore` configuration file.
 	 */
-	fs.writeFileSync(prettierIgnoreFile, gitAttributesFileContents);
+	fs.writeFileSync(prettierIgnoreFile, prettierIgnoreFileContents);
 };
