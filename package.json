@@ -3,7 +3,7 @@
 	"publishConfig": {
 		"access": "public"
 	},
-	"version": "1.0.222",
+	"version": "1.0.223",
 	"license": "GPL-3.0-or-later",
 	"name": "@clevercanyon/dev-deps",
 	"description": "Dev dependencies for Clever Canyon projects.",
@@ -48,6 +48,7 @@
 		"@iarna/toml": "^2.2.5",
 		"@mdx-js/mdx": "^2.3.0",
 		"@mdx-js/rollup": "^2.3.0",
+		"@microflash/rehype-starry-night": "^2.1.1",
 		"@octokit/core": "^4.2.4",
 		"@octokit/plugin-paginate-rest": "^5.0.1",
 		"@prefresh/vite": "^2.4.1",
@@ -101,7 +102,6 @@
 		"prettier-plugin-tailwindcss": "^0.5.4",
 		"react": "npm:@preact/compat@^17.1.2",
 		"react-dom": "npm:@preact/compat@^17.1.2",
-		"rehype-starry-night": "^1.0.2",
 		"remark": "^14.0.3",
 		"remark-directive": "^2.0.1",
 		"remark-frontmatter": "^4.0.1",
