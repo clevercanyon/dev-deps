@@ -10,6 +10,7 @@
  * @see https://www.npmjs.com/package/@mdx-js/rollup
  */
 
+import path from 'node:path';
 import exclusions from '../../../bin/includes/exclusions.mjs';
 import extensions from '../../../bin/includes/extensions.mjs';
 
@@ -18,15 +19,10 @@ import extensions from '../../../bin/includes/extensions.mjs';
  *
  * @param   props Props from vite config file driver.
  *
- * @returns       MDX configuration.
+ * @returns       MDX configuration for Vite.
  */
-export default async (/* {} */) => {
+export default async ({ projDir }) => {
 	return (await import('@mdx-js/rollup')).default({
-		jsxImportSource: 'preact',
-
-		mdExtensions: [...extensions.md],
-		mdxExtensions: [...extensions.mdx],
-
 		exclude: [
 			...new Set([
 				...exclusions.localIgnores, //
@@ -53,11 +49,6 @@ export default async (/* {} */) => {
 					...extensions.mdx, // Default + potentially other exports.
 				]),
 		],
-		remarkPlugins: [
-			(await import('remark-gfm')).default, //
-			(await import('remark-directive')).default,
-			(await import('remark-frontmatter')).default,
-			[(await import('remark-oembed')).default, { syncWidget: true, jsx: true }],
-		],
+		...(await (await import(path.resolve(projDir, './mdx.config.mjs'))).default()),
 	});
 };

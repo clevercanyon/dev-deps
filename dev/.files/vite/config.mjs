@@ -162,7 +162,7 @@ export default async ({ mode, command, ssrBuild: isSSRBuild }) => {
 	 */
 	const plugins = [
 		await viteSSLConfig(),
-		await viteMDXConfig(),
+		await viteMDXConfig({ projDir }),
 		await viteEJSConfig({ mode, projDir, srcDir, pkg, env }),
 		await viteMinifyConfig({ mode }),
 		await viteC10nConfig({

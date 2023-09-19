@@ -150,6 +150,49 @@ class NPMIgnore {
 }
 
 /**
+ * VSCodeIgnore command.
+ */
+class VSCodeIgnore {
+	/**
+	 * Constructor.
+	 */
+	constructor(args) {
+		this.args = args;
+	}
+
+	/**
+	 * Runs CMD.
+	 */
+	async run() {
+		await this.update();
+
+		if (this.args.dryRun) {
+			u.log($chalk.cyanBright('Dry run. This was all a simulation.'));
+		}
+	}
+
+	/**
+	 * Runs update.
+	 */
+	async update() {
+		/**
+		 * Recompiles `./.vscodeignore` file.
+		 */
+
+		u.log($chalk.green('Updating `./.vscodeignore`.'));
+		if (!this.args.dryRun) {
+			await (await import(path.resolve(projDir, './dev/.files/bin/vscodeignore/index.mjs'))).default({ projDir });
+		}
+
+		/**
+		 * Signals completion with success.
+		 */
+
+		u.log(await u.finaleBox('Success', '`./.vscodeignore` update complete.'));
+	}
+}
+
+/**
  * PrettierIgnore command.
  */
 class PrettierIgnore {
@@ -447,6 +490,9 @@ class Project {
 	async update() {
 		/**
 		 * Updates NPM packages.
+		 *
+		 * @todo Add option to bypass this? It takes a long time and it is potentially damaging upon doing a release,
+		 *   where the updates will be untested. Need to think this through a bit further.
 		 */
 
 		u.log($chalk.green('Updating NPM packages.'));
@@ -807,6 +853,31 @@ await (async () => {
 			},
 			handler: async (args) => {
 				await new NPMIgnore(args).run();
+			},
+		})
+		.command({
+			command: ['vscodeignore'],
+			describe: 'Updates project `./.vscodeignore`.',
+			builder: (yargs) => {
+				return yargs
+					.options({
+						dryRun: {
+							type: 'boolean',
+							requiresArg: false,
+							demandOption: false,
+							default: false,
+							description: 'Dry run?',
+						},
+					})
+					.check(async (/* args */) => {
+						if (!(await u.isInteractive())) {
+							throw new Error('This *must* be performed interactively.');
+						}
+						return true;
+					});
+			},
+			handler: async (args) => {
+				await new VSCodeIgnore(args).run();
 			},
 		})
 		.command({

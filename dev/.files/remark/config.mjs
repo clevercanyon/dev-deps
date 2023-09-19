@@ -8,16 +8,17 @@
  * @note Instead of editing here, please review <https://github.com/clevercanyon/skeleton>.
  *
  * @see https://github.com/remarkjs/remark/tree/main/packages/remark-stringify#options
- * @see https://github.com/remarkjs/remark/tree/main/packages/remark-cli#example-config-files-json-yaml-js
  */
 
 import pluginDirective from 'remark-directive';
 import pluginFrontmatter from 'remark-frontmatter';
 import pluginGFM from 'remark-gfm';
 import remarkLint from 'remark-lint';
+import pluginMermaid from 'remark-mermaidjs';
 import pluginOembed from 'remark-oembed';
 import presetLintRecommended from 'remark-preset-lint-recommended';
 import presetPrettier from 'remark-preset-prettier';
+import pluginSmartyPants from 'remark-smartypants';
 
 /**
  * Defines Remark configuration.
@@ -47,18 +48,30 @@ export default async () => {
 			tightDefinitions: false,
 		},
 		plugins: [
-			remarkLint, // Linter.
-			presetLintRecommended, // Basics.
-			presetPrettier, // No conflicting rules.
+			remarkLint, // Remark core linter.
+			presetLintRecommended, // Linting basics.
+			presetPrettier, // Removes conflicting lint rules.
 
-			pluginGFM,
-			pluginDirective,
-			pluginFrontmatter,
-			[pluginOembed, { syncWidget: true }],
+			pluginFrontmatter, // YAML properties.
+			pluginGFM, // GitHub-flavored markdown syntax.
+			pluginSmartyPants, // (em dash) `--` to `—`, quotes, etc.
+			[pluginOembed, { syncWidget: true }], // oEmbeds for markdown.
+			pluginMermaid, // Charting and diagramming; {@see https://o5p.me/5z7Yrt}.
+			pluginDirective, // Custom directives; {@see https://o5p.me/0fakce}.
 
 			// Disable this rule, as GFM explicitly allows this.
 			// Also, because the oEmbed plugin explicitly allows this.
 			['remark-lint-no-literal-urls', false],
 		],
+		tsconfigMDX: {
+			plugins: [
+				'remark-frontmatter', // YAML properties.
+				'remark-gfm', // GitHub-flavored markdown syntax.
+				'remark-smartypants', // (em dash) `--` to `—`, quotes, etc.
+				['remark-oembed', { syncWidget: true }], // oEmbeds for markdown.
+				'remark-mermaidjs', // Charting and diagramming; {@see https://o5p.me/5z7Yrt}.
+				'remark-directive', // Custom directives; {@see https://o5p.me/0fakce}.
+			],
+		},
 	};
 };

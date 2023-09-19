@@ -72,17 +72,20 @@ export default {
 	yaml: ['.yml', '.yaml'],
 	properties: ['.properties', '.env'],
 
-	js: ['.js', '.jsx', '.cjs', '.cjsx', '.node', '.mjs', '.mjsx'],
+	node: ['.node'], // Compiled JavaScript module.
+	wasm: ['.wasm'], // Compiled JavaScript module.
+
+	js: ['.js', '.jsx', '.cjs', '.cjsx', '.mjs', '.mjsx'],
 	ts: ['.ts', '.tsx', '.cts', '.ctsx', '.mts', '.mtsx'],
-	jts: [...['.js', '.jsx', '.cjs', '.cjsx', '.node', '.mjs', '.mjsx'], ...['.ts', '.tsx', '.cts', '.ctsx', '.mts', '.mtsx']],
+	jts: [...['.js', '.jsx', '.cjs', '.cjsx', '.mjs', '.mjsx'], ...['.ts', '.tsx', '.cts', '.ctsx', '.mts', '.mtsx']],
 
 	sjs: ['.js', '.jsx'],
 	sts: ['.ts', '.tsx'],
 	sjts: [...['.js', '.jsx'], ...['.ts', '.tsx']],
 
-	cjs: ['.cjs', '.cjsx', '.node'],
+	cjs: ['.cjs', '.cjsx'],
 	cts: ['.cts', '.ctsx'],
-	cjts: [...['.cjs', '.cjsx', '.node'], ...['.cts', '.ctsx']],
+	cjts: [...['.cjs', '.cjsx'], ...['.cts', '.ctsx']],
 
 	mjs: ['.mjs', '.mjsx'],
 	mts: ['.mts', '.mtsx'],
@@ -93,14 +96,17 @@ export default {
 	jtsx: [...['.jsx', '.cjsx', '.mjsx'], ...['.tsx', '.ctsx', '.mtsx']],
 
 	content: [
-		...['.js', '.jsx', '.cjs', '.cjsx', '.node', '.mjs', '.mjsx'],
+		...['.js', '.jsx', '.cjs', '.cjsx', '.mjs', '.mjsx'], //
 		...['.ts', '.tsx', '.cts', '.ctsx', '.mts', '.mtsx'],
-		...['md', 'mdx', 'xml', 'html', 'shtml', 'php', 'ejs'],
+		...['.md', '.mdx', '.xml', '.html', '.shtml', '.ejs'],
+		...['.php', '.bash'],
 	],
 	onImportWithNoExtensionTry: [
 		...['.ts', '.tsx', '.mts', '.mtsx', '.cts', '.ctsx'],
-		...['.js', '.jsx', '.mjs', '.mjsx', '.cjs', '.cjsx', '.node'],
-		...['json'],
-		...['md', 'mdx'],
+		...['.js', '.jsx', '.mjs', '.mjsx', '.cjs', '.cjsx'],
+		...['.mdx', '.md'],
+		...['.json'],
+		...['.wasm'],
+		...['.node'],
 	],
 };

@@ -121,28 +121,37 @@ export default async ({ projDir }) => {
 		'./.github/workflows/ci.yml',
 
 		'./.editorconfig',
+		'./.vscodeignore',
 		'./.vscode/settings.json',
 		'./.vscode/extensions.json',
+		'./.vscode/mdx-layout.mjsx',
+
+		'./eslint.config.mjs',
+		'./stylelint.config.mjs',
+		'./postcss.config.mjs',
+		'./tailwind.config.mjs',
+
+		'./prettier.config.mjs',
+		'./.prettierignore',
+
+		'./.shellcheckrc',
+		'./.browserslistrc',
+
+		'./.remarkrc.mjs',
+		'./.rehyperc.mjs',
+		'./mdx.config.mjs',
 
 		'./ts-types.d.ts',
 		'./tsconfig.json',
 		'./tsconfig.mjs',
 
+		'./jest.config.mjs',
+		'./vite.config.mjs',
+
 		'./wrangler.toml',
 		'./wrangler.mjs',
 
-		'./.browserslistrc',
-		'./.prettierignore',
-		'./.remarkrc.mjs',
-		'./.shellcheckrc',
-		'./eslint.config.mjs',
-		'./jest.config.mjs',
 		'./madrun.config.mjs',
-		'./postcss.config.mjs',
-		'./prettier.config.mjs',
-		'./stylelint.config.mjs',
-		'./tailwind.config.mjs',
-		'./vite.config.mjs',
 	]) {
 		if (await isLocked(relPath)) {
 			continue; // Locked 🔒.
@@ -224,44 +233,16 @@ export default async ({ projDir }) => {
 	}
 
 	/**
-	 * Recompiles `./.gitattributes`; i.e., following update.
+	 * Recompiles static configurations using latest dotfiles.
 	 */
-	log($chalk.green('Recompiling `./.gitattributes` using latest dotfiles.'));
+	log($chalk.green('Recompiling static configurations using latest dotfiles.'));
+
 	await (await import(path.resolve(projDir, './dev/.files/bin/gitattributes/index.mjs'))).default({ projDir });
-
-	/**
-	 * Recompiles `./.gitignore`; i.e., following update.
-	 */
-	log($chalk.green('Recompiling `./.gitignore` using latest dotfiles.'));
 	await (await import(path.resolve(projDir, './dev/.files/bin/gitignore/index.mjs'))).default({ projDir });
-
-	/**
-	 * Recompiles `./.npmignore`; i.e., following update.
-	 */
-	log($chalk.green('Recompiling `./.npmignore` using latest dotfiles.'));
 	await (await import(path.resolve(projDir, './dev/.files/bin/npmignore/index.mjs'))).default({ projDir });
-
-	/**
-	 * Recompiles `./.prettierignore`; i.e., following update.
-	 */
-	log($chalk.green('Recompiling `./.prettierignore` using latest dotfiles.'));
+	await (await import(path.resolve(projDir, './dev/.files/bin/vscodeignore/index.mjs'))).default({ projDir });
 	await (await import(path.resolve(projDir, './dev/.files/bin/prettierignore/index.mjs'))).default({ projDir });
-
-	/**
-	 * Recompiles `./.browserslistrc`; i.e., following update.
-	 */
-	log($chalk.green('Recompiling `./.browserslistrc` using latest dotfiles.'));
 	await (await import(path.resolve(projDir, './dev/.files/bin/browserslist/index.mjs'))).default({ projDir });
-
-	/**
-	 * Recompiles `./tsconfig.json`; i.e., following update.
-	 */
-	log($chalk.green('Recompiling `./tsconfig.json` using latest dotfiles.'));
 	await (await import(path.resolve(projDir, './dev/.files/bin/tsconfig/index.mjs'))).default({ projDir });
-
-	/**
-	 * Recompiles `./wrangler.toml`; i.e., following update.
-	 */
-	log($chalk.green('Recompiling `./wrangler.toml` using latest dotfiles.'));
 	await (await import(path.resolve(projDir, './dev/.files/bin/wrangler/index.mjs'))).default({ projDir });
 };

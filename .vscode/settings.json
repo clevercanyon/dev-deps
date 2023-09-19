@@ -33,6 +33,12 @@
 	"files.trimTrailingWhitespace": true,
 
 	"files.associations": {
+		"**/*.{js,cjs,mjs}": "javascript",
+		"**/*.{jsx,cjsx,mjsx}": "javascriptreact",
+
+		"**/*.{ts,cts,mts}": "typescript",
+		"**/*.{tsx,ctsx,mtsx}": "typescriptreact",
+
 		".inputrc": "text",
 		"CODEOWNERS": "ignore",
 
@@ -62,28 +68,28 @@
 
 		// Editors
 
-		// :: Vim
+		// » Vim
 
 		"**/.*.swp/**": true,
 
-		// :: IntelliJ
+		// » IntelliJ
 
 		"**/.idea/**": true,
 
-		// :: Sublime
+		// » Sublime
 
 		"**/*.sublime-project/**": true,
 		"**/*.sublime-workspace/**": true,
 
-		// :: Netbeans
+		// » Netbeans
 
 		"**/*.nbproject/**": true,
 
-		// :: VS Code
+		// » VS Code
 
 		"**/*.code-workspace/**": true,
 
-		// :: CTAGs
+		// » CTAGs
 
 		"**/*.ctags/**": true,
 
@@ -131,48 +137,49 @@
 
 		// VCS
 
+		// » Git
+
 		"**/.git/**": true,
+
+		// » Subversion
 
 		"**/.svn/**": true,
 		"**/_svn/**": true,
 		"**/.svnignore/**": true,
 
-		"**/CVS/**": true,
-		"**/.cvsignore/**": true,
+		// » Bazaar
 
 		"**/.bzr/**": true,
 		"**/.bzrignore/**": true,
 
+		// » Mercurial
+
 		"**/.hg/**": true,
 		"**/.hgignore/**": true,
 
-		"**/SCCS/**": true,
-		"**/RCS/**": true,
+		// Operating Systems
 
-		// OS Specials
-
-		// :: PC Files
+		// » PC Files
 
 		"**/Thumbs.db/**": true,
 		"**/ehthumbs.db/**": true,
 		"**/Desktop.ini/**": true,
 
-		// :: PC Directories
+		// » PC Directories
 
 		"**/$RECYCLE.BIN/**": true,
 
-		// :: Mac Files
+		// » Mac Files
 
 		// "**/._*/**": true, // Already listed above.
-		"**/Icon?/**": true,
-		"!**/Icons/**": true,
+		"**/Icon\r/**": true,
 		"**/.DS_Store/**": true,
 		"**/.disk_label/**": true,
 		"**/.LSOverride/**": true,
 		"**/.VolumeIcon.icns/**": true,
 		"**/.com.apple.timemachine.*/**": true,
 
-		// :: Mac Directories
+		// » Mac Directories
 
 		"**/.apdisk/**": true,
 		"**/*.icloud/**": true,
@@ -217,8 +224,8 @@
 	"commentAnchors.tags.matchCase": true,
 	"commentAnchors.tags.separators": [" ", ": "],
 
-	"commentAnchors.workspace.matchFiles": "{**/.*/**/.*,**/.*/**/*,**/.*,**/*}.{md,xml,html,shtml,php,ejs,js,cjs,mjs,jsx,ts,tsx,json,bash}",
 	"commentAnchors.workspace.excludeFiles": "**/{.git,dist,.yarn,vendor,node_modules,jspm_packages,bower_components}/**",
+	"commentAnchors.workspace.matchFiles": "{**/.*/**/.*,**/.*/**/*,**/.*,**/*}.{js,jsx,cjs,cjsx,mjs,mjsx,ts,tsx,cts,ctsx,mts,mtsx,md,mdx,xml,html,shtml,ejs,php,bash}",
 
 	/**
 	 * ESLint options.
@@ -265,11 +272,16 @@
 	 */
 
 	"mdx-preview.build.useSucraseTranspiler": true,
+	"mdx-preview.preview.useWhiteBackground": false,
+	"mdx-preview.preview.useVscodeMarkdownStyles": false,
+	"mdx-preview.preview.mdx.customLayoutFilePath": "/tmp/.vscode/mdx-layout.mjsx",
 
 	/**
 	 * Prettier options.
 	 */
 
+	// By default, prettier ignores everything in `.gitignore` also,
+	// which we don’t want, so explicitly listed here; {@see https://o5p.me/nfS7UF}.
 	"prettier.ignorePath": ".prettierignore",
 
 	/**

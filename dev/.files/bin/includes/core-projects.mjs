@@ -26,19 +26,17 @@ export default {
 
 			'split-cmd.fork',
 			'spawn-please.fork',
-			'shescape.fork',
 
 			'*.fork',
 
 			'utilities',
-			'utilities.php',
-			'utilities.bash',
-			'utilities.web',
-			'utilities.web',
-			'utilities.webw',
 			'utilities.node',
 			'utilities.cfw',
 			'utilities.cfp',
+			'utilities.web',
+			'utilities.webw',
+			'utilities.php',
+			'utilities.bash',
 
 			'utilities.*',
 			'skeleton.*',

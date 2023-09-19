@@ -7,7 +7,7 @@
  * @note This entire file will be updated automatically.
  * @note Instead of editing here, please review `./tsconfig.mjs`.
  *
- * Last generated using `./tsconfig.mjs` Mon, Sep 18, 2023, 1:09:38 AM EDT.
+ * Last generated using `./tsconfig.mjs` Tue, Sep 19, 2023, 3:02:43 AM EDT.
  */
 {
 	"include": ["./*.d.ts", "./src/**/*"],
@@ -116,5 +116,20 @@
 			"react-dom": ["../node_modules/preact/compat"],
 			"react-dom/test-utils": ["../node_modules/preact/test-utils"]
 		}
+	},
+	"mdx": {
+		"plugins": [
+			"remark-frontmatter",
+			"remark-gfm",
+			"remark-smartypants",
+			[
+				"remark-oembed",
+				{
+					"syncWidget": true
+				}
+			],
+			"remark-mermaidjs",
+			"remark-directive"
+		]
 	}
 }
