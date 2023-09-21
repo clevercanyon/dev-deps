@@ -6,107 +6,143 @@
  * @note Instead of editing here, please review <https://github.com/clevercanyon/skeleton>.
  */
 
+import { $obj, $path } from '../../../../node_modules/@clevercanyon/utilities/dist/index.js';
+
+/**
+ * Adds leading dot to extensions.
+ *
+ * @param   exts Array of extensions.
+ *
+ * @returns      Array of extensions (with dot).
+ */
+const dot = (exts) => noDot(exts).map((ext) => '.' + ext);
+
 /**
  * Strips leading dot from extensions.
  *
- * @param   e Array of extensions.
+ * @param   exts Array of extensions.
  *
- * @returns   Array of extensions (not dot).
+ * @returns      Array of extensions (not dot).
  */
-const noDot = (e) => [...new Set(e)].map((e) => e.replace(/^\./u, ''));
+const noDot = (exts) => [...new Set(exts)].map((ext) => ext.replace(/^\./u, ''));
 
 /**
- * Converts an array of extensions into a glob pattern.
+ * Converts an array of extensions into a braced glob.
  *
- * @param   e Array of extensions.
+ * @param   exts Array of extensions.
  *
- * @returns   Extensions as a glob pattern.
+ * @returns      Extensions as a braced glob.
  *
- * @note Don’t use these `{}` brace expansions in TypeScript config files; i.e., incompatible.
+ * @note Don’t use `{}` braces in TypeScript config files; i.e., incompatible.
  */
-const asGlob = (e) => {
-	e = [...new Set(e)]; // Unique.
-	return (e.length > 1 ? '{' : '') + noDot(e).join(',') + (e.length > 1 ? '}' : '');
+const asBracedGlob = (exts) => {
+    exts = [...new Set(exts)]; // Unique.
+    return (exts.length > 1 ? '{' : '') + noDot(exts).join(',') + (exts.length > 1 ? '}' : '');
 };
 
 /**
  * Converts an array of extensions into a regular expression fragment.
  *
- * @param   e Array of extensions.
+ * @param   exts Array of extensions.
  *
- * @returns   Extensions as a regular expression fragment.
+ * @returns      Extensions as a regular expression fragment.
  */
-const asRegExpFrag = (e) => {
-	e = [...new Set(e)]; // Unique.
-	return (e.length > 1 ? '(?:' : '') + noDot(e).join('|') + (e.length > 1 ? ')' : '');
+const asRegExpFrag = (exts) => {
+    exts = [...new Set(exts)]; // Unique.
+    return (exts.length > 1 ? '(?:' : '') + noDot(exts).join('|') + (exts.length > 1 ? ')' : '');
 };
 
 /**
  * Defines extensions.
  */
-export default {
-	noDot,
-	asGlob,
-	asRegExpFrag,
+const extensions = {
+    dot,
+    noDot,
+    asBracedGlob,
+    asRegExpFrag,
 
-	md: ['.md'],
-	mdx: ['.mdx'],
+    /**
+     * MIME type extensions by VS Code language. VS Code languages added to the default export here. Provided by
+     * `@clevercanyon/utilities`. This includes everything we have in our MIME types library.
+     */
+    ...$obj.map($path.extsByVSCodeLang(), (exts) => dot(exts)),
 
-	xml: ['.xml'],
-	html: ['.html'],
+    // True HTML/SHTML.
 
-	php: ['.php'],
-	sql: ['.sql'],
-	ruby: ['.rb'],
-	bash: ['.bash'],
+    trueHTML: ['.htm', '.html'],
+    trueSHTML: ['.shtm', '.shtml'],
 
-	css: ['.css'],
-	scss: ['.scss'],
-	less: ['.less'],
+    // Standard JS/TS.
 
-	json: ['.json'],
-	json5: ['.json5'],
+    sJavaScript: ['.js'],
+    sJavaScriptReact: ['.jsx'],
 
-	ini: ['.ini'],
-	toml: ['.toml'],
-	yaml: ['.yml', '.yaml'],
-	properties: ['.properties', '.env'],
+    sTypeScript: ['.ts'],
+    sTypeScriptReact: ['.tsx'],
 
-	node: ['.node'], // Compiled JavaScript module.
-	wasm: ['.wasm'], // Compiled JavaScript module.
+    // Common JS/TS.
 
-	js: ['.js', '.jsx', '.cjs', '.cjsx', '.mjs', '.mjsx'],
-	ts: ['.ts', '.tsx', '.cts', '.ctsx', '.mts', '.mtsx'],
-	jts: [...['.js', '.jsx', '.cjs', '.cjsx', '.mjs', '.mjsx'], ...['.ts', '.tsx', '.cts', '.ctsx', '.mts', '.mtsx']],
+    cJavaScript: ['.cjs'],
+    cJavaScriptReact: ['.cjsx'],
 
-	sjs: ['.js', '.jsx'],
-	sts: ['.ts', '.tsx'],
-	sjts: [...['.js', '.jsx'], ...['.ts', '.tsx']],
+    cTypeScript: ['.cts'],
+    cTypeScriptReact: ['.ctsx'],
 
-	cjs: ['.cjs', '.cjsx'],
-	cts: ['.cts', '.ctsx'],
-	cjts: [...['.cjs', '.cjsx'], ...['.cts', '.ctsx']],
+    // Module JS/TS.
 
-	mjs: ['.mjs', '.mjsx'],
-	mts: ['.mts', '.mtsx'],
-	mjts: [...['.mjs', '.mjsx'], ...['.mts', '.mtsx']],
+    mJavaScript: ['.mjs'],
+    mJavaScriptReact: ['.mjsx'],
 
-	jsx: ['.jsx', '.cjsx', '.mjsx'],
-	tsx: ['.tsx', '.ctsx', '.mtsx'],
-	jtsx: [...['.jsx', '.cjsx', '.mjsx'], ...['.tsx', '.ctsx', '.mtsx']],
+    mTypeScript: ['.mts'],
+    mTypeScriptReact: ['.mtsx'],
 
-	content: [
-		...['.js', '.jsx', '.cjs', '.cjsx', '.mjs', '.mjsx'], //
-		...['.ts', '.tsx', '.cts', '.ctsx', '.mts', '.mtsx'],
-		...['.md', '.mdx', '.xml', '.html', '.shtml', '.ejs'],
-		...['.php', '.bash'],
-	],
-	onImportWithNoExtensionTry: [
-		...['.ts', '.tsx', '.mts', '.mtsx', '.cts', '.ctsx'],
-		...['.js', '.jsx', '.mjs', '.mjsx', '.cjs', '.cjsx'],
-		...['.mdx', '.md'],
-		...['.json'],
-		...['.wasm'],
-		...['.node'],
-	],
+    // All flavors of JSX/TSX.
+
+    allJavaScriptReact: ['.jsx', '.cjsx', '.mjsx'],
+    allTypeScriptReact: ['.tsx', '.ctsx', '.mtsx'],
+
+    // All flavors of JS/TS.
+
+    allJavaScript: ['.js', '.jsx', '.cjs', '.cjsx', '.mjs', '.mjsx'],
+    allTypeScript: ['.ts', '.tsx', '.cts', '.ctsx', '.mts', '.mtsx'],
 };
+
+/**
+ * Content (tailwind).
+ */
+extensions.tailwindContent = [
+    ...new Set([
+        ...extensions.mdx,
+        ...extensions.markdown,
+
+        ...extensions.xml,
+        ...extensions.html,
+        ...extensions.trueHTML,
+        ...extensions.trueSHTML,
+
+        ...extensions.php,
+        ...extensions.ruby,
+        ...extensions.perl,
+        ...extensions.python,
+        ...extensions.shellscript,
+
+        ...extensions.allJavaScript,
+        ...extensions.allTypeScript,
+    ]),
+];
+extensions.tailwindPrettierContent = [...extensions.tailwindContent];
+
+/**
+ * Content (comment anchors).
+ */
+extensions.commentAnchorsContent = [...extensions.tailwindContent];
+
+/**
+ * Extensions to try on import w/o extension.
+ */
+extensions.onImportWithNoExtensionTry = [...extensions.allTypeScript, ...extensions.allJavaScript];
+
+/**
+ * Default export.
+ */
+export default extensions;

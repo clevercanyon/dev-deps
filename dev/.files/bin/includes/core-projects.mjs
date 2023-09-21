@@ -10,42 +10,42 @@
  * Defines core projects.
  */
 export default {
-	updates: {
-		ignore: [],
-		order: [
-			'dev-deps',
-			'skeleton',
-			'madrun',
+    updates: {
+        ignore: [],
+        order: [
+            'dev-deps',
+            'skeleton',
+            'madrun',
 
-			'is-number.fork',
-			'to-regex-range.fork',
-			'fill-range.fork',
-			'braces.fork',
-			'picomatch.fork',
-			'micromatch.fork',
+            'is-number.fork',
+            'to-regex-range.fork',
+            'fill-range.fork',
+            'braces.fork',
+            'picomatch.fork',
+            'micromatch.fork',
 
-			'split-cmd.fork',
-			'spawn-please.fork',
+            'split-cmd.fork',
+            'spawn-please.fork',
 
-			'*.fork',
+            '*.fork',
 
-			'utilities',
-			'utilities.node',
-			'utilities.cfw',
-			'utilities.cfp',
-			'utilities.web',
-			'utilities.webw',
-			'utilities.php',
-			'utilities.bash',
+            'utilities',
+            'utilities.node',
+            'utilities.cfw',
+            'utilities.cfp',
+            'utilities.web',
+            'utilities.webw',
+            'utilities.php',
+            'utilities.bash',
 
-			'utilities.*',
-			'skeleton.*',
+            'utilities.*',
+            'skeleton.*',
 
-			'canyon',
-			'.github',
-		],
-	},
-	skeleton: {
-		repoURL: 'https://github.com/clevercanyon/skeleton.git',
-	},
+            'canyon',
+            '.github',
+        ],
+    },
+    skeleton: {
+        repoURL: 'https://github.com/clevercanyon/skeleton.git',
+    },
 };

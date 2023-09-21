@@ -24,54 +24,54 @@ import pluginSmartyPants from 'remark-smartypants';
  * Defines Remark configuration.
  */
 export default async () => {
-	/**
-	 * Composition.
-	 */
-	return {
-		settings: {
-			bullet: '-',
-			bulletOrdered: '.',
-			bulletOther: '*',
-			closeAtx: false,
-			emphasis: '_',
-			fence: '`',
-			fences: true,
-			incrementListMarker: true,
-			listItemIndent: 'mixed',
-			quote: '"',
-			resourceLink: false,
-			rule: '-',
-			ruleRepetition: 3,
-			ruleSpaces: true,
-			setext: false,
-			strong: '*',
-			tightDefinitions: false,
-		},
-		plugins: [
-			remarkLint, // Remark core linter.
-			presetLintRecommended, // Linting basics.
-			presetPrettier, // Removes conflicting lint rules.
+    /**
+     * Composition.
+     */
+    return {
+        settings: {
+            bullet: '-',
+            bulletOrdered: '.',
+            bulletOther: '*',
+            closeAtx: false,
+            emphasis: '_',
+            fence: '`',
+            fences: true,
+            incrementListMarker: true,
+            listItemIndent: 'mixed',
+            quote: '"',
+            resourceLink: false,
+            rule: '-',
+            ruleRepetition: 3,
+            ruleSpaces: true,
+            setext: false,
+            strong: '*',
+            tightDefinitions: false,
+        },
+        plugins: [
+            remarkLint, // Remark core linter.
+            presetLintRecommended, // Linting basics.
+            presetPrettier, // Removes conflicting lint rules.
 
-			pluginFrontmatter, // YAML properties.
-			pluginGFM, // GitHub-flavored markdown syntax.
-			pluginSmartyPants, // (em dash) `--` to `—`, quotes, etc.
-			[pluginOembed, { syncWidget: true }], // oEmbeds for markdown.
-			pluginMermaid, // Charting and diagramming; {@see https://o5p.me/5z7Yrt}.
-			pluginDirective, // Custom directives; {@see https://o5p.me/0fakce}.
+            pluginFrontmatter, // YAML properties.
+            pluginGFM, // GitHub-flavored markdown features.
+            pluginSmartyPants, // (em dash) `--` to `—`, quotes, etc.
+            [pluginOembed, { syncWidget: true }], // oEmbeds for markdown.
+            pluginMermaid, // Charting and diagramming; {@see https://o5p.me/5z7Yrt}.
+            pluginDirective, // Custom directives; {@see https://o5p.me/0fakce}.
 
-			// Disable this rule, as GFM explicitly allows this.
-			// Also, because the oEmbed plugin explicitly allows this.
-			['remark-lint-no-literal-urls', false],
-		],
-		tsconfigMDX: {
-			plugins: [
-				'remark-frontmatter', // YAML properties.
-				'remark-gfm', // GitHub-flavored markdown syntax.
-				'remark-smartypants', // (em dash) `--` to `—`, quotes, etc.
-				['remark-oembed', { syncWidget: true }], // oEmbeds for markdown.
-				'remark-mermaidjs', // Charting and diagramming; {@see https://o5p.me/5z7Yrt}.
-				'remark-directive', // Custom directives; {@see https://o5p.me/0fakce}.
-			],
-		},
-	};
+            // Disable this rule, as GFM explicitly allows this.
+            // Also, because the oEmbed plugin explicitly allows this.
+            ['remark-lint-no-literal-urls', false],
+        ],
+        tsconfigMDX: {
+            plugins: [
+                'remark-frontmatter', // YAML properties.
+                'remark-gfm', // GitHub-flavored markdown features.
+                'remark-smartypants', // (em dash) `--` to `—`, quotes, etc.
+                ['remark-oembed', { syncWidget: true }], // oEmbeds for markdown.
+                'remark-mermaidjs', // Charting and diagramming; {@see https://o5p.me/5z7Yrt}.
+                'remark-directive', // Custom directives; {@see https://o5p.me/0fakce}.
+            ],
+        },
+    };
 };

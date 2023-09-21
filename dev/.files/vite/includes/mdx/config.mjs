@@ -22,33 +22,33 @@ import extensions from '../../../bin/includes/extensions.mjs';
  * @returns       MDX configuration for Vite.
  */
 export default async ({ projDir }) => {
-	return (await import('@mdx-js/rollup')).default({
-		exclude: [
-			...new Set([
-				...exclusions.localIgnores, //
-				...exclusions.logIgnores,
-				...exclusions.backupIgnores,
-				...exclusions.patchIgnores,
-				...exclusions.editorIgnores,
-				...exclusions.pkgIgnores,
-				...exclusions.vcsIgnores,
-				...exclusions.osIgnores,
-				...exclusions.dotIgnores,
-				...exclusions.dtsIgnores,
-				...exclusions.configIgnores,
-				...exclusions.lockIgnores,
-				...exclusions.devIgnores,
-				...exclusions.distIgnores,
-				...exclusions.docIgnores,
-			]),
-		],
-		include: [
-			'**/*.' +
-				extensions.asGlob([
-					...extensions.md, // Single default export only.
-					...extensions.mdx, // Default + potentially other exports.
-				]),
-		],
-		...(await (await import(path.resolve(projDir, './mdx.config.mjs'))).default()),
-	});
+    return (await import('@mdx-js/rollup')).default({
+        exclude: [
+            ...new Set([
+                ...exclusions.localIgnores, //
+                ...exclusions.logIgnores,
+                ...exclusions.backupIgnores,
+                ...exclusions.patchIgnores,
+                ...exclusions.editorIgnores,
+                ...exclusions.pkgIgnores,
+                ...exclusions.vcsIgnores,
+                ...exclusions.osIgnores,
+                ...exclusions.dotIgnores,
+                ...exclusions.dtsIgnores,
+                ...exclusions.configIgnores,
+                ...exclusions.lockIgnores,
+                ...exclusions.devIgnores,
+                ...exclusions.distIgnores,
+                ...exclusions.docIgnores,
+            ]),
+        ],
+        include: [
+            '**/*.' +
+                extensions.asBracedGlob([
+                    ...extensions.markdown, // Single default export only.
+                    ...extensions.mdx, // Default + potentially other exports.
+                ]),
+        ],
+        ...(await (await import(path.resolve(projDir, './mdx.config.mjs'))).default()),
+    });
 };

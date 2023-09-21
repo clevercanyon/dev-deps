@@ -16,13 +16,13 @@ import pluginStarryNight from '@microflash/rehype-starry-night';
  * Defines Rehype configuration.
  */
 export default async () => {
-	/**
-	 * Composition.
-	 */
-	return {
-		settings: {}, // None at this time.
-		plugins: [
-			pluginStarryNight, // Syntax highlighting.
-		],
-	};
+    /**
+     * Composition.
+     */
+    return {
+        settings: {}, // None at this time.
+        plugins: [
+            pluginStarryNight, // Syntax highlighting.
+        ],
+    };
 };

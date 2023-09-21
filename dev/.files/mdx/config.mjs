@@ -16,23 +16,23 @@ import extensions from '../bin/includes/extensions.mjs';
  * Defines MDX configuration.
  */
 export default async () => {
-	/**
-	 * Composition.
-	 */
-	return {
-		jsxImportSource: 'preact',
+    /**
+     * Composition.
+     */
+    return {
+        jsxImportSource: 'preact',
 
-		mdExtensions: [...extensions.md],
-		mdxExtensions: [...extensions.mdx],
+        mdExtensions: [...extensions.markdown],
+        mdxExtensions: [...extensions.mdx],
 
-		remarkPlugins: [
-			(await import('remark-frontmatter')).default, // YAML properties.
-			(await import('remark-gfm')).default, // GitHub-flavored markdown syntax.
-			(await import('remark-smartypants')).default, // (em dash) `--` to `—`, quotes, etc.
-			[(await import('remark-oembed')).default, { syncWidget: true, jsx: true }], // oEmbeds for markdown.
-			(await import('remark-mermaidjs')).default, // Charting and diagramming; {@see https://o5p.me/5z7Yrt}.
-			(await import('remark-directive')).default, // Custom directives; {@see https://o5p.me/0fakce}.
-		],
-		rehypePlugins: [await import('@microflash/rehype-starry-night').default], // Syntax highlighting.
-	};
+        remarkPlugins: [
+            (await import('remark-frontmatter')).default, // YAML properties.
+            (await import('remark-gfm')).default, // GitHub-flavored markdown syntax.
+            (await import('remark-smartypants')).default, // (em dash) `--` to `—`, quotes, etc.
+            [(await import('remark-oembed')).default, { syncWidget: true, jsx: true }], // oEmbeds for markdown.
+            (await import('remark-mermaidjs')).default, // Charting and diagramming; {@see https://o5p.me/5z7Yrt}.
+            (await import('remark-directive')).default, // Custom directives; {@see https://o5p.me/0fakce}.
+        ],
+        rehypePlugins: [await import('@microflash/rehype-starry-night').default], // Syntax highlighting.
+    };
 };
