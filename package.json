@@ -3,7 +3,7 @@
     "publishConfig": {
         "access": "public"
     },
-    "version": "1.0.229",
+    "version": "1.0.230",
     "license": "GPL-3.0-or-later",
     "name": "@clevercanyon/dev-deps",
     "description": "Dev dependencies for Clever Canyon projects.",
@@ -22,16 +22,16 @@
     "imports": {},
     "exports": {
         ".": {
+            "types": "./dist/types/index.d.ts",
             "import": "./dist/index.js",
-            "require": "./dist/index.umd.cjs",
-            "types": "./dist/types/index.d.ts"
+            "default": "./dist/index.js"
         }
     },
     "sideEffects": ["./src/resources/init-env.ts", "./src/index.ts"],
     "module": "./dist/index.js",
-    "main": "./dist/index.umd.cjs",
+    "main": "./dist/index.js",
     "browser": "",
-    "unpkg": "./dist/index.umd.cjs",
+    "unpkg": "./dist/index.js",
     "types": "./dist/types/index.d.ts",
     "typesVersions": {
         ">=3.1": {
@@ -39,10 +39,10 @@
         }
     },
     "dependencies": {
-        "@clevercanyon/madrun": "^1.0.97",
-        "@clevercanyon/utilities": "^1.0.264",
-        "@clevercanyon/utilities.cfp": "^1.0.92",
-        "@clevercanyon/utilities.node": "^1.0.104",
+        "@clevercanyon/madrun": "^1.0.98",
+        "@clevercanyon/utilities": "^1.0.265",
+        "@clevercanyon/utilities.cfp": "^1.0.93",
+        "@clevercanyon/utilities.node": "^1.0.105",
         "@cloudflare/workers-types": "^4.20230914.0",
         "@eslint/js": "^8.48.0",
         "@iarna/toml": "^2.2.5",
