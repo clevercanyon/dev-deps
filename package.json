@@ -102,7 +102,7 @@
         "prettier-plugin-tailwindcss": "^0.5.4",
         "react": "npm:@preact/compat@^17.1.2",
         "react-dom": "npm:@preact/compat@^17.1.2",
-        "remark": "^14.0.3",
+        "remark": "^15.0.1",
         "remark-directive": "^2.0.1",
         "remark-frontmatter": "^4.0.1",
         "remark-gfm": "^3.0.1",
