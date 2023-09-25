@@ -50,7 +50,7 @@
         "@mdx-js/rollup": "^2.3.0",
         "@microflash/rehype-starry-night": "^2.1.1",
         "@octokit/core": "^4.2.4",
-        "@octokit/plugin-paginate-rest": "^5.0.1",
+        "@octokit/plugin-paginate-rest": "^7.1.2",
         "@prefresh/vite": "^2.4.1",
         "@prettier/plugin-php": "^0.20.1",
         "@prettier/plugin-ruby": "^4.0.2",
