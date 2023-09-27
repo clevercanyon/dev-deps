@@ -17,7 +17,7 @@
 # Generated data.
 # <generated:start>
 
-# Last generated Mon, Sep 25, 2023, 1:42:42 PM EDT.
+# Last generated Wed, Sep 27, 2023, 6:38:13 PM EDT.
 
 # Packages
 
@@ -120,7 +120,7 @@ dist
 *.npmrc
 
 # EJS unsupported at this time.
-# @todo Build or find an EJS plugin.
+# @someday Build or find an EJS plugin.
 
 *.ejs
 
