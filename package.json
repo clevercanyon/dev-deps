@@ -3,7 +3,7 @@
     "publishConfig": {
         "access": "public"
     },
-    "version": "1.0.239",
+    "version": "1.0.240",
     "license": "GPL-3.0-or-later",
     "name": "@clevercanyon/dev-deps",
     "description": "Dev dependencies for Clever Canyon projects.",
@@ -47,6 +47,7 @@
         "@cloudflare/workers-types": "^4.20230922.0",
         "@eslint/js": "^8.48.0",
         "@iarna/toml": "^2.2.5",
+        "@iconify/json": "^2.2.121",
         "@mdx-js/mdx": "^2.3.0",
         "@mdx-js/rollup": "^2.3.0",
         "@microflash/rehype-starry-night": "^2.1.1",
