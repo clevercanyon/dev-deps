@@ -10,6 +10,7 @@
  * @see https://vitejs.dev/config/
  */
 
+import fs from 'node:fs';
 import path from 'node:path';
 import { loadEnv } from 'vite';
 import { $fs, $glob } from '../../../node_modules/@clevercanyon/utilities.node/dist/index.js';
@@ -105,6 +106,12 @@ export default async ({ mode, command, ssrBuild: isSSRBuild }) => {
     const appEntriesAsProjRelPaths = appEntries.map((absPath) => './' + path.relative(projDir, absPath));
     const appEntriesAsSrcSubpaths = appEntries.map((absPath) => path.relative(srcDir, absPath));
     const appEntriesAsSrcSubpathsNoExt = appEntriesAsSrcSubpaths.map((subpath) => subpath.replace(/\.[^.]+$/u, ''));
+
+    /**
+     * SSL certificates.
+     */
+    const sslKey = fs.readFileSync(path.resolve(projDir, './dev/.files/bin/ssl-certs/i10e-ca-key.pem')).toString();
+    const sslCrt = fs.readFileSync(path.resolve(projDir, './dev/.files/bin/ssl-certs/i10e-ca-crt.pem')).toString();
 
     /**
      * Other misc. configuration properties.
@@ -210,8 +217,16 @@ export default async ({ mode, command, ssrBuild: isSSRBuild }) => {
               }
             : {}),
         server: {
-            open: false, // Do not open dev server.
-            https: true, // Enable basic https in dev server.
+            host: '0.0.0.0', // All.
+            port: 443, // Default https.
+            open: false, // Not automatically.
+            https: { key: sslKey, cert: sslCrt },
+        },
+        preview: {
+            host: '0.0.0.0', // All.
+            port: 443, // Default https.
+            open: false, // Not automatically.
+            https: { key: sslKey, cert: sslCrt },
         },
         resolve: {
             alias: importAliases.asFindReplaceRegExps,
