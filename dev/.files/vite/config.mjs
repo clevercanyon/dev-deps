@@ -26,7 +26,6 @@ import viteMDXConfig from './includes/mdx/config.mjs';
 import viteMinifyConfig from './includes/minify/config.mjs';
 import vitePkgUpdates from './includes/package/updates.mjs';
 import viteRollupConfig from './includes/rollup/config.mjs';
-import viteSSLConfig from './includes/ssl/config.mjs';
 import viteVitestConfig from './includes/vitest/config.mjs';
 
 /**
@@ -153,7 +152,6 @@ export default async ({ mode, command, ssrBuild: isSSRBuild }) => {
      * Configures plugins for Vite.
      */
     const plugins = [
-        await viteSSLConfig(),
         await viteMDXConfig({ projDir }),
         await viteEJSConfig({ mode, projDir, srcDir, pkg, env }),
         await viteMinifyConfig({ mode }),
