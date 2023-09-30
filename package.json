@@ -3,7 +3,7 @@
     "publishConfig": {
         "access": "public"
     },
-    "version": "1.0.242",
+    "version": "1.0.243",
     "license": "GPL-3.0-or-later",
     "name": "@clevercanyon/dev-deps",
     "description": "Dev dependencies for Clever Canyon projects.",
@@ -40,7 +40,7 @@
     },
     "dependencies": {
         "@clevercanyon/madrun": "^1.0.110",
-        "@clevercanyon/utilities": "^1.0.291",
+        "@clevercanyon/utilities": "^1.0.293",
         "@clevercanyon/utilities.bash": "^1.0.130",
         "@clevercanyon/utilities.cfp": "^1.0.100",
         "@clevercanyon/utilities.node": "^1.0.113",
