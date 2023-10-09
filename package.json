@@ -3,7 +3,7 @@
     "publishConfig": {
         "access": "public"
     },
-    "version": "1.0.248",
+    "version": "1.0.249",
     "license": "GPL-3.0-or-later",
     "name": "@clevercanyon/dev-deps",
     "description": "Dev dependencies for Clever Canyon projects.",
@@ -39,11 +39,11 @@
         }
     },
     "dependencies": {
-        "@clevercanyon/madrun": "^1.0.116",
-        "@clevercanyon/utilities": "^1.0.330",
-        "@clevercanyon/utilities.bash": "^1.0.134",
-        "@clevercanyon/utilities.cfp": "^1.0.105",
-        "@clevercanyon/utilities.node": "^1.0.122",
+        "@clevercanyon/madrun": "^1.0.117",
+        "@clevercanyon/utilities": "^1.0.331",
+        "@clevercanyon/utilities.bash": "^1.0.135",
+        "@clevercanyon/utilities.cfp": "^1.0.106",
+        "@clevercanyon/utilities.node": "^1.0.123",
         "@cloudflare/workers-types": "^4.20231002.0",
         "@eslint/js": "^8.48.0",
         "@iarna/toml": "^2.2.5",
@@ -91,7 +91,7 @@
         "madge": "^6.1.0",
         "make-synchronous": "^1.0.0",
         "postcss": "^8.4.31",
-        "postcss-preset-env": "^9.1.4",
+        "postcss-preset-env": "^9.2.0",
         "postcss-safe-parser": "^6.0.0",
         "postcss-scss": "^4.0.9",
         "preact": "^10.18.1",
@@ -129,7 +129,7 @@
         "vite-plugin-minify": "^1.5.2",
         "vitest": "^0.34.6",
         "vitest-environment-miniflare": "^2.14.1",
-        "webdriverio": "^8.16.22",
+        "webdriverio": "^8.17.0",
         "wrangler": "^3.11.0"
     },
     "peerDependencies": {},
