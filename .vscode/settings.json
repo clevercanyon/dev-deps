@@ -7,7 +7,7 @@
  * @note This entire file will be updated automatically.
  * @note Instead of editing here, please review `./settings.mjs`.
  *
- * Last generated using `./settings.mjs` Mon, Oct 9, 2023, 9:47:14 PM EDT.
+ * Last generated using `./settings.mjs` Thu, Oct 19, 2023, 10:29:50 AM EDT.
  */
 {
     "editor.formatOnType": false,
@@ -77,12 +77,6 @@
         "**/src/cargo/_routes.{json,×××××××}": "jsonc"
     },
     "files.exclude": {
-        "**/.git": true,
-        "**/.svn": true,
-        "**/.hg": true,
-        "**/CVS": true,
-        "**/.DS_Store": true,
-        "**/Thumbs.db": true,
         "**/._*": true,
         "**/.~*": true,
         "**/.idea": true,
@@ -103,16 +97,21 @@
         "**/.docker": true,
         "**/.vagrant": true,
         "**/.elasticbeanstalk": true,
+        "**/.git": true,
+        "**/.svn": true,
         "**/_svn": true,
         "**/.svnignore": true,
         "**/.bzr": true,
         "**/.bzrignore": true,
+        "**/.hg": true,
         "**/.hgignore": true,
+        "**/Thumbs.db": true,
         "**/ehthumbs.db": true,
         "**/Desktop.ini": true,
         "**/$RECYCLE.BIN": true,
         "**/Icon": true,
         "**/*.icloud": true,
+        "**/.DS_Store": true,
         "**/.disk_label": true,
         "**/.LSOverride": true,
         "**/.VolumeIcon.icns": true,
@@ -171,18 +170,35 @@
             "scope": "workspace",
             "iconColor": "#fff0b5",
             "highlightColor": "#fff0b5",
+            "behavior": "anchor",
             "styleMode": "tag"
         },
         "@review": {
             "scope": "workspace",
             "iconColor": "#8a826d",
             "highlightColor": "#8a826d",
+            "behavior": "anchor",
             "styleMode": "tag"
         },
         "@someday": {
             "scope": "workspace",
             "iconColor": "#6d718a",
             "highlightColor": "#6d718a",
+            "behavior": "anchor",
+            "styleMode": "tag"
+        },
+        "@anchor": {
+            "scope": "hidden",
+            "iconColor": "#696969",
+            "highlightColor": "#696969",
+            "behavior": "anchor",
+            "styleMode": "tag"
+        },
+        "@see-anchor": {
+            "scope": "hidden",
+            "iconColor": "#696969",
+            "highlightColor": "#696969",
+            "behavior": "link",
             "styleMode": "tag"
         }
     },
