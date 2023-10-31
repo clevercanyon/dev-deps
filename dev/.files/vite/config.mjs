@@ -129,7 +129,7 @@ export default async ({ mode, command, ssrBuild: isSSRBuild }) => {
     const minifyEnable = 'dev' !== mode && !['lib'].includes(appType);
     const vitestSandboxEnable = process.env.VITEST && $str.parseValue(String(process.env.VITEST_SANDBOX_ENABLE || ''));
     const vitestExamplesEnable = process.env.VITEST && $str.parseValue(String(process.env.VITEST_EXAMPLES_ENABLE || ''));
-    const prefreshEnable = 'serve' === command && 'dev' === mode && ['spa', 'mpa'].includes(appType) && !process.env.VITEST;
+    const prefreshEnable = process.env.VITE_PREFRESH_ENABLE && !process.env.VITEST && 'serve' === command && 'dev' === mode && ['spa', 'mpa'].includes(appType);
 
     /**
      * Validates all of the above.
@@ -247,7 +247,7 @@ export default async ({ mode, command, ssrBuild: isSSRBuild }) => {
         optimizeDeps: {
             force: true, // Don’t use cache for optimized deps; recreate.
             // Preact is required by prefresh plugin; {@see https://o5p.me/WmuefH}.
-            ...(prefreshEnable ? { include: ['preact', 'preact/hooks', 'preact/compat'] } : {}),
+            ...(prefreshEnable ? { include: ['preact', 'preact/hooks', 'preact/compat', '@preact/signals'] } : {}),
         },
         esbuild: esbuildConfig, // esBuild config options.
 

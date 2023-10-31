@@ -112,6 +112,20 @@ export default /* not async compatible */ ({ themesConfig } = {}) => {
                         },
                     },
                 },
+                keyframes: {
+                    'fade-in': {
+                        from: { opacity: 0 },
+                        to: { opacity: 1 },
+                    },
+                    'fade-out': {
+                        from: { opacity: 1 },
+                        to: { opacity: 0 },
+                    },
+                },
+                animation: {
+                    'fade-in': 'fade-in 150ms linear',
+                    'fade-out': 'fade-out 150ms linear',
+                },
             },
         },
         plugins: [
