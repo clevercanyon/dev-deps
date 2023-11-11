@@ -20,7 +20,8 @@ import extensions from '../bin/includes/extensions.mjs';
 import importAliases from '../bin/includes/import-aliases.mjs';
 import u from '../bin/includes/utilities.mjs';
 import viteA16sDir from './includes/a16s/dir.mjs';
-import viteC10nConfig from './includes/c10n/config.mjs';
+import viteC10nPostProcessingConfig from './includes/c10n/post-processing.mjs';
+import viteC10nTransformsConfig from './includes/c10n/transforms.mjs';
 import viteEJSConfig from './includes/ejs/config.mjs';
 import viteESBuildConfig from './includes/esbuild/config.mjs';
 import viteIconsConfig from './includes/icons/config.mjs';
@@ -85,7 +86,7 @@ export default async ({ mode, command, ssrBuild: isSSRBuild }) => {
         ['$$__' + appEnvPrefixes[0] + 'PKG_REPOSITORY__$$']: pkg.repository || '',
         ['$$__' + appEnvPrefixes[0] + 'PKG_HOMEPAGE__$$']: pkg.homepage || '',
         ['$$__' + appEnvPrefixes[0] + 'PKG_BUGS__$$']: pkg.bugs || '',
-        ['$$__' + appEnvPrefixes[0] + 'BUILD_TIME_YMD__$$']: $time.parse('now').toSQLDate() || '',
+        ['$$__' + appEnvPrefixes[0] + 'BUILD_TIME_YMD__$$']: $time.now().toYMD() || '',
     };
     Object.keys(env) // Add string env vars to static defines.
         .filter((key) => new RegExp('^(?:' + appEnvPrefixes.map((v) => $str.escRegExp(v)).join('|') + ')', 'u').test(key))
@@ -168,11 +169,12 @@ export default async ({ mode, command, ssrBuild: isSSRBuild }) => {
      * Configures plugins for Vite.
      */
     const plugins = [
+        await viteC10nTransformsConfig({}),
         await viteIconsConfig({}),
         await viteMDXConfig({ projDir }),
         await viteEJSConfig({ mode, projDir, srcDir, pkg, env }),
         await viteMinifyConfig({ mode }),
-        await viteC10nConfig({
+        await viteC10nPostProcessingConfig({
             mode, command, isSSRBuild, projDir, distDir,
             pkg, env, appType, targetEnv, staticDefs, pkgUpdates
         }), // prettier-ignore
