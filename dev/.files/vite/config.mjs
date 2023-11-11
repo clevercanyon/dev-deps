@@ -268,6 +268,8 @@ export default async ({ mode, command, ssrBuild: isSSRBuild }) => {
             sourcemap: 'dev' === mode, // Enables creation of sourcemaps (for debugging).
 
             minify: minifyEnable ? 'esbuild' : false, // Minify userland code?
+            cssMinify: minifyEnable ? 'esbuild' : false, // Minify userland code?
+
             modulePreload: false, // Disable. DOM injections conflict with our SPAs.
 
             ...(['cma', 'lib'].includes(appType) ? { lib: { entry: appEntries, formats: ['es'] } } : {}),
