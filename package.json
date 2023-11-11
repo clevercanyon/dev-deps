@@ -3,7 +3,7 @@
     "publishConfig": {
         "access": "public"
     },
-    "version": "1.0.260",
+    "version": "1.0.262",
     "license": "GPL-3.0-or-later",
     "name": "@clevercanyon/dev-deps",
     "description": "Dev dependencies for Clever Canyon projects.",
@@ -40,7 +40,7 @@
     },
     "dependencies": {
         "@clevercanyon/madrun": "^1.0.120",
-        "@clevercanyon/utilities": "^1.0.433",
+        "@clevercanyon/utilities": "^1.0.434",
         "@clevercanyon/utilities.bash": "^1.0.138",
         "@clevercanyon/utilities.cfp": "^1.0.109",
         "@clevercanyon/utilities.node": "^1.0.126",
@@ -76,7 +76,6 @@
         "@vitest/coverage-v8": "^0.34.6",
         "@vitest/ui": "^0.34.6",
         "browserslist-generator": "2.0.3",
-        "cssnano": "^6.0.1",
         "dotenv-vault": "^1.25.0",
         "eslint": "^8.53.0",
         "eslint-config-prettier": "^9.0.0",
@@ -88,6 +87,7 @@
         "jest": "^29.7.0",
         "jsdom": "^21.1.2",
         "libsodium-wrappers": "^0.7.13",
+        "lightningcss": "^1.22.1",
         "madge": "^6.1.0",
         "make-synchronous": "^1.0.0",
         "postcss": "^8.4.31",

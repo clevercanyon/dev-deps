@@ -7,7 +7,7 @@
  * @note This entire file will be updated automatically.
  * @note Instead of editing here, please review `./settings.mjs`.
  *
- * Last generated using `./settings.mjs` Nov 11, 2023 6:59 PM UTC.
+ * Last generated using `./settings.mjs` Nov 11, 2023 7:47 PM UTC.
  */
 {
     "editor.formatOnType": false,
@@ -77,6 +77,12 @@
         "**/src/cargo/_routes.{json,×××××××}": "jsonc"
     },
     "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/Thumbs.db": true,
         "**/._*": true,
         "**/.~*": true,
         "**/.idea": true,
@@ -97,21 +103,16 @@
         "**/.docker": true,
         "**/.vagrant": true,
         "**/.elasticbeanstalk": true,
-        "**/.git": true,
-        "**/.svn": true,
         "**/_svn": true,
         "**/.svnignore": true,
         "**/.bzr": true,
         "**/.bzrignore": true,
-        "**/.hg": true,
         "**/.hgignore": true,
-        "**/Thumbs.db": true,
         "**/ehthumbs.db": true,
         "**/Desktop.ini": true,
         "**/$RECYCLE.BIN": true,
         "**/Icon": true,
         "**/*.icloud": true,
-        "**/.DS_Store": true,
         "**/.disk_label": true,
         "**/.LSOverride": true,
         "**/.VolumeIcon.icns": true,
@@ -134,7 +135,7 @@
         "tsconfig.*": true,
         "dev-types.d.ts": true,
         "config.gypi": true,
-        "dev/.files": true,
+        "dev/.files": false,
         ".yarn": true,
         "vendor": true,
         "node_modules": true,
