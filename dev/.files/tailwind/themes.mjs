@@ -323,11 +323,10 @@ const baseConfigThemes = /* not async compatible */ () => {
     /**
      * Configures other named themes.
      *
-     * Named themes extend the default theme, so anything configured here only needs to override defaults. Then, to
-     * enable a named theme, simply add `<html class="{named-theme}">` to your HTML markup.
-     *
-     * The best practice is to end each theme’s name with a `-theme` suffix. If a named theme class is not present in
-     * the HTML markup, then the default theme will be applied automatically.
+     * Named themes extend the default theme, so anything configured here only needs to override defaults. To enable a
+     * named theme, add `<html class="{named-theme}">`, which is handled automatically by `<LayoutContext>`, `<HTML>`.
+     * Each theme’s name must end with a `-theme` suffix. If a named theme class is not present in the HTML markup, then
+     * the default theme will be applied automatically.
      *
      * Don’t add named themes unnecessarily. A default theme will typically do fine. The more themes you add, the larger
      * your bundle size becomes. Also, don’t name a theme `dark`; {@see https://o5p.me/jLROv0}.
