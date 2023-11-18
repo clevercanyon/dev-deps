@@ -85,6 +85,13 @@ export default /* not async compatible */ ({ themesConfig } = {}) => {
             container: { center: true }, // No need for `mx-auto` on each container.
 
             extend: {
+                maxWidth: {
+                    '1/4': '25%',
+                    '1/2': '50%',
+                    '3/4': '75%',
+                    '1/3': '33.333%',
+                    '2/3': '66.667%',
+                },
                 typography: {
                     // This makes `<code>` appear almost the same as `<kbd>`.
                     sm: { css: { 'code': { ...pluginTypographyStyles.sm.css[0]['kbd'] } } },
@@ -95,6 +102,8 @@ export default /* not async compatible */ ({ themesConfig } = {}) => {
 
                     DEFAULT: {
                         css: {
+                            maxWidth: null, // No max width.
+
                             // Prose link underline on hover only.
                             'a': {
                                 textDecoration: 'none',
@@ -102,13 +111,17 @@ export default /* not async compatible */ ({ themesConfig } = {}) => {
                             'a:hover': {
                                 textDecoration: 'underline',
                             },
-                            // This makes `<code>` appear almost the same as `<kbd>`.
+                            // `<code>` to appear almost the same as `<kbd>`.
                             'code::before': null, // Gets rid of '`' backtick.
                             'code::after': null, // Gets rid of '`' backtick.
                             'code': {
                                 ...pluginTypographyStyles.base.css[0]['kbd'],
                                 borderRadius: '0.188rem', // Equivalent to 3px.
                                 boxShadow: '0 0 0 1px rgb(var(--tw-prose-code-shadows) / 10%)',
+                            },
+                            'mark': {
+                                color: 'rgb(var(--colors-color-hilite-fg))',
+                                backgroundColor: 'rgb(var(--colors-color-hilite))',
                             },
                         },
                     },

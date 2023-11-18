@@ -59,6 +59,10 @@ export default /* not async compatible */ ({ themesConfig } = {}) => {
          *
          * 💡 Tip: Fast track. Just change `color-basic-link` to match your brand colors. The other colors use common
          * defaults that typically work well for most brands. Tune the rest in later.
+         *
+         * 💡 Tip: If you change `color-basic`, please remember to adjust `themeIsDark` in `<LayoutContext>`
+         * accordingly; i.e., if your theme is dark, then `themeIsDark` should be set to `true`, such that consumers of
+         * `<LayoutContext>` are aware. Simply map themes by name in your `<LayoutContext>` implementation.
          */
         const defaultBasicColors = {
             'color-basic': '#09090b', // Background color.
@@ -324,9 +328,9 @@ const baseConfigThemes = /* not async compatible */ () => {
      * Configures other named themes.
      *
      * Named themes extend the default theme, so anything configured here only needs to override defaults. To enable a
-     * named theme, add `<html class="{named-theme}">`, which is handled automatically by `<LayoutContext>`, `<HTML>`.
-     * Each theme’s name must end with a `-theme` suffix. If a named theme class is not present in the HTML markup, then
-     * the default theme will be applied automatically.
+     * named theme, add `<html class="{named-theme}">`, which is handled automatically by our `<LayoutContext>` and
+     * `<HTML>` components. Each theme’s name must end with a `-theme` suffix. If a named theme class is not present in
+     * the HTML markup, then the default theme will be applied automatically.
      *
      * Don’t add named themes unnecessarily. A default theme will typically do fine. The more themes you add, the larger
      * your bundle size becomes. Also, don’t name a theme `dark`; {@see https://o5p.me/jLROv0}.
