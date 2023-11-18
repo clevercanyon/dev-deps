@@ -39,7 +39,7 @@ import viteVitestConfig from './includes/vitest/config.mjs';
  *
  * @returns      Vite configuration object properties.
  */
-export default async ({ mode, command, ssrBuild: isSSRBuild }) => {
+export default async ({ mode, command, isSsrBuild: isSSRBuild }) => {
     /**
      * Configures `NODE_ENV` environment variable.
      */
@@ -199,7 +199,7 @@ export default async ({ mode, command, ssrBuild: isSSRBuild }) => {
     /**
      * Configures imported workers.
      */
-    const importedWorkerPlugins = []; // No worker plugins at this time.
+    const importedWorkerPlugins = () => []; // No worker plugins at this time.
     const importedWorkerRollupConfig = { ...$obj.omit(rollupConfig, ['input']) };
 
     /**
@@ -264,8 +264,9 @@ export default async ({ mode, command, ssrBuild: isSSRBuild }) => {
             assetsDir: path.relative(distDir, a16sDir), // Relative to `outDir` directory.
             // Note: `a16s` is a numeronym for 'acquired resources'; i.e. via imports.
 
-            manifest: !isSSRBuild, // Enables creation of manifest (for assets).
-            sourcemap: 'dev' === mode, // Enables creation of sourcemaps (for debugging).
+            manifest: !isSSRBuild ? 'vite/manifest.json' : false, // Enables manifest of asset locations.
+            ssrManifest: isSSRBuild ? 'vite/ssr-manifest.json' : false, // Enables SSR manifest of asset locations.
+            sourcemap: 'dev' === mode, // Enables creation of sourcemaps; i.e., for debugging.
 
             minify: minifyEnable ? 'esbuild' : false, // {@see https://o5p.me/pkJ5Xz}.
             cssMinify: minifyEnable ? 'lightningcss' : false, // {@see https://o5p.me/h0Hgj3}.

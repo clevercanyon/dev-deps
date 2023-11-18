@@ -18,7 +18,6 @@ Example `index.scss` starter file contents:
 @use '../dev/.files/tailwind/layers';
 -------------------------------------------------------------------------------------------------------------------- */
 
-import pluginForms from '@tailwindcss/forms';
 import pluginTypography from '@tailwindcss/typography';
 import pluginTypographyStyles from '@tailwindcss/typography/src/styles.js';
 import fs from 'node:fs';
@@ -93,28 +92,23 @@ export default /* not async compatible */ ({ themesConfig } = {}) => {
                     '2/3': '66.667%',
                 },
                 typography: {
-                    // This makes `<code>` appear almost the same as `<kbd>`.
-                    sm: { css: { 'code': { ...pluginTypographyStyles.sm.css[0]['kbd'] } } },
-                    base: { css: { 'code': { ...pluginTypographyStyles.base.css[0]['kbd'] } } },
-                    lg: { css: { 'code': { ...pluginTypographyStyles.lg.css[0]['kbd'] } } },
-                    xl: { css: { 'code': { ...pluginTypographyStyles.xl.css[0]['kbd'] } } },
-                    '2xl': { css: { 'code': { ...pluginTypographyStyles['2xl'].css[0]['kbd'] } } },
-
                     DEFAULT: {
                         css: {
                             maxWidth: null, // No max width.
 
-                            // Prose link underline on hover only.
                             'a': {
                                 textDecoration: 'none',
                             },
                             'a:hover': {
                                 textDecoration: 'underline',
                             },
-                            // `<code>` to appear almost the same as `<kbd>`.
-                            'code::before': null, // Gets rid of '`' backtick.
-                            'code::after': null, // Gets rid of '`' backtick.
-                            'code': {
+                            'hr': {
+                                marginTop: '1.5em',
+                                marginBottom: '1.5em',
+                            },
+                            'code::before': null, // No '`' backtick.
+                            'code::after': null, // No '`' backtick.
+                            'code:not(:where(pre code))': {
                                 ...pluginTypographyStyles.base.css[0]['kbd'],
                                 borderRadius: '0.188rem', // Equivalent to 3px.
                                 boxShadow: '0 0 0 1px rgb(var(--tw-prose-code-shadows) / 10%)',
@@ -144,7 +138,6 @@ export default /* not async compatible */ ({ themesConfig } = {}) => {
         },
         plugins: [
             pluginTypography({ className: 'prose' }), // Implements `prose` class.
-            pluginForms({ strategy: 'class' }), // Implements form classes; e.g., `form-{class}`.
             pluginThemer(mergeThemesConfig({ themesConfig })), // Implements themes configuration.
         ],
         content: [

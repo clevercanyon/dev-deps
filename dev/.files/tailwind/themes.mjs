@@ -85,27 +85,27 @@ export default /* not async compatible */ ({ themesConfig } = {}) => {
             'color-prose-links': basicColors['color-basic-link'],
 
             'color-prose-headings': basicColors['color-basic-heading'],
-            'color-prose-lead': $color[basicBGIsDark ? 'lighten' : 'darken'](basicColors['color-basic-fg'], 0.1),
-            'color-prose-bold': $color[basicBGIsDark ? 'lighten' : 'darken'](basicColors['color-basic-fg'], 0.1),
+            'color-prose-lead': $color[basicBGIsDark ? 'lighten' : 'darken'](basicColors['color-basic-fg'], 0.055),
+            'color-prose-bold': $color[basicBGIsDark ? 'lighten' : 'darken'](basicColors['color-basic-fg'], 0.055),
 
-            'color-prose-counters': $color[basicBGIsDark ? 'darken' : 'lighten'](basicColors['color-basic-fg'], 0.35),
-            'color-prose-bullets': $color[basicBGIsDark ? 'darken' : 'lighten'](basicColors['color-basic-fg'], 0.35),
+            'color-prose-counters': $color[basicBGIsDark ? 'darken' : 'lighten'](basicColors['color-basic-fg'], 0.25),
+            'color-prose-bullets': $color[basicBGIsDark ? 'darken' : 'lighten'](basicColors['color-basic-fg'], 0.25),
 
             'color-prose-quotes': $color[basicBGIsDark ? 'darken' : 'lighten'](basicColors['color-basic-fg'], 0.25),
             'color-prose-quote-borders': $color[basicBGIsDark ? 'darken' : 'lighten'](basicColors['color-basic-fg'], 0.85),
 
-            'color-prose-kbd': $color[basicBGIsDark ? 'lighten' : 'darken'](basicColors['color-basic-fg'], 0.1),
+            'color-prose-kbd': $color[basicBGIsDark ? 'lighten' : 'darken'](basicColors['color-basic-fg'], 0.055),
             // This is incorporated into an `rgb(x x x / x)` final color.
             'color-prose-kbd-shadows': $color.toRGBListNoAlpha(basicColors['color-basic-fg']),
 
-            'color-prose-code': $color[basicBGIsDark ? 'lighten' : 'darken'](basicColors['color-basic-fg'], 0.1),
+            'color-prose-code': $color[basicBGIsDark ? 'lighten' : 'darken'](basicColors['color-basic-fg'], 0.055),
             // This is incorporated into an `rgb(x x x / x)` final color.
             'color-prose-code-shadows': $color.toRGBListNoAlpha(basicColors['color-basic-fg']),
 
-            'color-prose-pre': $color[basicBGIsDark ? 'lighten' : 'darken'](basicColors['color-basic'], 0.05),
-            'color-prose-pre-code': $color[basicBGIsDark ? 'lighten' : 'darken'](basicColors['color-basic-fg'], 0.25),
+            'color-prose-pre': $color[basicBGIsDark ? 'lighten' : 'darken'](basicColors['color-basic'], 0.055),
+            'color-prose-pre-code': $color[basicBGIsDark ? 'lighten' : 'darken'](basicColors['color-basic-fg'], 0.055),
 
-            'color-prose-th-borders': $color[basicBGIsDark ? 'darken' : 'lighten'](basicColors['color-basic-fg'], 0.75),
+            'color-prose-th-borders': $color[basicBGIsDark ? 'darken' : 'lighten'](basicColors['color-basic-fg'], 0.85),
             'color-prose-td-borders': $color[basicBGIsDark ? 'darken' : 'lighten'](basicColors['color-basic-fg'], 0.85),
 
             'color-prose-hr': $color[basicBGIsDark ? 'darken' : 'lighten'](basicColors['color-basic-fg'], 0.85),
@@ -133,10 +133,10 @@ export default /* not async compatible */ ({ themesConfig } = {}) => {
             'color-header-link': $color[basicBGIsDark ? 'darken' : 'lighten'](basicColors['color-basic-link'], 0.015),
             'color-header-heading': $color[basicBGIsDark ? 'darken' : 'lighten'](basicColors['color-basic-heading'], 0.015),
 
-            'color-sidebar': $color[basicBGIsDark ? 'lighten' : 'darken'](basicColors['color-basic'], 0.05),
-            'color-sidebar-fg': $color[basicBGIsDark ? 'darken' : 'lighten'](basicColors['color-basic-fg'], 0.225),
-            'color-sidebar-link': $color[basicBGIsDark ? 'darken' : 'lighten'](basicColors['color-basic-link'], 0.05),
-            'color-sidebar-heading': $color[basicBGIsDark ? 'darken' : 'lighten'](basicColors['color-basic-heading'], 0.225),
+            'color-sidebar': $color[basicBGIsDark ? 'darken' : 'lighten'](basicColors['color-basic'], 0.015),
+            'color-sidebar-fg': $color[basicBGIsDark ? 'darken' : 'lighten'](basicColors['color-basic-fg'], 0.015),
+            'color-sidebar-link': $color[basicBGIsDark ? 'darken' : 'lighten'](basicColors['color-basic-link'], 0.015),
+            'color-sidebar-heading': $color[basicBGIsDark ? 'darken' : 'lighten'](basicColors['color-basic-heading'], 0.015),
 
             'color-footer': $color[basicBGIsDark ? 'darken' : 'lighten'](basicColors['color-basic'], 0.015),
             'color-footer-fg': $color[basicBGIsDark ? 'darken' : 'lighten'](basicColors['color-basic-fg'], 0.015),
@@ -238,14 +238,11 @@ const baseConfigThemes = /* not async compatible */ () => {
                     'sans-serif',
                 ],
                 serif: [
-                    'Palatino', //
-                    '"Palatino Linotype"',
-                    'ui-serif',
+                    'ui-serif', //
                     'serif',
                 ],
                 mono: [
-                    '"Operator Mono"', //
-                    'ui-monospace',
+                    'ui-monospace', //
                     'monospace',
                 ],
             },
