@@ -3,7 +3,7 @@
     "publishConfig": {
         "access": "public"
     },
-    "version": "1.0.268",
+    "version": "1.0.269",
     "license": "GPL-3.0-or-later",
     "name": "@clevercanyon/dev-deps",
     "description": "Dev dependencies for Clever Canyon projects.",
@@ -40,7 +40,7 @@
     },
     "dependencies": {
         "@clevercanyon/madrun": "^1.0.121",
-        "@clevercanyon/utilities": "^1.0.461",
+        "@clevercanyon/utilities": "^1.0.462",
         "@clevercanyon/utilities.bash": "^1.0.139",
         "@clevercanyon/utilities.cfp": "^1.0.110",
         "@clevercanyon/utilities.node": "^1.0.127",
@@ -110,6 +110,7 @@
         "remark-frontmatter": "^5.0.0",
         "remark-gfm": "^4.0.0",
         "remark-lint": "^9.1.2",
+        "remark-mdx-frontmatter": "^4.0.0",
         "remark-mermaidjs": "^6.0.0",
         "remark-oembed": "^1.2.2",
         "remark-preset-lint-recommended": "^6.1.3",
