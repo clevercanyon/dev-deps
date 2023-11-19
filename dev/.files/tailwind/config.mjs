@@ -94,7 +94,7 @@ export default /* not async compatible */ ({ themesConfig } = {}) => {
                 typography: {
                     DEFAULT: {
                         css: {
-                            maxWidth: null, // No max width.
+                            maxWidth: null,
 
                             'a': {
                                 textDecoration: 'none',
@@ -106,8 +106,8 @@ export default /* not async compatible */ ({ themesConfig } = {}) => {
                                 marginTop: '1.5em',
                                 marginBottom: '1.5em',
                             },
-                            'code::before': null, // No '`' backtick.
-                            'code::after': null, // No '`' backtick.
+                            'code::before': null,
+                            'code::after': null,
                             'code:not(:where(pre code))': {
                                 ...pluginTypographyStyles.base.css[0]['kbd'],
                                 borderRadius: '0.188rem', // Equivalent to 3px.
