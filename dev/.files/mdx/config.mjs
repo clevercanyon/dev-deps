@@ -26,7 +26,8 @@ export default async () => {
         mdxExtensions: [...extensions.byVSCodeLang.mdx],
 
         remarkPlugins: [
-            (await import('remark-frontmatter')).default, // YAML properties.
+            (await import('remark-frontmatter')).default, // Frontmatter.
+            [(await import('remark-mdx-frontmatter')).default, { name: 'frontMatter' }],
             (await import('remark-gfm')).default, // GitHub-flavored markdown syntax.
             (await import('remark-smartypants')).default, // (em dash) `--` to `—`, quotes, etc.
             [(await import('remark-oembed')).default, { syncWidget: true, jsx: true }], // oEmbeds for markdown.
@@ -34,5 +35,17 @@ export default async () => {
             (await import('remark-directive')).default, // Custom directives; {@see https://o5p.me/0fakce}.
         ],
         rehypePlugins: [(await import('@microflash/rehype-starry-night')).default], // Syntax highlighting.
+
+        vsCodeTSConfig: {
+            plugins: [
+                'remark-frontmatter', // Frontmatter.
+                ['remark-mdx-frontmatter', { name: 'frontMatter' }],
+                'remark-gfm', // GitHub-flavored markdown features.
+                'remark-smartypants', // (em dash) `--` to `—`, quotes, etc.
+                ['remark-oembed', { syncWidget: true, jsx: true }], // oEmbeds for markdown.
+                'remark-mermaidjs', // Charting and diagramming; {@see https://o5p.me/5z7Yrt}.
+                'remark-directive', // Custom directives; {@see https://o5p.me/0fakce}.
+            ],
+        },
     };
 };

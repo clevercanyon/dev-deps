@@ -7,7 +7,7 @@
  * @note This entire file will be updated automatically.
  * @note Instead of editing here, please review `./tsconfig.mjs`.
  *
- * Last generated using `./tsconfig.mjs` Nov 19, 2023 3:42 AM UTC.
+ * Last generated using `./tsconfig.mjs` Nov 21, 2023 12:11 PM UTC.
  */
 {
     "include": ["./src/**/*", "./dev-types.d.ts"],
@@ -127,12 +127,19 @@
     "mdx": {
         "plugins": [
             "remark-frontmatter",
+            [
+                "remark-mdx-frontmatter",
+                {
+                    "name": "frontMatter"
+                }
+            ],
             "remark-gfm",
             "remark-smartypants",
             [
                 "remark-oembed",
                 {
-                    "syncWidget": true
+                    "syncWidget": true,
+                    "jsx": true
                 }
             ],
             "remark-mermaidjs",
