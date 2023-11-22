@@ -26,6 +26,7 @@ import viteEJSConfig from './includes/ejs/config.mjs';
 import viteESBuildConfig from './includes/esbuild/config.mjs';
 import viteIconsConfig from './includes/icons/config.mjs';
 import viteMDXConfig from './includes/mdx/config.mjs';
+import viteMDXESBuildConfig from './includes/mdx/esbuild.mjs';
 import viteMinifyConfig from './includes/minify/config.mjs';
 import vitePkgUpdates from './includes/package/updates.mjs';
 import vitePrefreshConfig from './includes/prefresh/config.mjs';
@@ -52,7 +53,7 @@ export default async ({ mode, command, isSsrBuild: isSSRBuild }) => {
      *
      * @note The `APP_` prefix ensures Vite picks this up and adds it to app builds.
      *       This can be useful, as it allows us to detect, within our app,
-     *       whether the Vite dev server is running our app.
+     *       whether the Vite dev server is currently running.
      */
     process.env.APP_IS_VITE = command + '=' + mode;
 
@@ -248,8 +249,9 @@ export default async ({ mode, command, isSsrBuild: isSSRBuild }) => {
         },
         optimizeDeps: {
             force: true, // Don’t use cache for optimized deps; recreate.
+            esbuildOptions: { plugins: [await viteMDXESBuildConfig({ projDir })] },
             // Preact is required by prefresh plugin; {@see https://o5p.me/WmuefH}.
-            ...(prefreshEnable ? { include: ['preact', 'preact/hooks', 'preact/compat', '@preact/signals'] } : {}),
+            ...(prefreshEnable ? { include: ['preact', 'preact/jsx-runtime', 'preact/hooks', 'preact/compat', '@preact/signals'] } : {}),
         },
         esbuild: esbuildConfig, // esBuild config options.
 

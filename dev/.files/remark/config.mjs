@@ -15,7 +15,6 @@ import pluginFrontmatter from 'remark-frontmatter';
 import pluginGFM from 'remark-gfm';
 import remarkLint from 'remark-lint';
 import pluginMermaid from 'remark-mermaidjs';
-import pluginOembed from 'remark-oembed';
 import presetLintRecommended from 'remark-preset-lint-recommended';
 import presetPrettier from 'remark-preset-prettier';
 import pluginSmartyPants from 'remark-smartypants';
@@ -53,14 +52,12 @@ export default async () => {
             presetPrettier, // Removes conflicting lint rules.
 
             pluginFrontmatter, // Frontmatter.
-            pluginGFM, // GitHub-flavored markdown features.
+            [pluginGFM, { singleTilde: false }], // GFM features.
             pluginSmartyPants, // (em dash) `--` to `—`, quotes, etc.
-            [pluginOembed, { syncWidget: true }], // oEmbeds for markdown.
             pluginMermaid, // Charting and diagramming; {@see https://o5p.me/5z7Yrt}.
             pluginDirective, // Custom directives; {@see https://o5p.me/0fakce}.
 
             // Disable this rule, as GFM explicitly allows this.
-            // Also, because the oEmbed plugin explicitly allows this.
             ['remark-lint-no-literal-urls', false],
         ],
     };

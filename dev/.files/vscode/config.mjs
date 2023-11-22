@@ -272,6 +272,7 @@ export default async () => {
         'json.validate.enable': true,
         'javascript.validate.enable': true,
         'typescript.validate.enable': true,
+
         // <https://stackoverflow.com/a/52397123>.
         'javascript.suggestionActions.enabled': false,
 
@@ -334,7 +335,7 @@ export default async () => {
         ],
 
         /**
-         * Markdown options.
+         * Markdown/MDX options.
          */
 
         'markdown.styles': [],
@@ -342,6 +343,12 @@ export default async () => {
         'markdown.preview.lineHeight': 1.5,
         'markdown.preview.typographer': true,
         'markdown.preview.fontFamily': 'Georama, ui-sans-serif, sans-serif',
+
+        'markdown.validate.enabled': false, // For a different markdown flavor.
+        // Disabling because we use remark, a different flavor than VSCode, and several plugins.
+
+        'mdx.server.enable': false, // Experimental, so disabling.
+        // MDX intellisense has trouble validating links in frontmatter, footnotes.
 
         /**
          * Prettier options.
@@ -363,6 +370,7 @@ export default async () => {
         '[mdx]': {
             'editor.tabSize': prettierConfig.tabWidth,
             'editor.insertSpaces': !prettierConfig.useTabs,
+            'files.trimTrailingWhitespace': false,
             'editor.wordWrap': 'on',
 
             'editor.codeActionsOnSave': {
@@ -373,6 +381,7 @@ export default async () => {
         '[markdown]': {
             'editor.tabSize': prettierConfig.tabWidth,
             'editor.insertSpaces': !prettierConfig.useTabs,
+            'files.trimTrailingWhitespace': false,
             'editor.wordWrap': 'on',
 
             'editor.codeActionsOnSave': {

@@ -28,9 +28,8 @@ export default async () => {
         remarkPlugins: [
             (await import('remark-frontmatter')).default, // Frontmatter.
             [(await import('remark-mdx-frontmatter')).default, { name: 'frontMatter' }],
-            (await import('remark-gfm')).default, // GitHub-flavored markdown syntax.
+            [(await import('remark-gfm')).default, { singleTilde: false }], // GFM features.
             (await import('remark-smartypants')).default, // (em dash) `--` to `—`, quotes, etc.
-            [(await import('remark-oembed')).default, { syncWidget: true, jsx: true }], // oEmbeds for markdown.
             (await import('remark-mermaidjs')).default, // Charting and diagramming; {@see https://o5p.me/5z7Yrt}.
             (await import('remark-directive')).default, // Custom directives; {@see https://o5p.me/0fakce}.
         ],
@@ -40,9 +39,8 @@ export default async () => {
             plugins: [
                 'remark-frontmatter', // Frontmatter.
                 ['remark-mdx-frontmatter', { name: 'frontMatter' }],
-                'remark-gfm', // GitHub-flavored markdown features.
+                ['remark-gfm', { singleTilde: false }], // GFM features.
                 'remark-smartypants', // (em dash) `--` to `—`, quotes, etc.
-                ['remark-oembed', { syncWidget: true, jsx: true }], // oEmbeds for markdown.
                 'remark-mermaidjs', // Charting and diagramming; {@see https://o5p.me/5z7Yrt}.
                 'remark-directive', // Custom directives; {@see https://o5p.me/0fakce}.
             ],

@@ -36,7 +36,7 @@ $google-fonts: (
         @apply bg-color-basic text-color-basic-fg;
 
         :where(a, .link):not(:where(.prose, .not-basic, .prose *, .not-basic *)) {
-            @apply text-color-basic-link/80 hover:text-color-basic-link no-underline;
+            @apply text-color-basic-link/80 no-underline hover:text-color-basic-link;
 
             &:hover {
                 @apply underline;

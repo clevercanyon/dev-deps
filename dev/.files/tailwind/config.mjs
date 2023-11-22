@@ -53,9 +53,9 @@ export default /* not async compatible */ ({ themesConfig } = {}) => {
                 // Less than or equal to, in descending specificity order.
                 // The order matters, because it affects specificity.
                 'lte-widescreen': { raw: '(max-width: none)' },
-                'lte-desktop': { max: '2559px' },
-                'lte-laptop': { max: '1439px' },
-                'lte-notebook': { max: '1279px' },
+                'lte-desktop': { raw: '(max-width: 2559px)' },
+                'lte-laptop': { raw: '(max-width: 1439px)' },
+                'lte-notebook': { raw: '(max-width: 1279px)' },
                 'lte-tablet': { raw: '(max-width: 959px)' },
                 'lte-phone': { raw: '(max-width: 479px)' },
 
@@ -63,18 +63,18 @@ export default /* not async compatible */ ({ themesConfig } = {}) => {
                 // The order matters, because it affects specificity.
                 'gte-phone': { raw: '(min-width: 320px)' },
                 'gte-tablet': { raw: '(min-width: 480px)' },
-                'gte-notebook': { min: '960px' },
-                'gte-laptop': { min: '1280px' },
-                'gte-desktop': { min: '1440px' },
+                'gte-notebook': { raw: '(min-width: 960px)' },
+                'gte-laptop': { raw: '(min-width: 1280px)' },
+                'gte-desktop': { raw: '(min-width: 1440px)' },
                 'gte-widescreen': { raw: '(min-width: 2560px)' },
 
                 // Device-specific min/max breakpoints, in any order.
                 // Order doesn’t really matter due to min/max specificity.
                 'phone': { raw: '(min-width: 320px) and (max-width: 479px)' },
                 'tablet': { raw: '(min-width: 480px) and (max-width: 959px)' },
-                'notebook': { min: '960px', max: '1279px' },
-                'laptop': { min: '1280px', max: '1439px' },
-                'desktop': { min: '1440px', max: '2559px' },
+                'notebook': { min: '960px', max: '1279px' }, // Container max-width: 960px.
+                'laptop': { min: '1280px', max: '1439px' }, // Container max-width: 1280px.
+                'desktop': { min: '1440px', max: '2559px' }, // Container max-width: 1440px.
                 'widescreen': { raw: '(min-width: 2560px)' },
 
                 // Note: We use `raw` to avoid smaller breakpoints becoming a max-width for containers.
@@ -84,7 +84,31 @@ export default /* not async compatible */ ({ themesConfig } = {}) => {
             container: { center: true }, // No need for `mx-auto` on each container.
 
             extend: {
+                // We have to declare screen sizes explicitly for `min/max` widths.
+                // The reason is because our `screens` configuration uses complex values.
+                // For further details, {@see https://o5p.me/oLXcju}.
+                minWidth: {
+                    'phone': '320px',
+                    'tablet': '480px',
+                    'notebook': '960px',
+                    'laptop': '1280px',
+                    'desktop': '1440px',
+                    'widescreen': 'none',
+
+                    '1/4': '25%',
+                    '1/2': '50%',
+                    '3/4': '75%',
+                    '1/3': '33.333%',
+                    '2/3': '66.667%',
+                },
                 maxWidth: {
+                    'phone': '320px',
+                    'tablet': '480px',
+                    'notebook': '960px',
+                    'laptop': '1280px',
+                    'desktop': '1440px',
+                    'widescreen': 'none',
+
                     '1/4': '25%',
                     '1/2': '50%',
                     '3/4': '75%',
@@ -116,6 +140,43 @@ export default /* not async compatible */ ({ themesConfig } = {}) => {
                             'mark': {
                                 color: 'rgb(var(--colors-color-hilite-fg))',
                                 backgroundColor: 'rgb(var(--colors-color-hilite))',
+                            },
+                            // Task lists produced by remark GFM plugin.
+                            '.contains-task-list, .task-list-item': {
+                                paddingLeft: '0',
+                                listStyleType: 'none',
+                            },
+                            '.contains-task-list .contains-task-list': {
+                                margin: '0',
+                                paddingLeft: '1.5em',
+                            },
+                            '.task-list-item::marker': {
+                                content: "''",
+                            },
+                            '.task-list-item > input[type=checkbox]': {
+                                appearance: 'none',
+                                position: 'relative',
+                                display: 'inline-block',
+
+                                width: '1em',
+                                height: '1em',
+                                margin: '0 .5em 0 0',
+                                verticalAlign: 'middle',
+
+                                background: 'rgb(var(--colors-color-neutral))',
+                                border: '1px solid rgb(var(--colors-color-neutral-fg), .25)',
+                                borderRadius: '.15em',
+                            },
+                            '.task-list-item > input[type=checkbox]:checked::before': {
+                                content: "'\\2713'",
+
+                                fontSize: '1em',
+                                lineHeight: '1em',
+                                color: 'rgb(var(--colors-color-neutral-fg))',
+
+                                top: '-.05em',
+                                left: '.1em',
+                                position: 'absolute',
                             },
                         },
                     },
