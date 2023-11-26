@@ -7,7 +7,7 @@
  * @note This entire file will be updated automatically.
  * @note Instead of editing here, please review `./tsconfig.mjs`.
  *
- * Last generated using `./tsconfig.mjs` Nov 22, 2023 8:33 AM UTC.
+ * Last generated using `./tsconfig.mjs` Nov 26, 2023 6:33 AM UTC.
  */
 {
     "include": ["./src/**/*", "./dev-types.d.ts"],

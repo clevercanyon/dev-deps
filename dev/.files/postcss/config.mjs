@@ -32,7 +32,7 @@ export default async () => {
             // i.e., Tailwind’s `theme()` function works, but don’t try to feed a response into an SCSS variable|fn.
 
             'tailwindcss': { config: path.resolve(projDir, './tailwind.config.mjs') },
-            'postcss-preset-env': { stage: 3 }, // Includes autoprefixer.
+            'postcss-preset-env': { stage: 3, minimumVendorImplementations: 2, env: 'web' },
             'postcss-variable-compress': {}, // Compresses variables.
         },
     };

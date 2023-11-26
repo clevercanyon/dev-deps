@@ -120,30 +120,71 @@ export default /* not async compatible */ ({ themesConfig } = {}) => {
                         css: {
                             maxWidth: null,
 
-                            'a': {
+                            '.link': {
+                                ...pluginTypographyStyles.DEFAULT.css[0]['a'],
+                            },
+                            '.link code': {
+                                ...pluginTypographyStyles.DEFAULT.css[0]['a code'],
+                            },
+                            '.link strong': {
+                                ...pluginTypographyStyles.DEFAULT.css[0]['a strong'],
+                            },
+                            'a, .link': {
+                                cursor: 'pointer',
                                 textDecoration: 'none',
                             },
-                            'a:hover': {
+                            'a:hover, .link:hover': {
                                 textDecoration: 'underline',
                             },
                             'hr': {
                                 marginTop: '1.5em',
                                 marginBottom: '1.5em',
                             },
+                            'pre': {
+                                border: '1px solid rgb(var(--colors-color-prose-pre-borders))',
+                                boxShadow: 'inset 0 0 2px 2px rgb(var(--colors-color-prose-pre-shadows))',
+                            },
                             'code::before': null,
                             'code::after': null,
                             'code:not(:where(pre code))': {
+                                // fontSize: em(14, 16),
+                                // borderRadius: rem(5),
+                                // paddingTop: em(3, 16),
+                                // paddingRight: em(6, 16),
+                                // paddingBottom: em(3, 16),
+                                // paddingLeft: em(6, 16),
+                                // All included in base `<kbd>` styles.
                                 ...pluginTypographyStyles.base.css[0]['kbd'],
                                 borderRadius: '0.188rem', // Equivalent to 3px.
-                                boxShadow: '0 0 0 1px rgb(var(--tw-prose-code-shadows) / 10%)',
+                                boxShadow: '0 0 0 2px rgb(var(--tw-prose-code-shadows) / 12%)',
+                            },
+                            'kbd': {
+                                boxShadow:
+                                    '0 1px 0 2px rgb(var(--tw-prose-kbd-shadows) / 20%),' + //
+                                    ' 0 1px 10px 0 rgb(var(--tw-prose-kbd-shadows) / 20%)',
                             },
                             'mark': {
+                                // fontSize: em(14, 16),
+                                // borderRadius: rem(5),
+                                // paddingTop: em(3, 16),
+                                // paddingRight: em(6, 16),
+                                // paddingBottom: em(3, 16),
+                                // paddingLeft: em(6, 16),
+                                // All included in base `<kbd>` styles.
+                                ...pluginTypographyStyles.base.css[0]['kbd'],
+                            },
+                            'mark, mark *': {
+                                fontSize: '.944444em',
                                 color: 'rgb(var(--colors-color-hilite-fg))',
                                 backgroundColor: 'rgb(var(--colors-color-hilite))',
-                            },
+                            }, // Supports nested `<a>`, `<code>`, `<kdb>`, `*`.
+                            'mark *': { border: '0', padding: '0', boxShadow: 'none' },
+                            'mark a, mark .link': { opacity: '.75', textDecoration: 'underline' },
+                            'mark a:hover, mark .link:hover': { opacity: '1' }, // Opaque on hover.
+
                             // Task lists produced by remark GFM plugin.
                             '.contains-task-list, .task-list-item': {
-                                paddingLeft: '0',
+                                paddingLeft: '.375em',
                                 listStyleType: 'none',
                             },
                             '.contains-task-list .contains-task-list': {
@@ -177,6 +218,16 @@ export default /* not async compatible */ ({ themesConfig } = {}) => {
                                 top: '-.05em',
                                 left: '.1em',
                                 position: 'absolute',
+                            },
+                            // Footnotes produced by remark GFM plugin.
+                            '.footnotes': {
+                                borderTop: '1px solid rgb(var(--colors-color-prose-hr))',
+                                marginTop: '4em',
+                                fontSize: '0.875rem',
+                                lineHeight: '1.25rem',
+                            },
+                            '.footnotes > h2': {
+                                marginTop: '1em',
                             },
                         },
                     },

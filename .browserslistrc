@@ -17,10 +17,33 @@
 # Generated data.
 # <generated:start>
 
-# Last generated Nov 22, 2023 8:33 AM UTC.
+# Last generated Nov 26, 2023 6:33 AM UTC.
 
 [production]
-last 1 chrome versions
+node >= 20.9.0
+and_chr >= 92
+chrome >= 92
+and_ff >= 90
+android >= 119
+edge >= 92
+samsung >= 16.0
+safari >= 15.4
+ios_saf >= 15.4
+opera >= 78
+firefox >= 90
+unreleased and_chr versions
+unreleased chrome versions
+unreleased and_ff versions
+unreleased android versions
+unreleased edge versions
+unreleased samsung versions
+unreleased safari versions
+unreleased ios_saf versions
+unreleased opera versions
+unreleased firefox versions
+not dead
+
+[development]
 node >= 20.9.0
 and_chr >= 92
 chrome >= 92
@@ -45,7 +68,6 @@ unreleased firefox versions
 not dead
 
 [any]
-last 1 chrome versions
 node >= 20.9.0
 and_chr >= 92
 chrome >= 92

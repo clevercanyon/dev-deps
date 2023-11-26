@@ -85,30 +85,32 @@ export default /* not async compatible */ ({ themesConfig } = {}) => {
             'color-prose-links': basicColors['color-basic-link'],
 
             'color-prose-headings': basicColors['color-basic-heading'],
-            'color-prose-lead': $color[basicBGIsDark ? 'lighten' : 'darken'](basicColors['color-basic-fg'], 0.055),
-            'color-prose-bold': $color[basicBGIsDark ? 'lighten' : 'darken'](basicColors['color-basic-fg'], 0.055),
+            'color-prose-lead': $color[basicBGIsDark ? 'lighten' : 'darken'](basicColors['color-basic-fg'], 0.15),
+            'color-prose-bold': $color[basicBGIsDark ? 'lighten' : 'darken'](basicColors['color-basic-fg'], 0.15),
 
             'color-prose-counters': $color[basicBGIsDark ? 'darken' : 'lighten'](basicColors['color-basic-fg'], 0.25),
             'color-prose-bullets': $color[basicBGIsDark ? 'darken' : 'lighten'](basicColors['color-basic-fg'], 0.25),
 
             'color-prose-quotes': $color[basicBGIsDark ? 'darken' : 'lighten'](basicColors['color-basic-fg'], 0.25),
-            'color-prose-quote-borders': $color[basicBGIsDark ? 'darken' : 'lighten'](basicColors['color-basic-fg'], 0.85),
+            'color-prose-quote-borders': $color[basicBGIsDark ? 'darken' : 'lighten'](basicColors['color-basic-fg'], 0.825),
 
-            'color-prose-kbd': $color[basicBGIsDark ? 'lighten' : 'darken'](basicColors['color-basic-fg'], 0.055),
+            'color-prose-kbd': $color[basicBGIsDark ? 'lighten' : 'darken'](basicColors['color-basic-fg'], 0.15),
             // This is incorporated into an `rgb(x x x / x)` final color.
             'color-prose-kbd-shadows': $color.toRGBListNoAlpha(basicColors['color-basic-fg']),
 
-            'color-prose-code': $color[basicBGIsDark ? 'lighten' : 'darken'](basicColors['color-basic-fg'], 0.055),
+            'color-prose-code': $color[basicBGIsDark ? 'lighten' : 'darken'](basicColors['color-basic-fg'], 0.15),
             // This is incorporated into an `rgb(x x x / x)` final color.
             'color-prose-code-shadows': $color.toRGBListNoAlpha(basicColors['color-basic-fg']),
 
-            'color-prose-pre': $color[basicBGIsDark ? 'lighten' : 'darken'](basicColors['color-basic'], 0.055),
-            'color-prose-pre-code': $color[basicBGIsDark ? 'lighten' : 'darken'](basicColors['color-basic-fg'], 0.055),
+            'color-prose-pre': $color[basicBGIsDark ? 'darken' : 'lighten'](basicColors['color-basic'], 0.005),
+            'color-prose-pre-code': $color[basicBGIsDark ? 'darken' : 'lighten'](basicColors['color-basic-fg'], 0.005),
+            'color-prose-pre-borders': $color[basicBGIsDark ? 'darken' : 'lighten'](basicColors['color-basic-fg'], 0.825),
+            'color-prose-pre-shadows': basicBGIsDark ? $color.darken(basicColors['color-basic'], 0.25) : $color.darken(basicColors['color-basic'], 0.025),
 
-            'color-prose-th-borders': $color[basicBGIsDark ? 'darken' : 'lighten'](basicColors['color-basic-fg'], 0.85),
-            'color-prose-td-borders': $color[basicBGIsDark ? 'darken' : 'lighten'](basicColors['color-basic-fg'], 0.85),
+            'color-prose-th-borders': $color[basicBGIsDark ? 'darken' : 'lighten'](basicColors['color-basic-fg'], 0.825),
+            'color-prose-td-borders': $color[basicBGIsDark ? 'darken' : 'lighten'](basicColors['color-basic-fg'], 0.825),
 
-            'color-prose-hr': $color[basicBGIsDark ? 'darken' : 'lighten'](basicColors['color-basic-fg'], 0.85),
+            'color-prose-hr': $color[basicBGIsDark ? 'darken' : 'lighten'](basicColors['color-basic-fg'], 0.825),
             'color-prose-captions': $color[basicBGIsDark ? 'darken' : 'lighten'](basicColors['color-basic-fg'], 0.25),
         };
 
@@ -188,7 +190,72 @@ export default /* not async compatible */ ({ themesConfig } = {}) => {
         };
         for (const [name, value] of Object.entries(defaultBrandColors)) {
             defaultBrandColors[name + '-fg'] = $color.getReadable(value);
-        }
+        } // We go ahead and calculate brand colors so they can be used for starry night defaults below.
+        const brandColors = $obj.defaults({}, $obj.pick(theme.extend.colors, Object.keys(defaultBrandColors)), defaultBrandColors);
+
+        /**
+         * Defines starry night colors.
+         *
+         * Starry night is a beautiful code syntax highlighter that compiles to JSX — compatible with Preact/MDX. These
+         * color derivations are based on the configured basic colors, and also based on configured brand colors.
+         *
+         * 💡 Tip: Fast track. These colors use defaults that typically work well for most brands. That said, if you
+         * customize, consider starting with `color-starry-night-syntax-*` colors. Tune the rest in later.
+         */
+        const defaultStarryNightColors = {
+            // Highlighted bg/fg colors.
+            'color-starry-night': $color[basicBGIsDark ? 'darken' : 'lighten'](basicColors['color-basic'], 0.005),
+            'color-starry-night-fg': $color[basicBGIsDark ? 'darken' : 'lighten'](basicColors['color-basic-fg'], 0.005),
+
+            // Highlighted presentation colors.
+            'color-starry-night-border': $color[basicBGIsDark ? 'darken' : 'lighten'](basicColors['color-basic-fg'], 0.825),
+            'color-starry-night-box-shadows': basicBGIsDark ? $color.darken(basicColors['color-basic'], 0.25) : $color.darken(basicColors['color-basic'], 0.025),
+            'color-starry-night-hilited-lines': basicBGIsDark ? $color.lighten(basicColors['color-basic'], 0.05) : $color.lighten(basicColors['color-basic'], 0.0375),
+
+            // Highlighted header colors.
+            'color-starry-night-header': $color[basicBGIsDark ? 'darken' : 'lighten'](basicColors['color-basic'], 0.25),
+            'color-starry-night-header-fg': $color[basicBGIsDark ? 'darken' : 'lighten'](basicColors['color-basic-fg'], 0.005),
+
+            // Highlighted header language colors.
+            'color-starry-night-header-language': brandColors['color-accent'],
+            'color-starry-night-header-language-fg': brandColors['color-accent-fg'],
+
+            ...(basicBGIsDark // Dark syntax theme.
+                ? {
+                      // Script comments, gutter marks, punctuation.
+                      'color-starry-night-syntax-comment-fg': '#696969',
+                      'color-starry-night-syntax-gutter-mark-fg': '#3c3c3c',
+                      'color-starry-night-syntax-punctuation-fg': '#6a6e76',
+
+                      // Script keywords, variables, constants, strings, etc.
+                      'color-starry-night-syntax-keyword-fg': '#6382a9',
+                      'color-starry-night-syntax-variable-fg': '#be7175',
+                      'color-starry-night-syntax-constant-fg': '#ca9d6b',
+                      'color-starry-night-syntax-modifier-fg': '#be7175',
+                      'color-starry-night-syntax-entity-fg': '#ca9d6b',
+                      'color-starry-night-syntax-entity-tag-fg': '#e5c07b',
+                      'color-starry-night-syntax-other-link-fg': '#80aff9',
+                      'color-starry-night-syntax-string-fg': '#84a267',
+                      'color-starry-night-syntax-regexp-fg': '#759d6d',
+                  }
+                : {
+                      // Script comments, gutter marks, punctuation.
+                      'color-starry-night-syntax-comment-fg': '#a8a8a8',
+                      'color-starry-night-syntax-gutter-mark-fg': '#d5d5d5',
+                      'color-starry-night-syntax-punctuation-fg': '#333333',
+
+                      // Script keywords, variables, constants, strings, etc.
+                      'color-starry-night-syntax-keyword-fg': '#006a7a',
+                      'color-starry-night-syntax-variable-fg': '#b80f15',
+                      'color-starry-night-syntax-constant-fg': '#845015',
+                      'color-starry-night-syntax-modifier-fg': '#224f87',
+                      'color-starry-night-syntax-entity-fg': '#7a4100',
+                      'color-starry-night-syntax-entity-tag-fg': '#754c00',
+                      'color-starry-night-syntax-other-link-fg': '#004ecc',
+                      'color-starry-night-syntax-string-fg': '#508b18',
+                      'color-starry-night-syntax-regexp-fg': '#357e25',
+                  }),
+        };
 
         /**
          * Composition.
@@ -197,7 +264,9 @@ export default /* not async compatible */ ({ themesConfig } = {}) => {
             ...defaultBasicColors,
             ...defaultBasicProseColors,
             ...defaultBasicSectionColors,
+
             ...defaultBrandColors,
+            ...defaultStarryNightColors,
 
             ...themes.defaultTheme.extend.colors,
             ...theme.extend.colors,
