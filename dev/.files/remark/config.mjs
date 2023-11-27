@@ -14,7 +14,6 @@ import pluginDirective from 'remark-directive';
 import pluginFrontmatter from 'remark-frontmatter';
 import pluginGFM from 'remark-gfm';
 import remarkLint from 'remark-lint';
-import pluginMermaid from 'remark-mermaidjs';
 import presetLintRecommended from 'remark-preset-lint-recommended';
 import presetPrettier from 'remark-preset-prettier';
 import pluginSmartyPants from 'remark-smartypants';
@@ -54,7 +53,6 @@ export default async () => {
             pluginFrontmatter, // Frontmatter.
             [pluginGFM, { singleTilde: false }], // GFM features.
             pluginSmartyPants, // (em dash) `--` to `—`, quotes, etc.
-            pluginMermaid, // Charting and diagramming; {@see https://o5p.me/5z7Yrt}.
             pluginDirective, // Custom directives; {@see https://o5p.me/0fakce}.
 
             // Disable this rule, as GFM explicitly allows this.

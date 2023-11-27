@@ -31,7 +31,6 @@ export default async () => {
             [(await import('remark-mdx-frontmatter')).default, { name: 'frontMatter' }],
             [(await import('remark-gfm')).default, { singleTilde: false }], // GFM features.
             (await import('remark-smartypants')).default, // (em dash) `--` to `—`, quotes, etc.
-            (await import('remark-mermaidjs')).default, // Charting and diagramming; {@see https://o5p.me/5z7Yrt}.
             (await import('remark-directive')).default, // Custom directives; {@see https://o5p.me/0fakce}.
         ],
         rehypePlugins: [
@@ -66,7 +65,6 @@ export default async () => {
                 ['remark-mdx-frontmatter', { name: 'frontMatter' }],
                 ['remark-gfm', { singleTilde: false }], // GFM features.
                 'remark-smartypants', // (em dash) `--` to `—`, quotes, etc.
-                'remark-mermaidjs', // Charting and diagramming; {@see https://o5p.me/5z7Yrt}.
                 'remark-directive', // Custom directives; {@see https://o5p.me/0fakce}.
             ],
         },
