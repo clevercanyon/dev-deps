@@ -3,7 +3,7 @@
     "publishConfig": {
         "access": "public"
     },
-    "version": "1.0.277",
+    "version": "1.0.278",
     "license": "GPL-3.0-or-later",
     "name": "@clevercanyon/dev-deps",
     "description": "Dev dependencies for Clever Canyon projects.",
@@ -40,7 +40,7 @@
     },
     "dependencies": {
         "@clevercanyon/madrun": "^1.0.121",
-        "@clevercanyon/utilities": "^1.0.479",
+        "@clevercanyon/utilities": "^1.0.480",
         "@clevercanyon/utilities.bash": "^1.0.139",
         "@clevercanyon/utilities.cfp": "^1.0.110",
         "@clevercanyon/utilities.node": "^1.0.129",
@@ -58,6 +58,8 @@
         "@prettier/plugin-php": "0.20.1",
         "@prettier/plugin-ruby": "4.0.2",
         "@prettier/plugin-xml": "3.2.2",
+        "@svgr/core": "8.1.0",
+        "@svgr/plugin-jsx": "8.1.0",
         "@tailwindcss/typography": "0.5.10",
         "@testing-library/preact": "3.2.3",
         "@types/archiver": "5.3.4",
