@@ -22,6 +22,7 @@ import pluginTypography from '@tailwindcss/typography';
 import pluginTypographyStyles from '@tailwindcss/typography/src/styles.js';
 import fs from 'node:fs';
 import path from 'node:path';
+import pluginAnimated from 'tailwindcss-animated';
 import pluginThemer from 'tailwindcss-themer';
 import exclusions from '../bin/includes/exclusions.mjs';
 import extensions from '../bin/includes/extensions.mjs';
@@ -84,6 +85,11 @@ export default /* not async compatible */ ({ themesConfig } = {}) => {
             container: { center: true }, // No need for `mx-auto` on each container.
 
             extend: {
+                spacing: {
+                    '1em': '1em',
+                    '1.5em': '1.5em',
+                    '2em': '2em',
+                },
                 // We have to declare screen sizes explicitly for `min/max` widths.
                 // The reason is because our `screens` configuration uses complex values.
                 // For further details, {@see https://o5p.me/oLXcju}.
@@ -115,35 +121,133 @@ export default /* not async compatible */ ({ themesConfig } = {}) => {
                     '1/3': '33.333%',
                     '2/3': '66.667%',
                 },
+                fontSize: {
+                    // Neither of these are allowed to autoscale.
+                    // We don’t autoscale text that is small already.
+                    xs: ['.75rem', { lineHeight: '1rem' }], // Equivalent to 12px/16px.
+                    sm: ['.875rem', { lineHeight: '1.25rem' }], // Equivalent to 14px/20px.
+
+                    // All of these are allowed to autoscale down to one size smaller than ideal target size.
+                    base: ['clamp(.875rem, 1.111vw, 1rem)', { lineHeight: 'clamp(1.25rem, 1.667vw, 1.5rem)' }], // Equivalent to 16px/24px.
+                    lg: ['clamp(1rem, 1.250vw, 1.125rem)', { lineHeight: 'clamp(1.5rem, 1.944vw, 1.75rem)' }], // Equivalent to 18px/28px.
+                    xl: ['clamp(1.125rem, 1.389vw, 1.25rem)', { lineHeight: 'clamp(1.75rem, 1.944vw, 1.75rem)' }], // Equivalent to 20px/28px.
+                    '2xl': ['clamp(1.25rem, 1.667vw, 1.5rem)', { lineHeight: 'clamp(1.75rem, 2.222vw, 2rem)' }], // Equivalent to 24px/32px.
+
+                    // All of these are allowed to autoscale down to two sizes smaller than ideal target size.
+                    '3xl': ['clamp(1.25rem, 2.083vw, 1.875rem)', { lineHeight: 'clamp(1.75rem, 2.500vw, 2.25rem)' }], // Equivalent to 30px/36px.
+                    '4xl': ['clamp(1.5rem, 2.500vw, 2.25rem)', { lineHeight: 'clamp(2rem, 2.778vw, 2.5rem)' }], // Equivalent to 36px/40px.
+                    '5xl': ['clamp(1.875rem, 3.333vw, 3rem)', { lineHeight: 'clamp(2.25rem, 4.028vw, 3.625rem)' }], // Equivalent to 48px/58px.
+
+                    // All of these are allowed to autoscale down to three sizes smaller than ideal target size.
+                    '6xl': ['clamp(1.875rem, 4.167vw, 3.75rem)', { lineHeight: 'clamp(2.25rem, 4.861vw, 4.375rem)' }], // Equivalent to 60px/70px.
+                    '7xl': ['clamp(2.25rem, 5vw, 4.5rem)', { lineHeight: 'clamp(2.5rem, 5.972vw, 5.375rem)' }], // Equivalent to 72px/86px.
+
+                    // All of these are allowed to autoscale down to four sizes smaller than ideal target size.
+                    '8xl': ['clamp(2.25rem, 6.667vw, 6rem)', { lineHeight: 'clamp(2.5rem, 7.986vw, 7.188rem)' }], // Equivalent to 96px/115px.
+                    '9xl': ['clamp(3rem, 8.889vw, 8rem)', { lineHeight: 'clamp(3.625rem, 10.625vw, 9.563rem)' }], // Equivalent to 128px/153px.
+                },
+                /**
+                 * Prose styles.
+                 *
+                 * - In our Tailwind implementation, class `p` = `prose`.
+                 * - In our Tailwind implementation, a much shorter `_` = `not-p` = `not-prose`.
+                 * - In our basic styles implementation, `_` = `not-p` = `not-prose` = `not-basic`.
+                 *
+                 * Also worth noting that in our Tailwind prose implementation, the `~` class means prose colors should
+                 * be inherited from the parent containing the `~` class; e.g., if a component applies colors that
+                 * differ from prose colors, then it needs to make sure any prose it contains will inherit the colors it
+                 * has assigned, and not use the default prose colors. So `~` is an alternative to `_`, indicating that
+                 * prose is to be allowed, but it must use inherited coloration.
+                 */
                 typography: {
                     DEFAULT: {
                         css: {
-                            maxWidth: null,
+                            maxWidth: null, // No max-width.
+                            // Instead, we wrap all prose in a container.
 
-                            '.link': {
-                                ...pluginTypographyStyles.DEFAULT.css[0]['a'],
-                            },
-                            '.link code': {
-                                ...pluginTypographyStyles.DEFAULT.css[0]['a code'],
-                            },
-                            '.link strong': {
-                                ...pluginTypographyStyles.DEFAULT.css[0]['a strong'],
-                            },
+                            // We explicitly don’t set a `<strong>` color.
+                            // Doing so makes it necessary to add more and more rules
+                            // that must revert colorization in various nested contexts.
+                            strong: { color: null },
+                            'blockquote strong': { color: null },
+                            'thead th strong': { color: null },
+                            'h1 strong': { color: null },
+                            'h2 strong': { color: null },
+                            'h3 strong': { color: null },
+                            'h4 strong': { color: null },
+
+                            // We explicitly don’t set a `<kbd>` or `<code>` color.
+                            // Doing so makes it necessary to add more and more rules
+                            // that must revert colorization in various nested contexts.
+                            code: { color: null },
+                            'h1 code': { color: null },
+                            'h2 code': { color: null },
+                            'h3 code': { color: null },
+                            'h4 code': { color: null },
+                            'blockquote code': { color: null },
+                            'thead th code': { color: null },
+                            'pre code': { color: null },
+
+                            // Link styles.
+                            'a': null, // Redefined as `a, .link`.
+                            'a code': null, // Redefined as `a code, .link code`.
+                            'a strong': null, // Redefined as `a strong, .link strong`.
+
                             'a, .link': {
-                                cursor: 'pointer',
+                                // color: 'var(--tw-prose-links)',
+                                // textDecoration: 'underline',
+                                // fontWeight: '500',
+                                // All included in base `<a>` styles.
+                                ...pluginTypographyStyles.DEFAULT.css[0]['a'],
+                                opacity: '.9',
                                 textDecoration: 'none',
+                                cursor: 'pointer',
                             },
                             'a:hover, .link:hover': {
+                                opacity: '1',
                                 textDecoration: 'underline',
                             },
+                            'a code, .link code': {
+                                // color: 'inherit',
+                                // All included in base `<code>` styles.
+                                ...pluginTypographyStyles.DEFAULT.css[0]['a code'],
+                                color: null, // Explicitly remove; see notes above.
+                            },
+                            'a strong, .link strong': {
+                                // color: 'inherit',
+                                // All included in base `<strong>` styles.
+                                ...pluginTypographyStyles.DEFAULT.css[0]['a strong'],
+                                color: null, // Explicitly remove; see notes above.
+                            },
+
+                            // Auto-linked headings with `~`-prefixed IDs.
+                            '[id^=\\~]': {
+                                position: 'relative',
+                            },
+                            '[id^=\\~] > x-hash:first-child': {
+                                opacity: '0',
+                                left: '-1em',
+                                width: '1em',
+                                textAlign: 'left',
+                                position: 'absolute',
+                            },
+                            '[id^=\\~]:hover > x-hash:first-child': {
+                                opacity: '1',
+                            },
+
+                            // Horizontal line styles.
                             'hr': {
                                 marginTop: '1.5em',
                                 marginBottom: '1.5em',
                             },
+
+                            // Pre styles.
                             'pre': {
                                 border: '1px solid rgb(var(--colors-color-prose-pre-borders))',
                                 boxShadow: 'inset 0 0 2px 2px rgb(var(--colors-color-prose-pre-shadows))',
                             },
+
+                            // Code styles.
                             'code::before': null,
                             'code::after': null,
                             'code:not(:where(pre code))': {
@@ -158,11 +262,16 @@ export default /* not async compatible */ ({ themesConfig } = {}) => {
                                 borderRadius: '0.188rem', // Equivalent to 3px.
                                 boxShadow: '0 0 0 2px rgb(var(--tw-prose-code-shadows) / 12%)',
                             },
+
+                            // Key styles.
                             'kbd': {
                                 boxShadow:
                                     '0 1px 0 2px rgb(var(--tw-prose-kbd-shadows) / 20%),' + //
                                     ' 0 1px 10px 0 rgb(var(--tw-prose-kbd-shadows) / 20%)',
+                                color: null, // Explicitly remove; see notes above.
                             },
+
+                            // Mark styles.
                             'mark': {
                                 // fontSize: em(14, 16),
                                 // borderRadius: rem(5),
@@ -182,6 +291,11 @@ export default /* not async compatible */ ({ themesConfig } = {}) => {
                             'mark a, mark .link': { opacity: '.75', textDecoration: 'underline' },
                             'mark a:hover, mark .link:hover': { opacity: '1' }, // Opaque on hover.
 
+                            // Abbreviation styles.
+                            'abbr': {
+                                cursor: 'help',
+                            },
+
                             // Task lists produced by remark GFM plugin.
                             '.contains-task-list, .task-list-item': {
                                 paddingLeft: '.375em',
@@ -194,21 +308,20 @@ export default /* not async compatible */ ({ themesConfig } = {}) => {
                             '.task-list-item::marker': {
                                 content: "''",
                             },
-                            '.task-list-item > input[type=checkbox]': {
+                            '.task-list-item > input': {
                                 appearance: 'none',
                                 position: 'relative',
-                                display: 'inline-block',
 
                                 width: '1em',
                                 height: '1em',
                                 margin: '0 .5em 0 0',
                                 verticalAlign: 'middle',
 
-                                background: 'rgb(var(--colors-color-neutral))',
-                                border: '1px solid rgb(var(--colors-color-neutral-fg), .25)',
+                                background: 'rgb(var(--colors-color-neutral), .25)',
+                                border: '1px solid rgb(var(--colors-color-neutral-bdr))',
                                 borderRadius: '.15em',
                             },
-                            '.task-list-item > input[type=checkbox]:checked::before': {
+                            '.task-list-item > input:checked::before': {
                                 content: "'\\2713'",
 
                                 fontSize: '1em',
@@ -219,6 +332,7 @@ export default /* not async compatible */ ({ themesConfig } = {}) => {
                                 left: '.1em',
                                 position: 'absolute',
                             },
+
                             // Footnotes produced by remark GFM plugin.
                             '.footnotes': {
                                 borderTop: '1px solid rgb(var(--colors-color-prose-hr))',
@@ -229,6 +343,14 @@ export default /* not async compatible */ ({ themesConfig } = {}) => {
                             '.footnotes > h2': {
                                 marginTop: '1em',
                             },
+
+                            // The `~` class means prose colors should be inherited from the parent containing the `~` class.
+                            '.\\~ :where(h1, h2, h3, h4, h5, h6, [class~="lead"], a, .link, dt, blockquote, thead th)': {
+                                color: 'inherit',
+                            },
+                            '.\\~ :where(ol > li, ul > li)::marker': { color: 'inherit' },
+                            '.\\~ :where(hr, thead, tbody tr, tfoot)': { borderColor: 'currentColor' },
+                            '.\\~ :where(a, .link)': { textDecoration: 'underline' },
                         },
                     },
                 },
@@ -249,11 +371,17 @@ export default /* not async compatible */ ({ themesConfig } = {}) => {
             },
         },
         plugins: [
-            pluginTypography({ className: 'prose' }), // Implements `prose` class.
-            pluginThemer(mergeThemesConfig({ themesConfig })), // Implements themes configuration.
+            pluginTypography({ className: 'p' }), // In our implementation, `p` = `prose`, `_` = `not-prose` = `not-basic`.
+            // The `_` = `not-prose` logic is handled by our PostCSS configuration, which includes a custom plugin.
+
+            // This plugin is what powers all of our theme configurations; {@see https://www.npmjs.com/package/tailwindcss-themer}.
+            pluginThemer(mergeThemesConfig({ themesConfig })), // Our own theme system is also called upon here to configure Tailwind themes.
+
+            // This plugin adds support for more animation utilities and comes with a beautiful animation configurator.
+            pluginAnimated, // {@see https://www.tailwindcss-animated.com/configurator.html}.
         ],
         content: [
-            path.resolve(projDir, './src') + '/**/*.' + extensions.asBracedGlob([...extensions.tailwindContent]),
+            path.resolve(projDir, './{src,dist}') + '/**/*.' + extensions.asBracedGlob([...extensions.tailwindContent]),
 
             // If this package is using `@clevercanyon/utilities` we can also scan preact files.
             ...(fs.existsSync(path.resolve(projDir, './node_modules/@clevercanyon/utilities/dist/preact'))
@@ -302,5 +430,6 @@ export default /* not async compatible */ ({ themesConfig } = {}) => {
                 { dropExistingNegations: true },
             ),
         ],
+        blocklist: ['!p'], // This `!important` `p` = `prose` gets picked up from `./dist` somewhere.
     };
 };

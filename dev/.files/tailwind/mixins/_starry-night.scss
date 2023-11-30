@@ -20,7 +20,7 @@
     .highlight-header {
         display: flex;
         gap: 0.5em;
-        align-items: center;
+        justify-content: space-between;
         padding: 0.5em;
         color: rgb(var(--colors-color-starry-night-header-fg));
         background: rgb(var(--colors-color-starry-night-header));
@@ -39,63 +39,118 @@
         border-radius: 0.1875rem;
     }
 
-    // `<pre>` tag inside code block container.
-    .highlight pre {
-        padding: 0.8571em 0;
-        margin: 0;
-        background: none;
-        border: 0;
-        border-radius: 0;
-        box-shadow: inset 0 0 2px 2px rgb(var(--colors-color-starry-night-box-shadows));
+    // Copy button inside code block header.
+    .highlight-copy {
+        position: relative;
+        user-select: none;
 
-        // `<code>` tag inside code block container.
-        & > code {
-            display: grid;
-            color: rgb(var(--colors-color-starry-night-fg));
+        &:disabled {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        &::after {
+            margin: 0 0 0 0.5em;
+            line-height: 1em;
+            vertical-align: middle;
+            content: '❏';
+        }
+
+        &::before {
+            position: absolute;
+            top: -25px;
+            left: -18px;
+            color: rgb(var(--colors-color-success));
+            content: '✔';
+            opacity: 0;
+        }
+
+        &:not(.-copy-success)::before {
+            top: 0;
+            visibility: hidden;
+            opacity: 1;
+        }
+
+        &.-copy-success::before {
+            transition:
+                opacity 1s,
+                top 1s;
         }
     }
 
-    // Lines of code inside code block container.
-    .highlight .line {
-        padding-inline: 1.1428em;
+    // Nested highlight styles.
+    .highlight {
+        // `<pre>` tag.
+        > pre {
+            padding: 0.8571em 0;
+            margin: 0;
+            background: none;
+            border: 0;
+            border-radius: 0;
+            box-shadow: inset 0 0 2px 2px rgb(var(--colors-color-starry-night-box-shadows));
 
-        // Focused and/or hovered lines of code.
-        &:focus:not(:focus-visible),
-        &:hover {
-            background: rgb(var(--colors-color-starry-night-hilited-lines));
+            // `<code>` tag.
+            > code {
+                display: grid;
+                color: rgb(var(--colors-color-starry-night-fg));
+            }
         }
 
-        // Line numbers.
-        & .line-number {
+        // Lines of code.
+        .line {
+            padding-inline: 1.1428em;
+
+            // Focused and/or hovered lines of code.
+            &:hover,
+            &:focus:not(:focus-visible) {
+                background: rgb(var(--colors-color-starry-night-hilited-lines));
+            }
+        }
+
+        // Lines of code line numbers.
+        .line-number {
             margin-inline-end: 1em;
             color: rgb(var(--colors-color-starry-night-syntax-gutter-mark-fg));
             user-select: none;
         }
 
-        // Highlighted lines of code.
-        &[data-highlighted] {
+        // Copy-in-progress and highlighted lines of code.
+        > pre.-copy-in-progress .line,
+        .line[data-highlighted] {
             background: rgb(var(--colors-color-starry-night-hilited-lines));
-            border-inline-start: 2px solid rgb(var(--colors-color-starry-night-syntax-comment-fg));
 
             // Highlighted line numbers.
-            & .line-number {
+            .line-number {
                 color: rgb(var(--colors-color-starry-night-syntax-comment-fg));
             }
         }
 
+        // Highlighted lines of code.
+        .line[data-highlighted] {
+            border-inline-start: 2px solid rgb(var(--colors-color-starry-night-syntax-comment-fg));
+        }
+
         // Lines with shell prompt icons.
-        & .line-prompt::before {
-            display: inline-block;
-            width: 1em;
-            height: 1em;
-            margin-inline: -0.175em 0.35em;
-            vertical-align: middle;
-            content: '';
-            background: rgb(var(--colors-color-starry-night-syntax-comment-fg));
-            mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='none' fill-rule='evenodd' clip-rule='evenodd' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M17.179 5.597C13.491 3.081 5.957 3.057 6.344 8.186c.399 5.287 11.204 1.813 11.566 7.102.369 5.375-8 5.71-11.832 2.666M12.017 2v20'/%3E%3C/svg%3E");
-            mask-repeat: no-repeat;
-            mask-position: top center;
-            mask-size: contain;
+        .line-prompt {
+            &::before {
+                display: inline-block;
+                width: 1em;
+                height: 1em;
+                margin-inline: -0.175em 0.35em;
+                vertical-align: middle;
+                content: '';
+                background: rgb(var(--colors-color-starry-night-syntax-comment-fg));
+            }
+
+            &::before {
+                // Define as a variable so that when autoprefixer runs it won’t end up duplicating this lengthy value.
+                --highlight-line-prompt-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' fill-rule='evenodd' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' clip-rule='evenodd' viewBox='0 0 24 24'%3E%3Cpath d='M17 6C13 3 6 3 6 8c1 5 12 2 12 7 0 6-8 6-12 3m6-16v20'/%3E%3C/svg%3E");
+
+                mask-image: var(--highlight-line-prompt-mask-image);
+                mask-repeat: no-repeat;
+                mask-position: top center;
+                mask-size: contain;
+            }
         }
     }
 

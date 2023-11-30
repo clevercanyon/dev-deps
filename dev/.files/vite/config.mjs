@@ -279,6 +279,13 @@ export default async ({ mode, command, isSsrBuild: isSSRBuild }) => {
             ...(['cma', 'lib'].includes(appType) ? { lib: { entry: appEntries, formats: ['es'] } } : {}),
             rollupOptions: rollupConfig, // See: <https://o5p.me/5Vupql>.
         },
+        experimental: {
+            importGlobRestoreExtension: true, // Restores file extension on glob imports containing a query string.
+            // This is needed by the MDX plugin for Vite; e.g., when we glob import MDX files to acquire frontMatter,
+            // we add a query to make the glob import distinct from other dynamic imports of the same file elsewhere.
+            // Enabling this option restores the `.mdx` extension, such that the MDX plugin still considers
+            // the import to be an MDX file; i.e., given that it ends with a query string otherwise.
+        },
         test: vitestConfig, // Vitest configuration.
     };
 

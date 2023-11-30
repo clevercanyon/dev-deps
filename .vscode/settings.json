@@ -7,7 +7,7 @@
  * @note This entire file will be updated automatically.
  * @note Instead of editing here, please review `./settings.mjs`.
  *
- * Last generated using `./settings.mjs` Nov 26, 2023 7:33 AM UTC.
+ * Last generated using `./settings.mjs` Nov 30, 2023 2:16 PM UTC.
  */
 {
     "editor.formatOnType": false,
@@ -219,6 +219,7 @@
     "eslint.lintTask.enable": false,
     "eslint.run": "onType",
     "eslint.runtime": "node",
+    "eslint.useESLintClass": true,
     "eslint.codeActionsOnSave.mode": "all",
     "eslint.experimental.useFlatConfig": true,
     "eslint.workingDirectories": [
@@ -226,7 +227,7 @@
             "mode": "auto"
         }
     ],
-    "eslint.validate": ["mdx", "markdown", "javascript", "javascriptreact", "typescript", "typescriptreact"],
+    "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
     "eslint.options": {
         "overrideConfigFile": "./eslint.config.mjs"
     },
@@ -323,7 +324,7 @@
         "editor.codeActionsOnSave": {
             "source.fixAll": true
         },
-        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
     "[markdown]": {
         "editor.tabSize": 4,
@@ -333,7 +334,7 @@
         "editor.codeActionsOnSave": {
             "source.fixAll": true
         },
-        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
     "[html]": {
         "editor.tabSize": 4,

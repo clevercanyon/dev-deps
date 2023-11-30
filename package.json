@@ -3,7 +3,7 @@
     "publishConfig": {
         "access": "public"
     },
-    "version": "1.0.280",
+    "version": "1.0.281",
     "license": "GPL-3.0-or-later",
     "name": "@clevercanyon/dev-deps",
     "description": "Dev dependencies for Clever Canyon projects.",
@@ -40,7 +40,7 @@
     },
     "dependencies": {
         "@clevercanyon/madrun": "^1.0.121",
-        "@clevercanyon/utilities": "^1.0.480",
+        "@clevercanyon/utilities": "^1.0.492",
         "@clevercanyon/utilities.bash": "^1.0.139",
         "@clevercanyon/utilities.cfp": "^1.0.110",
         "@clevercanyon/utilities.node": "^1.0.129",
@@ -132,7 +132,7 @@
         "typescript": "5.3.2",
         "unist-util-visit": "5.0.0",
         "unplugin-icons": "0.17.4",
-        "vite": "5.0.2",
+        "vite": "5.0.4",
         "vite-plugin-ejs": "1.7.0",
         "vite-plugin-minify": "1.5.2",
         "vitest": "0.34.6",

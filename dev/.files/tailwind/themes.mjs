@@ -67,6 +67,7 @@ export default /* not async compatible */ ({ themesConfig } = {}) => {
         const defaultBasicColors = {
             'color-basic': '#09090b', // Background color.
             'color-basic-fg': '#f0f0f0', // Foreground color.
+            'color-basic-bdr': '#17171c', // Border color.
             'color-basic-link': '#80aff9', // Link/anchor color.
             'color-basic-heading': '#ffffff', // Heading color.
         };
@@ -94,15 +95,18 @@ export default /* not async compatible */ ({ themesConfig } = {}) => {
             'color-prose-quotes': $color[basicBGIsDark ? 'darken' : 'lighten'](basicColors['color-basic-fg'], 0.25),
             'color-prose-quote-borders': $color[basicBGIsDark ? 'darken' : 'lighten'](basicColors['color-basic-fg'], 0.825),
 
+            // We don’t actually use `color-prose-kbd`; only shadows. See notes in `./config.mjs` file.
             'color-prose-kbd': $color[basicBGIsDark ? 'lighten' : 'darken'](basicColors['color-basic-fg'], 0.15),
             // This is incorporated into an `rgb(x x x / x)` final color.
             'color-prose-kbd-shadows': $color.toRGBListNoAlpha(basicColors['color-basic-fg']),
 
+            // We don’t actually use `color-prose-code`; only shadows. See notes in `./config.mjs` file.
             'color-prose-code': $color[basicBGIsDark ? 'lighten' : 'darken'](basicColors['color-basic-fg'], 0.15),
             // This is incorporated into an `rgb(x x x / x)` final color.
             'color-prose-code-shadows': $color.toRGBListNoAlpha(basicColors['color-basic-fg']),
 
             'color-prose-pre': $color[basicBGIsDark ? 'darken' : 'lighten'](basicColors['color-basic'], 0.005),
+            // We don’t actually use `color-prose-pre-code`. See notes in `./config.mjs` file.
             'color-prose-pre-code': $color[basicBGIsDark ? 'darken' : 'lighten'](basicColors['color-basic-fg'], 0.005),
             'color-prose-pre-borders': $color[basicBGIsDark ? 'darken' : 'lighten'](basicColors['color-basic-fg'], 0.825),
             'color-prose-pre-shadows': basicBGIsDark ? $color.darken(basicColors['color-basic'], 0.25) : $color.darken(basicColors['color-basic'], 0.025),
@@ -132,16 +136,19 @@ export default /* not async compatible */ ({ themesConfig } = {}) => {
         const defaultBasicSectionColors = {
             'color-header': $color[basicBGIsDark ? 'darken' : 'lighten'](basicColors['color-basic'], 0.015),
             'color-header-fg': $color[basicBGIsDark ? 'darken' : 'lighten'](basicColors['color-basic-fg'], 0.015),
+            'color-header-bdr': $color[basicBGIsDark ? 'lighten' : 'darken'](basicColors['color-basic'], 0.075),
             'color-header-link': $color[basicBGIsDark ? 'darken' : 'lighten'](basicColors['color-basic-link'], 0.015),
             'color-header-heading': $color[basicBGIsDark ? 'darken' : 'lighten'](basicColors['color-basic-heading'], 0.015),
 
             'color-sidebar': $color[basicBGIsDark ? 'darken' : 'lighten'](basicColors['color-basic'], 0.015),
             'color-sidebar-fg': $color[basicBGIsDark ? 'darken' : 'lighten'](basicColors['color-basic-fg'], 0.015),
+            'color-sidebar-bdr': $color[basicBGIsDark ? 'lighten' : 'darken'](basicColors['color-basic'], 0.075),
             'color-sidebar-link': $color[basicBGIsDark ? 'darken' : 'lighten'](basicColors['color-basic-link'], 0.015),
             'color-sidebar-heading': $color[basicBGIsDark ? 'darken' : 'lighten'](basicColors['color-basic-heading'], 0.015),
 
             'color-footer': $color[basicBGIsDark ? 'darken' : 'lighten'](basicColors['color-basic'], 0.015),
             'color-footer-fg': $color[basicBGIsDark ? 'darken' : 'lighten'](basicColors['color-basic-fg'], 0.015),
+            'color-footer-bdr': $color[basicBGIsDark ? 'lighten' : 'darken'](basicColors['color-basic'], 0.075),
             'color-footer-link': $color[basicBGIsDark ? 'darken' : 'lighten'](basicColors['color-basic-link'], 0.015),
             'color-footer-heading': $color[basicBGIsDark ? 'darken' : 'lighten'](basicColors['color-basic-heading'], 0.015),
         };
@@ -190,6 +197,7 @@ export default /* not async compatible */ ({ themesConfig } = {}) => {
         };
         for (const [name, value] of Object.entries(defaultBrandColors)) {
             defaultBrandColors[name + '-fg'] = $color.getReadable(value);
+            defaultBrandColors[name + '-bdr'] = $color[basicBGIsDark ? 'lighten' : 'darken'](value, 0.075);
         } // We go ahead and calculate brand colors so they can be used for starry night defaults below.
         const brandColors = $obj.defaults({}, $obj.pick(theme.extend.colors, Object.keys(defaultBrandColors)), defaultBrandColors);
 

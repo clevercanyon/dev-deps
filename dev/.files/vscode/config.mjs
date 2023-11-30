@@ -286,14 +286,24 @@ export default async () => {
 
         'eslint.run': 'onType',
         'eslint.runtime': 'node',
+        'eslint.useESLintClass': true,
 
         'eslint.codeActionsOnSave.mode': 'all',
         'eslint.experimental.useFlatConfig': true,
         'eslint.workingDirectories': [{ 'mode': 'auto' }],
 
         'eslint.validate': [
-            'mdx', //
-            'markdown',
+            // For now, disabling eslint for markdown.
+
+            // MDX eslint plugin not compatible with MDX v3 yet.
+            // Outdated package: `eslint-plugin-mdx`.
+
+            // Additionally, the formatter for MDX/markdown has been changed
+            // from eslint to prettier, for now. See langauge settings below.
+
+            // 'mdx',
+            // 'markdown',
+
             'javascript',
             'javascriptreact',
             'typescript',
@@ -376,7 +386,8 @@ export default async () => {
             'editor.codeActionsOnSave': {
                 'source.fixAll': true,
             },
-            'editor.defaultFormatter': 'dbaeumer.vscode-eslint',
+            // Change this back to `dbaeumer.vscode-eslint` when `eslint-plugin-mdx` is compatible with MDX v3.
+            'editor.defaultFormatter': 'esbenp.prettier-vscode',
         },
         '[markdown]': {
             'editor.tabSize': prettierConfig.tabWidth,
@@ -387,7 +398,8 @@ export default async () => {
             'editor.codeActionsOnSave': {
                 'source.fixAll': true,
             },
-            'editor.defaultFormatter': 'dbaeumer.vscode-eslint',
+            // Change this back to `dbaeumer.vscode-eslint` when `eslint-plugin-mdx` is compatible with MDX v3.
+            'editor.defaultFormatter': 'esbenp.prettier-vscode',
         },
         '[html]': {
             'editor.tabSize': prettierConfig.tabWidth,
