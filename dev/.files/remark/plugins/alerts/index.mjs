@@ -20,16 +20,16 @@ export default () => {
 
                 const data = node.data || (node.data = {});
                 const atts = node.attributes || (node.attributes = {});
-                const props = { className: '~', 'aria-label': 'Alert' };
+                const props = { class: '~', 'aria-label': 'Alert' };
 
-                props.className += ' bg-color-' + (atts.color || 'neutral');
-                props.className += ' text-color-' + (atts.color || 'neutral') + '-fg';
-                props.className += ' border-color-' + (atts.color || 'neutral') + '-bdr';
+                props.class += ' bg-color-' + (atts.color || 'neutral');
+                props.class += ' text-color-' + (atts.color || 'neutral') + '-fg';
+                props.class += ' border-color-' + (atts.color || 'neutral') + '-bdr';
                 if (atts.size) {
-                    props.className += ' text-' + atts.size;
+                    props.class += ' text-' + atts.size;
                 }
-                props.className += ' rounded border p-4 _my-lp _fc-mt-0 _lc-mb-0';
-                props.className = props.className.trim();
+                props.class += ' rounded border p-4 _my-lp _fc-mt-0 _lc-mb-0';
+                props.class = props.class.trim();
 
                 data.hName = 'div'; // Block-level container.
                 data.hProperties = h(data.hName, props).properties;

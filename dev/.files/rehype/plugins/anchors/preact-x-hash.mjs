@@ -22,7 +22,8 @@ export default () => {
                 node.properties.tabIndex = node.properties.tabIndex || 0;
 
                 // Styles `<x-hash>` tags just like `<a>` tags are styled.
-                node.properties.className = (node.properties.className || []).concat(['link']);
+                node.properties.class = (node.properties.class || []).concat(node.properties.className || []).concat(['link']);
+                delete node.properties.className; // Removes `className` in favor of `class`.
             }
             return node;
         });

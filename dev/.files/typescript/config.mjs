@@ -31,13 +31,15 @@ import importAliases from '../bin/includes/import-aliases.mjs';
 
 const __dirname = $fs.imuDirname(import.meta.url);
 const projDir = path.resolve(__dirname, '../../..');
+const srcDir = path.resolve(projDir, './src');
 
 /**
  * Prepares relative import aliases.
  */
-const relativeImportAliases = {}; // Relative to `tsBaseDir`.
+const relativeImportAliases = {}; // Initializes relative aliases.
 for (const [aliasPath, realPath] of Object.entries(importAliases.asGlobs)) {
-    relativeImportAliases[aliasPath] = [path.relative(path.resolve(projDir, './src'), realPath)];
+    let realRelativePath = path.relative(srcDir, realPath); // i.e., Relative to `compilerOptions.baseUrl`.
+    relativeImportAliases[aliasPath] = [realRelativePath.startsWith('.') ? realRelativePath : './' + realRelativePath];
 }
 
 /**
@@ -49,7 +51,7 @@ export default async () => {
      */
     const baseConfig = {
         include: [
-            './' + path.relative(projDir, path.resolve(projDir, './src')) + '/**/*', //
+            './' + path.relative(projDir, srcDir) + '/**/*', //
             './' + path.relative(projDir, path.resolve(projDir, './dev-types.d.ts')),
         ],
         exclude: exclusions.asRelativeGlobs(projDir, [
@@ -74,8 +76,8 @@ export default async () => {
             ),
         ]),
         compilerOptions: {
-            baseUrl: './' + path.relative(projDir, path.resolve(projDir, './src')),
-            rootDir: './' + path.relative(projDir, path.resolve(projDir, './src')),
+            baseUrl: './' + path.relative(projDir, srcDir),
+            rootDir: './' + path.relative(projDir, srcDir),
             declarationDir: './' + path.relative(projDir, path.resolve(projDir, './dist/types')),
 
             declaration: true,
@@ -114,7 +116,5 @@ export default async () => {
     /**
      * Composition.
      */
-    return {
-        ...baseConfig,
-    };
+    return { ...baseConfig };
 };

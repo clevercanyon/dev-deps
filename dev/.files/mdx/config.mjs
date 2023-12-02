@@ -29,6 +29,7 @@ export default async () => {
      */
     return {
         jsxImportSource: 'preact',
+        elementAttributeNameCase: 'html',
 
         mdExtensions: [...extensions.byVSCodeLang.markdown],
         mdxExtensions: [...extensions.byVSCodeLang.mdx],

@@ -12,7 +12,7 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
-import { loadEnv } from 'vite';
+import { createLogger, loadEnv } from 'vite';
 import { $fs, $glob } from '../../../node_modules/@clevercanyon/utilities.node/dist/index.js';
 import { $is, $json, $obj, $obp, $str, $time, $url } from '../../../node_modules/@clevercanyon/utilities/dist/index.js';
 import esVersion from '../bin/includes/es-version.mjs';
@@ -204,6 +204,20 @@ export default async ({ mode, command, isSsrBuild: isSSRBuild }) => {
     const importedWorkerRollupConfig = { ...$obj.omit(rollupConfig, ['input']) };
 
     /**
+     * Custom logger.
+     */
+    const customLogger = createLogger();
+    const originalLoggerWarnOnce = customLogger.warnOnce;
+
+    customLogger.warnOnce = (msg, options) => {
+        if (/^Sourcemap for "[^"]+\.mdx" points to missing source files$/iu.test(msg)) {
+            return; // Safe to ignore. Some MDX glob imports contain query strings, which makes the filesystem path unreachable.
+            // This is a consequence of us needing to create a distinct import for frontMatter. See `importGlobRestoreExtension` below.
+        }
+        originalLoggerWarnOnce(msg, options);
+    };
+
+    /**
      * Base config for Vite.
      *
      * @see https://vitejs.dev/config/
@@ -268,23 +282,28 @@ export default async ({ mode, command, isSsrBuild: isSSRBuild }) => {
 
             manifest: !isSSRBuild ? 'vite/manifest.json' : false, // Enables manifest of asset locations.
             ssrManifest: isSSRBuild ? 'vite/ssr-manifest.json' : false, // Enables SSR manifest of asset locations.
-            sourcemap: 'dev' === mode, // Enables creation of sourcemaps; i.e., for debugging.
+            sourcemap: 'dev' === mode ? 'inline' : false, // Enables creation of sourcemaps; i.e., for debugging.
 
             minify: minifyEnable ? 'esbuild' : false, // {@see https://o5p.me/pkJ5Xz}.
             cssMinify: minifyEnable ? 'lightningcss' : false, // {@see https://o5p.me/h0Hgj3}.
             // We ran several tests between `esbuild`, `cssnano`, and `lightningcss` wins.
 
             modulePreload: false, // Disable. DOM injections conflict with our SPAs.
+            // This option is sort-of respected, but not fully; {@see https://github.com/vitejs/vite/issues/13952}.
 
             ...(['cma', 'lib'].includes(appType) ? { lib: { entry: appEntries, formats: ['es'] } } : {}),
             rollupOptions: rollupConfig, // See: <https://o5p.me/5Vupql>.
         },
+        customLogger, // Uses our custom logger, which is based on the default logger.
         experimental: {
             importGlobRestoreExtension: true, // Restores file extension on glob imports containing a query string.
-            // This is needed by the MDX plugin for Vite; e.g., when we glob import MDX files to acquire frontMatter,
+            // This is needed by our use of the MDX plugin for Vite; e.g., when we glob MDX files to import frontMatter,
             // we add a query to make the glob import distinct from other dynamic imports of the same file elsewhere.
             // Enabling this option restores the `.mdx` extension, such that the MDX plugin still considers
             // the import to be an MDX file; i.e., given that it ends with a query string otherwise.
+
+            // Another way to accomplish the same thing is to set the query string to a value that ends with `.mdx`.
+            // Just documenting this for future reference in case the experimental option goes away or changes.
         },
         test: vitestConfig, // Vitest configuration.
     };

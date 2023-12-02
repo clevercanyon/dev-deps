@@ -23,7 +23,7 @@ export default () => {
 
         const hast = toHast(r.map); // HTML abstract syntax tree.
         pluginAnchorsPreactXHash()(hast); // Converts anchors to `<x-hash>` tags.
-        const tocAsPreactVNode = toJsxRuntime(hast, { Fragment, jsx, jsxs }); // Preact vNode.
+        const tocAsPreactVNode = toJsxRuntime(hast, { Fragment, jsx, jsxs, elementAttributeNameCase: 'html' });
 
         tree.children.splice(r.index - 1, 1); // Removes `Table of Contents` heading.
         // Exports a `TableOfContents` function component; i.e., using MDX estree nodes.

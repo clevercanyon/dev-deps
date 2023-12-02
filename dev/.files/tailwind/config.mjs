@@ -90,6 +90,9 @@ export default /* not async compatible */ ({ themesConfig } = {}) => {
                     '1.5em': '1.5em',
                     '2em': '2em',
                 },
+                aspectRatio: {
+                    'image': '40 / 21', // e.g., 1200 x 630 for OG image.
+                },
                 // We have to declare screen sizes explicitly for `min/max` widths.
                 // The reason is because our `screens` configuration uses complex values.
                 // For further details, {@see https://o5p.me/oLXcju}.

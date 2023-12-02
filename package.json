@@ -3,7 +3,7 @@
     "publishConfig": {
         "access": "public"
     },
-    "version": "1.0.281",
+    "version": "1.0.282",
     "license": "GPL-3.0-or-later",
     "name": "@clevercanyon/dev-deps",
     "description": "Dev dependencies for Clever Canyon projects.",
@@ -19,7 +19,11 @@
     "contributors": [],
     "type": "module",
     "bin": {},
-    "imports": {},
+    "imports": {
+        "#^*": "./*",
+        "#@*": "./src/resources/*",
+        "#*": "./src/*"
+    },
     "exports": {
         ".": {
             "types": "./dist/types/index.d.ts",
@@ -40,7 +44,7 @@
     },
     "dependencies": {
         "@clevercanyon/madrun": "^1.0.121",
-        "@clevercanyon/utilities": "^1.0.492",
+        "@clevercanyon/utilities": "^1.0.494",
         "@clevercanyon/utilities.bash": "^1.0.139",
         "@clevercanyon/utilities.cfp": "^1.0.110",
         "@clevercanyon/utilities.node": "^1.0.129",
