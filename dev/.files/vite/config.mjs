@@ -129,7 +129,7 @@ export default async ({ mode, command, isSsrBuild: isSSRBuild }) => {
      */
     const peerDepKeys = Object.keys(pkg.peerDependencies || {});
     const targetEnvIsServer = ['cfw', 'node'].includes(targetEnv);
-    const minifyEnable = !['lib'].includes(appType) && !['dev', 'stage'].includes(mode);
+    const minifyEnable = !['lib'].includes(appType) && !['dev'].includes(mode);
     const sourcemapsEnable = ['dev', 'stage'].includes(mode); // Sourcemaps only in these modes.
     const vitestSandboxEnable = process.env.VITEST && $str.parseValue(String(process.env.VITEST_SANDBOX_ENABLE || ''));
     const vitestExamplesEnable = process.env.VITEST && $str.parseValue(String(process.env.VITEST_EXAMPLES_ENABLE || ''));
