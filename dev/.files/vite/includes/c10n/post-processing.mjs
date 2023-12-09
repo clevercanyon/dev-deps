@@ -13,7 +13,7 @@ import fsp from 'node:fs/promises';
 import path from 'node:path';
 import { $http as $cfpꓺhttp } from '../../../../../node_modules/@clevercanyon/utilities.cfp/dist/index.js';
 import { $chalk, $fs, $glob, $prettier } from '../../../../../node_modules/@clevercanyon/utilities.node/dist/index.js';
-import { $crypto, $json, $mm, $obp, $preact, $str } from '../../../../../node_modules/@clevercanyon/utilities/dist/index.js';
+import { $brand, $crypto, $json, $mm, $obp, $preact, $str, $url } from '../../../../../node_modules/@clevercanyon/utilities/dist/index.js';
 import { StandAlone as StandAlone404 } from '../../../../../node_modules/@clevercanyon/utilities/dist/preact/components/404.js';
 import exclusions from '../../../bin/includes/exclusions.mjs';
 import extensions from '../../../bin/includes/extensions.mjs';
@@ -26,7 +26,7 @@ import u from '../../../bin/includes/utilities.mjs';
  *
  * @returns       Plugin configuration.
  */
-export default async ({ mode, command, isSSRBuild, projDir, distDir, pkg, env, appType, targetEnv, staticDefs, pkgUpdates }) => {
+export default async ({ mode, command, isSSRBuild, projDir, distDir, pkg, env, appBaseURL, appType, targetEnv, staticDefs, pkgUpdates }) => {
     let postProcessed = false; // Initialize.
     return {
         name: 'vite-plugin-c10n-post-processing',
@@ -142,6 +142,7 @@ export default async ({ mode, command, isSSRBuild, projDir, distDir, pkg, env, a
                         '_routes.json',
                         '404.html',
                         'robots.txt',
+                        'manifest.json',
                         'sitemap.xml',
                         'sitemaps/**/*.xml',
                     ],
@@ -194,6 +195,92 @@ export default async ({ mode, command, isSSRBuild, projDir, distDir, pkg, env, a
                 }
                 const prettierConfig = { ...(await $prettier.resolveConfig(file)), parser: 'json' };
                 await fsp.writeFile(file, await $prettier.format($json.stringify(sha1Data, { pretty: true }), prettierConfig));
+            }
+
+            /**
+             * Generates PWA manifest file for SPA/MPA apps, if they don’t have one already.
+             *
+             * @see https://web.dev/articles/add-manifest
+             */
+            if (!isSSRBuild && 'build' === command && ['spa', 'mpa'].includes(appType) && appBaseURL && !fs.existsSync(path.resolve(distDir, './manifest.json'))) {
+                u.log($chalk.gray('Generating PWA `./manifest.json`.'));
+
+                const file = path.resolve(distDir, './manifest.json'),
+                    brandConfigFile = path.resolve(projDir, './brand.config.mjs');
+
+                const brand = $brand.addApp({
+                        pkgName: pkg.name,
+                        baseURL: appBaseURL,
+                        props: await (await import(brandConfigFile)).default(),
+                    }),
+                    data = {
+                        id: $url.toPathQueryHash($url.addQueryVar('utm_source', 'pwa', brand.url)),
+                        start_url: $url.toPathQueryHash($url.addQueryVar('utm_source', 'pwa', brand.url)),
+                        scope: $str.rTrim($url.parse(brand.url).pathname, '/') + '/',
+
+                        display_override: ['browser', 'standalone', 'minimal-ui'],
+                        display: 'browser', // Default and preferred presentation.
+
+                        theme_color: brand.theme.color,
+                        background_color: brand.theme.color,
+
+                        name: brand.name,
+                        short_name: brand.name,
+                        description: brand.description,
+
+                        icons: [
+                            // SVGs.
+                            {
+                                type: 'image/svg+xml',
+                                src: $url.toPathQueryHash(brand.icon.svg),
+                                sizes: brand.icon.width + 'x' + brand.icon.height,
+                            },
+                            {
+                                type: 'image/svg+xml',
+                                src: $url.toPathQueryHash(brand.icon.svg),
+                                sizes: '512x512', // Required size in Chrome.
+                            },
+                            {
+                                type: 'image/svg+xml',
+                                src: $url.toPathQueryHash(brand.icon.svg),
+                                sizes: '192x192', // Required size in Chrome.
+                            },
+                            // PNGs.
+                            {
+                                type: 'image/png',
+                                src: $url.toPathQueryHash(brand.icon.png),
+                                sizes: brand.icon.width + 'x' + brand.icon.height,
+                            },
+                            {
+                                type: 'image/png',
+                                src: $url.toPathQueryHash(brand.icon.png),
+                                sizes: '512x512', // Required size in Chrome.
+                            },
+                            {
+                                type: 'image/png',
+                                src: $url.toPathQueryHash(brand.icon.png),
+                                sizes: '192x192', // Required size in Chrome.
+                            },
+                        ],
+                        screenshots: [
+                            // Wide.
+                            {
+                                type: 'image/png',
+                                form_factor: 'wide',
+                                src: $url.toPathQueryHash(brand.ogImage.png),
+                                sizes: brand.ogImage.width + 'x' + brand.ogImage.height,
+                            },
+                            // Narrow.
+                            {
+                                type: 'image/png',
+                                form_factor: 'narrow',
+                                src: $url.toPathQueryHash(brand.ogImage.png),
+                                sizes: brand.ogImage.width + 'x' + brand.ogImage.height,
+                            },
+                        ],
+                    };
+                const prettierConfig = { ...(await $prettier.resolveConfig(file)), parser: 'json' };
+                await fsp.writeFile(file, await $prettier.format($json.stringify(data, { pretty: true }), prettierConfig));
             }
 
             /**

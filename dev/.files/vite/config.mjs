@@ -185,7 +185,7 @@ export default async ({ mode, command, isSsrBuild: isSSRBuild }) => {
         await viteDTSConfig({ distDir }),
         await viteC10nPostProcessingConfig({
             mode, command, isSSRBuild, projDir, distDir,
-            pkg, env, appType, targetEnv, staticDefs, pkgUpdates
+            pkg, env, appBaseURL, appType, targetEnv, staticDefs, pkgUpdates
         }), // prettier-ignore
         ...(prefreshEnable ? [await vitePrefreshConfig({})] : []),
     ];
