@@ -222,9 +222,13 @@ export default class u {
             $brand.addApp({
                 pkgName: pkgName,
                 baseURL: baseURL || '',
-                props: await (await import(path.resolve(projDir, './brand.config.mjs'))).default(),
+                props: await u.brandConfig(),
             })
         );
+    }
+
+    static async brandConfig() {
+        return await (await import(path.resolve(projDir, './brand.config.mjs'))).default();
     }
 
     /*
