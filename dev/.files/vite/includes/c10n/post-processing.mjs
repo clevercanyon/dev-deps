@@ -13,7 +13,7 @@ import fsp from 'node:fs/promises';
 import path from 'node:path';
 import { $http as $cfpꓺhttp } from '../../../../../node_modules/@clevercanyon/utilities.cfp/dist/index.js';
 import { $chalk, $fs, $glob, $prettier } from '../../../../../node_modules/@clevercanyon/utilities.node/dist/index.js';
-import { $brand, $crypto, $json, $mm, $obp, $preact, $str, $url } from '../../../../../node_modules/@clevercanyon/utilities/dist/index.js';
+import { $crypto, $json, $mm, $obp, $preact, $str, $url } from '../../../../../node_modules/@clevercanyon/utilities/dist/index.js';
 import { StandAlone as StandAlone404 } from '../../../../../node_modules/@clevercanyon/utilities/dist/preact/components/404.js';
 import exclusions from '../../../bin/includes/exclusions.mjs';
 import extensions from '../../../bin/includes/extensions.mjs';
@@ -27,14 +27,17 @@ import u from '../../../bin/includes/utilities.mjs';
  * @returns       Plugin configuration.
  */
 export default async ({ mode, command, isSSRBuild, projDir, distDir, pkg, env, appBaseURL, appType, targetEnv, staticDefs, pkgUpdates }) => {
-    let postProcessed = false; // Initialize.
+    let buildEndError = undefined, // Initialize.
+        postProcessed = false; // Initialize.
+
     return {
         name: 'vite-plugin-c10n-post-processing',
         enforce: 'post', // After others on this hook.
+        buildEnd: (error) => void (buildEndError = error),
 
         async closeBundle(/* Rollup hook. */) {
-            if (postProcessed) return;
-            postProcessed = true;
+            if (postProcessed || buildEndError) return;
+            postProcessed = true; // Processing now.
 
             /**
              * Recompiles `./package.json`.
@@ -129,7 +132,7 @@ export default async ({ mode, command, isSSRBuild, projDir, distDir, pkg, env, a
             /**
              * Updates a few files that configure apps running on Cloudflare Pages.
              *
-             * None of these file must exist, and none of these must contain replacement codes. We leave it up to the
+             * None of these files must exist, and none of these must contain replacement codes. We leave it for the
              * implementation to decide. If they do not exist, or do not contain replacement codes, we assume that
              * nothing should occur. For example, it might be desirable in some cases for `./robots.txt`, `sitemap.xml`,
              * or others to be served dynamically. In which case they may not exist in these locations statically.
@@ -198,21 +201,13 @@ export default async ({ mode, command, isSSRBuild, projDir, distDir, pkg, env, a
             }
 
             /**
-             * Generates PWA manifest file for SPA/MPA apps, if they don’t have one already.
-             *
-             * @see https://web.dev/articles/add-manifest
+             * Generates PWA manifest if it doesn’t exist already; {@see https://web.dev/articles/add-manifest}.
              */
             if (!isSSRBuild && 'build' === command && ['spa', 'mpa'].includes(appType) && appBaseURL && !fs.existsSync(path.resolve(distDir, './manifest.json'))) {
                 u.log($chalk.gray('Generating PWA `./manifest.json`.'));
 
-                const file = path.resolve(distDir, './manifest.json'),
-                    brandConfigFile = path.resolve(projDir, './brand.config.mjs');
-
-                const brand = $brand.addApp({
-                        pkgName: pkg.name,
-                        baseURL: appBaseURL,
-                        props: await (await import(brandConfigFile)).default(),
-                    }),
+                const file = path.resolve(distDir, './manifest.json');
+                const brand = await u.brand({ baseURL: appBaseURL }),
                     data = {
                         id: $url.toPathQueryHash($url.addQueryVar('utm_source', 'pwa', brand.url)),
                         start_url: $url.toPathQueryHash($url.addQueryVar('utm_source', 'pwa', brand.url)),

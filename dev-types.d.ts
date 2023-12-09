@@ -16,8 +16,8 @@ declare const $$__APP_PKG_VERSION__$$: string;
 declare const $$__APP_PKG_REPOSITORY__$$: string;
 declare const $$__APP_PKG_HOMEPAGE__$$: string;
 declare const $$__APP_PKG_BUGS__$$: string;
-declare const $$__APP_BUILD_TIME_YMD__$$: string;
 declare const $$__APP_BASE_URL__$$: string;
+declare const $$__APP_BUILD_TIME_YMD__$$: string;
 
 /**
  * Declares prefresh API in Vite plugin.

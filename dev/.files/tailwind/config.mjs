@@ -321,7 +321,7 @@ export default /* not async compatible */ ({ themesConfig } = {}) => {
                                 verticalAlign: 'middle',
 
                                 background: 'rgb(var(--colors-color-neutral), .25)',
-                                border: '1px solid rgb(var(--colors-color-neutral-bdr))',
+                                border: '1px solid rgb(var(--colors-color-neutral-line))',
                                 borderRadius: '.15em',
                             },
                             '.task-list-item > input:checked::before': {
