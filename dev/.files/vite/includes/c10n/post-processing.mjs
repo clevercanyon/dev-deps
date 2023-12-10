@@ -20,13 +20,13 @@ import extensions from '../../../bin/includes/extensions.mjs';
 import u from '../../../bin/includes/utilities.mjs';
 
 /**
- * Configures Vite/Rollup post-processing.
+ * Configures Vite post-processing plugin.
  *
  * @param   props Props from vite config file driver.
  *
  * @returns       Plugin configuration.
  */
-export default async ({ mode, command, isSSRBuild, projDir, distDir, pkg, env, appBaseURL, appType, targetEnv, staticDefs, pkgUpdates }) => {
+export default async ({ mode, wranglerMode, inProdLikeMode, command, isSSRBuild, projDir, distDir, pkg, env, appBaseURL, appType, targetEnv, staticDefs, pkgUpdates }) => {
     let buildEndError = undefined, // Initialize.
         postProcessed = false; // Initialize.
 
@@ -58,9 +58,9 @@ export default async ({ mode, command, isSSRBuild, projDir, distDir, pkg, env, a
             /**
              * Prunes `./.npmignore`s, which we don’t include in any distribution.
              *
-             * We only prune `./.npmignore`s when building for production, as it’s possible there are files being
-             * compiled by TypeScript that are needed for development; i.e., they need to exist in dev mode in order to
-             * be capable of serving their intended purpose; e.g., dev-only utilities, runners, sandbox files, etc.
+             * We only prune `./.npmignore`s when building in a prod-like mode, as it’s possible there are files being
+             * compiled by TypeScript that are needed for development; i.e., they need to exist in to be capable of
+             * serving their intended purpose; e.g., dev-only utilities, runners, sandbox files, etc.
              *
              * Regarding `node_modules`. There is an exception for the case of `node_modules/assets/a16s`, used for
              * Cloudflare SSR-specific assets. See `../a16s/dir.mjs` for details. The `node_modules` folder is pruned by
@@ -72,7 +72,7 @@ export default async ({ mode, command, isSSRBuild, projDir, distDir, pkg, env, a
              * potentially customized `./.npmignore` file in the current project directory. The reason is because we
              * intend to enforce our standards. For further details {@see https://o5p.me/MuskgW}.
              */
-            if (!isSSRBuild && 'build' === command && 'prod' === mode) {
+            if (!isSSRBuild && 'build' === command && inProdLikeMode) {
                 for (let globOpts = [{ onlyDirectories: true }, { onlyFiles: false }], i = 0; i < globOpts.length; i++) {
                     for (const fileOrDir of await $glob.promise(exclusions.defaultNPMIgnores, { cwd: distDir, ignoreCase: true, ...globOpts[i] })) {
                         const projRelPath = path.relative(projDir, fileOrDir);
@@ -112,11 +112,11 @@ export default async ({ mode, command, isSSRBuild, projDir, distDir, pkg, env, a
             /**
              * Deletes a few things that are not needed by apps running on Cloudflare Pages.
              *
-             * We only prune when building for production, as it’s possible there are files being compiled by TypeScript
-             * that are needed for development; i.e., they need to exist in dev mode in order to be capable of serving
-             * their intended purpose; e.g., dev-only utilities, runners, sandbox files, etc.
+             * We only prune when building in a prod-like mode, as it’s possible there are files being compiled by
+             * TypeScript that are needed for development; i.e., they need to exist in dev mode in order to be capable
+             * of serving their intended purpose; e.g., dev-only utilities, runners, sandbox files, etc.
              */
-            if (!isSSRBuild && 'build' === command && 'prod' === mode && ['spa', 'mpa'].includes(appType) && ['cfp'].includes(targetEnv)) {
+            if (!isSSRBuild && 'build' === command && inProdLikeMode && ['spa', 'mpa'].includes(appType) && ['cfp'].includes(targetEnv)) {
                 for (const fileOrDir of await $glob.promise(
                     [
                         'types', // Prunes TypeScript type declarations.
@@ -213,8 +213,8 @@ export default async ({ mode, command, isSSRBuild, projDir, distDir, pkg, env, a
                         start_url: $url.toPathQueryHash($url.addQueryVar('utm_source', 'pwa', brand.url)),
                         scope: $str.rTrim($url.parse(brand.url).pathname, '/') + '/',
 
-                        display_override: ['browser', 'standalone', 'minimal-ui'],
-                        display: 'browser', // Default and preferred presentation.
+                        display_override: ['standalone', 'browser'],
+                        display: 'standalone', // Preferred presentation.
 
                         theme_color: brand.theme.color,
                         background_color: brand.theme.color,
@@ -229,32 +229,38 @@ export default async ({ mode, command, isSSRBuild, projDir, distDir, pkg, env, a
                                 type: 'image/svg+xml',
                                 src: $url.toPathQueryHash(brand.icon.svg),
                                 sizes: brand.icon.width + 'x' + brand.icon.height,
+                                purpose: 'any maskable',
                             },
                             {
                                 type: 'image/svg+xml',
                                 src: $url.toPathQueryHash(brand.icon.svg),
                                 sizes: '512x512', // Required size in Chrome.
+                                purpose: 'any maskable',
                             },
                             {
                                 type: 'image/svg+xml',
                                 src: $url.toPathQueryHash(brand.icon.svg),
                                 sizes: '192x192', // Required size in Chrome.
+                                purpose: 'any maskable',
                             },
                             // PNGs.
                             {
                                 type: 'image/png',
                                 src: $url.toPathQueryHash(brand.icon.png),
                                 sizes: brand.icon.width + 'x' + brand.icon.height,
+                                purpose: 'any maskable',
                             },
                             {
                                 type: 'image/png',
                                 src: $url.toPathQueryHash(brand.icon.png),
                                 sizes: '512x512', // Required size in Chrome.
+                                purpose: 'any maskable',
                             },
                             {
                                 type: 'image/png',
                                 src: $url.toPathQueryHash(brand.icon.png),
                                 sizes: '192x192', // Required size in Chrome.
+                                purpose: 'any maskable',
                             },
                         ],
                         screenshots: [
@@ -289,7 +295,7 @@ export default async ({ mode, command, isSSRBuild, projDir, distDir, pkg, env, a
             /**
              * Generates a zip archive containing `./dist` directory.
              */
-            if (!isSSRBuild && 'build' === command) {
+            if (!isSSRBuild && 'build' === command && 'dev' !== wranglerMode) {
                 const zipFile = path.resolve(projDir, './.~dist.zip');
                 u.log($chalk.gray('Generating `' + path.relative(projDir, zipFile) + '`.'));
 

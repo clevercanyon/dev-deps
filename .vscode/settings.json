@@ -7,7 +7,7 @@
  * @note This entire file will be updated automatically.
  * @note Instead of editing here, please review `./settings.mjs`.
  *
- * Last generated using `./settings.mjs` Dec 9, 2023 9:01 AM UTC.
+ * Last generated using `./settings.mjs` Dec 10, 2023 4:02 AM UTC.
  */
 {
     "editor.formatOnType": false,
@@ -72,8 +72,11 @@
         "**/CODEOWNERS": "ignore",
         "**/tsconfig.{json,×××××××}": "jsonc",
         "**/.vscode/*.{json,×××××××}": "jsonc",
+        "**/dist/_headers": "plaintext",
         "**/src/cargo/_headers": "plaintext",
+        "**/dist/_redirects": "plaintext",
         "**/src/cargo/_redirects": "plaintext",
+        "**/dist/_routes.{json,×××××××}": "jsonc",
         "**/src/cargo/_routes.{json,×××××××}": "jsonc"
     },
     "files.exclude": {
@@ -227,6 +230,7 @@
             "mode": "auto"
         }
     ],
+    "eslint.probe": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
     "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
     "eslint.options": {
         "overrideConfigFile": "./eslint.config.mjs"
@@ -322,7 +326,7 @@
         "files.trimTrailingWhitespace": false,
         "editor.wordWrap": "on",
         "editor.codeActionsOnSave": {
-            "source.fixAll": true
+            "source.fixAll": "explicit"
         },
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
@@ -332,7 +336,7 @@
         "files.trimTrailingWhitespace": false,
         "editor.wordWrap": "on",
         "editor.codeActionsOnSave": {
-            "source.fixAll": true
+            "source.fixAll": "explicit"
         },
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
@@ -340,7 +344,7 @@
         "editor.tabSize": 4,
         "editor.insertSpaces": true,
         "editor.codeActionsOnSave": {
-            "source.fixAll": true
+            "source.fixAll": "explicit"
         },
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
@@ -348,7 +352,7 @@
         "editor.tabSize": 4,
         "editor.insertSpaces": true,
         "editor.codeActionsOnSave": {
-            "source.fixAll": true
+            "source.fixAll": "explicit"
         },
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
@@ -356,7 +360,7 @@
         "editor.tabSize": 4,
         "editor.insertSpaces": true,
         "editor.codeActionsOnSave": {
-            "source.fixAll": true
+            "source.fixAll": "explicit"
         },
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
@@ -364,7 +368,7 @@
         "editor.tabSize": 4,
         "editor.insertSpaces": true,
         "editor.codeActionsOnSave": {
-            "source.fixAll": true
+            "source.fixAll": "explicit"
         },
         "editor.defaultFormatter": "ms-python.black-formatter"
     },
@@ -372,7 +376,7 @@
         "editor.tabSize": 4,
         "editor.insertSpaces": true,
         "editor.codeActionsOnSave": {
-            "source.fixAll": true
+            "source.fixAll": "explicit"
         },
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
@@ -380,7 +384,7 @@
         "editor.tabSize": 4,
         "editor.insertSpaces": true,
         "editor.codeActionsOnSave": {
-            "source.fixAll": true
+            "source.fixAll": "explicit"
         },
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
@@ -388,7 +392,7 @@
         "editor.tabSize": 4,
         "editor.insertSpaces": true,
         "editor.codeActionsOnSave": {
-            "source.fixAll": true
+            "source.fixAll": "explicit"
         },
         "editor.defaultFormatter": "dbaeumer.vscode-eslint"
     },
@@ -396,7 +400,7 @@
         "editor.tabSize": 4,
         "editor.insertSpaces": true,
         "editor.codeActionsOnSave": {
-            "source.fixAll": true
+            "source.fixAll": "explicit"
         },
         "editor.defaultFormatter": "dbaeumer.vscode-eslint"
     },
@@ -404,7 +408,7 @@
         "editor.tabSize": 4,
         "editor.insertSpaces": true,
         "editor.codeActionsOnSave": {
-            "source.fixAll": true
+            "source.fixAll": "explicit"
         },
         "editor.defaultFormatter": "dbaeumer.vscode-eslint"
     },
@@ -412,7 +416,7 @@
         "editor.tabSize": 4,
         "editor.insertSpaces": true,
         "editor.codeActionsOnSave": {
-            "source.fixAll": true
+            "source.fixAll": "explicit"
         },
         "editor.defaultFormatter": "dbaeumer.vscode-eslint"
     },
@@ -420,7 +424,7 @@
         "editor.tabSize": 4,
         "editor.insertSpaces": true,
         "editor.codeActionsOnSave": {
-            "source.fixAll": true
+            "source.fixAll": "explicit"
         },
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
@@ -428,7 +432,7 @@
         "editor.tabSize": 4,
         "editor.insertSpaces": true,
         "editor.codeActionsOnSave": {
-            "source.fixAll": true
+            "source.fixAll": "explicit"
         },
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
@@ -436,7 +440,7 @@
         "editor.tabSize": 4,
         "editor.insertSpaces": true,
         "editor.codeActionsOnSave": {
-            "source.fixAll": true
+            "source.fixAll": "explicit"
         },
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
@@ -444,7 +448,7 @@
         "editor.tabSize": 4,
         "editor.insertSpaces": true,
         "editor.codeActionsOnSave": {
-            "source.fixAll": true
+            "source.fixAll": "explicit"
         },
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
@@ -452,7 +456,7 @@
         "editor.tabSize": 4,
         "editor.insertSpaces": true,
         "editor.codeActionsOnSave": {
-            "source.fixAll": true
+            "source.fixAll": "explicit"
         },
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
@@ -460,7 +464,7 @@
         "editor.tabSize": 4,
         "editor.insertSpaces": true,
         "editor.codeActionsOnSave": {
-            "source.fixAll": true
+            "source.fixAll": "explicit"
         },
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
@@ -468,7 +472,7 @@
         "editor.tabSize": 4,
         "editor.insertSpaces": true,
         "editor.codeActionsOnSave": {
-            "source.fixAll": true
+            "source.fixAll": "explicit"
         },
         "editor.defaultFormatter": "tamasfe.even-better-toml"
     },
@@ -476,7 +480,7 @@
         "editor.tabSize": 4,
         "editor.insertSpaces": true,
         "editor.codeActionsOnSave": {
-            "source.fixAll": true
+            "source.fixAll": "explicit"
         },
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
@@ -484,7 +488,7 @@
         "editor.tabSize": 4,
         "editor.insertSpaces": true,
         "editor.codeActionsOnSave": {
-            "source.fixAll": true
+            "source.fixAll": "explicit"
         },
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
@@ -492,7 +496,7 @@
         "editor.tabSize": 4,
         "editor.insertSpaces": true,
         "editor.codeActionsOnSave": {
-            "source.fixAll": true
+            "source.fixAll": "explicit"
         },
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
@@ -500,7 +504,7 @@
         "editor.tabSize": 4,
         "editor.insertSpaces": true,
         "editor.codeActionsOnSave": {
-            "source.fixAll": true
+            "source.fixAll": "explicit"
         },
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     }

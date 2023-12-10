@@ -3,7 +3,7 @@
     "publishConfig": {
         "access": "public"
     },
-    "version": "1.0.293",
+    "version": "1.0.294",
     "license": "GPL-3.0-or-later",
     "name": "@clevercanyon/dev-deps",
     "description": "Dev dependencies for Clever Canyon projects.",
@@ -31,7 +31,7 @@
             "default": "./dist/index.js"
         }
     },
-    "sideEffects": ["**/*.{css,scss,less}", "./src/resources/init.ts"],
+    "sideEffects": ["**/*.{css,scss,less}", "./src/resources/initialize.ts"],
     "module": "./dist/index.js",
     "main": "./dist/index.js",
     "browser": "",
@@ -43,10 +43,10 @@
         }
     },
     "dependencies": {
-        "@clevercanyon/madrun": "^1.0.125",
-        "@clevercanyon/utilities": "^1.0.550",
+        "@clevercanyon/madrun": "^1.0.126",
+        "@clevercanyon/utilities": "^1.0.556",
         "@clevercanyon/utilities.bash": "^1.0.142",
-        "@clevercanyon/utilities.cfp": "^1.0.117",
+        "@clevercanyon/utilities.cfp": "^1.0.118",
         "@clevercanyon/utilities.node": "^1.0.134",
         "@cloudflare/workers-types": "4.20231121.0",
         "@eslint/js": "8.48.0",
@@ -104,6 +104,7 @@
         "postcss-safe-parser": "7.0.0",
         "postcss-scss": "4.0.9",
         "postcss-simple-vars": "7.0.1",
+        "postcss-url": "10.1.3",
         "postcss-variable-compress": "3.0.0",
         "preact": "10.19.2",
         "prettier": "3.1.0",

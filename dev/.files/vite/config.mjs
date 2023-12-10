@@ -20,8 +20,9 @@ import extensions from '../bin/includes/extensions.mjs';
 import importAliases from '../bin/includes/import-aliases.mjs';
 import u from '../bin/includes/utilities.mjs';
 import viteA16sDir from './includes/a16s/dir.mjs';
+import viteC10nBrandConfig from './includes/c10n/brand-config.mjs';
 import viteC10nPostProcessingConfig from './includes/c10n/post-processing.mjs';
-import viteC10nTransformsConfig from './includes/c10n/transforms.mjs';
+import viteC10nSideEffectsConfig from './includes/c10n/side-effects.mjs';
 import viteDTSConfig from './includes/dts/config.mjs';
 import viteEJSConfig from './includes/ejs/config.mjs';
 import viteESBuildConfig from './includes/esbuild/config.mjs';
@@ -82,9 +83,21 @@ export default async ({ mode, command, isSsrBuild: isSSRBuild }) => {
     if (isSSRBuild) appEnvPrefixes.push('SSR_APP_'); // Added to SSR builds.
     const env = loadEnv(mode, envsDir, appEnvPrefixes); // Includes `APP_IS_VITE`.
 
-    const appBaseURL = env.APP_BASE_URL || ''; // e.g., `https://example.com/`, `https://example.com/base`.
-    // A base URL is only required for some app types; e.g., `spa|mpa`. See validation below for details.
-    process.env._APP_BASE_URL = appBaseURL; // Informs; e.g., brand acquisition via Tailwind configuration.
+    const appBaseURL = env.APP_BASE_URL || '';
+    // A trailing slash or no trailing slash; it definitely matters!
+    // e.g., `new URL('./', 'https://example.com/')` = `https://example.com/`.
+    // e.g., `new URL('./', 'https://example.com/base')` = `https://example.com/`.
+    // e.g., `new URL('./', 'https://example.com/base/')` = `https://example.com/base/`.
+
+    // We leave it up to the implementation to decide which it prefers to use.
+    // A base URL is only required for some app types; e.g., `spa|mpa`. Validation below.
+
+    // This is a variant of the base URL that’s resolved and has no trailing slash.
+    const appBaseURLResolvedNTS = appBaseURL ? $str.rTrim(new URL('./', appBaseURL).toString(), '/') : '';
+
+    // No other choice at this time, we have to store this in an environment variable for Tailwind configuration.
+    // This uses a leading underscore to avoid contaminating current environment variables in @clevercanyon/utilities.
+    process.env._MODE_AWARE_APP_BASE_URL = appBaseURL; // Informs brand acquisition in our Tailwind configuration file.
 
     const staticDefs = {
         ['$$__' + appEnvPrefixes[0] + 'PKG_NAME__$$']: pkg.name || '',
@@ -93,6 +106,7 @@ export default async ({ mode, command, isSsrBuild: isSSRBuild }) => {
         ['$$__' + appEnvPrefixes[0] + 'PKG_HOMEPAGE__$$']: pkg.homepage || '',
         ['$$__' + appEnvPrefixes[0] + 'PKG_BUGS__$$']: pkg.bugs || '',
         ['$$__' + appEnvPrefixes[0] + 'BASE_URL__$$']: appBaseURL || '',
+        ['$$__' + appEnvPrefixes[0] + 'BASE_URL_RESOLVED_NTS__$$']: appBaseURLResolvedNTS || '',
         ['$$__' + appEnvPrefixes[0] + 'BUILD_TIME_YMD__$$']: $time.now().toYMD() || '',
     };
     Object.keys(env) // Add string env vars to static defines.
@@ -131,8 +145,10 @@ export default async ({ mode, command, isSsrBuild: isSSRBuild }) => {
      */
     const peerDepKeys = Object.keys(pkg.peerDependencies || {});
     const targetEnvIsServer = ['cfw', 'node'].includes(targetEnv);
-    const minifyEnable = !['lib'].includes(appType) && !['dev'].includes(mode);
-    const sourcemapsEnable = ['dev', 'stage'].includes(mode); // Sourcemaps only in these modes.
+    const wranglerMode = process.env.VITE_WRANGLER_MODE || ''; // Wrangler mode.
+    const inProdLikeMode = ['prod', 'stage'].includes(mode) || ('dev' === mode && 'dev' === wranglerMode);
+    const sourcemapsEnable = ['dev'].includes(mode); // Only generate sourcemaps when explicitly in dev mode.
+    const minifyEnable = !['lib'].includes(appType) && inProdLikeMode; // We don’t ever minify code in a library.
     const vitestSandboxEnable = process.env.VITEST && $str.parseValue(String(process.env.VITEST_SANDBOX_ENABLE || ''));
     const vitestExamplesEnable = process.env.VITEST && $str.parseValue(String(process.env.VITEST_EXAMPLES_ENABLE || ''));
     const prefreshEnable = process.env.VITE_PREFRESH_ENABLE && !process.env.VITEST && 'serve' === command && 'dev' === mode && ['spa', 'mpa'].includes(appType);
@@ -179,14 +195,15 @@ export default async ({ mode, command, isSsrBuild: isSSRBuild }) => {
      * Configures plugins for Vite.
      */
     const plugins = [
-        await viteC10nTransformsConfig({}),
         await viteIconsConfig({}),
+        await viteC10nBrandConfig({}),
+        await viteC10nSideEffectsConfig({}),
         await viteMDXConfig({ projDir }),
         await viteEJSConfig({ mode, projDir, srcDir, pkg, env }),
         await viteMinifyConfig({ minifyEnable }),
         await viteDTSConfig({ distDir }),
         await viteC10nPostProcessingConfig({
-            mode, command, isSSRBuild, projDir, distDir,
+            mode, wranglerMode, inProdLikeMode, command, isSSRBuild, projDir, distDir,
             pkg, env, appBaseURL, appType, targetEnv, staticDefs, pkgUpdates
         }), // prettier-ignore
         ...(prefreshEnable ? [await vitePrefreshConfig({})] : []),
@@ -238,7 +255,7 @@ export default async ({ mode, command, isSsrBuild: isSSRBuild }) => {
 
         root: srcDir, // Absolute path where entry indexes live.
         publicDir: isSSRBuild ? false : path.relative(srcDir, cargoDir),
-        base: appBaseURL ? $url.toPath(appBaseURL) : '/',
+        base: appBaseURLResolvedNTS ? $url.toPath(appBaseURLResolvedNTS) : '/',
 
         envDir: path.relative(srcDir, envsDir), // Relative to `root` directory.
         envPrefix: appEnvPrefixes, // Env vars w/ these prefixes become part of the app.
