@@ -3,7 +3,7 @@
     "publishConfig": {
         "access": "public"
     },
-    "version": "1.0.295",
+    "version": "1.0.296",
     "license": "GPL-3.0-or-later",
     "name": "@clevercanyon/dev-deps",
     "description": "Dev dependencies for Clever Canyon projects.",
@@ -44,7 +44,7 @@
     },
     "dependencies": {
         "@clevercanyon/madrun": "^1.0.126",
-        "@clevercanyon/utilities": "^1.0.556",
+        "@clevercanyon/utilities": "^1.0.557",
         "@clevercanyon/utilities.bash": "^1.0.142",
         "@clevercanyon/utilities.cfp": "^1.0.118",
         "@clevercanyon/utilities.node": "^1.0.134",
@@ -137,6 +137,7 @@
         "tailwindcss": "3.3.6",
         "tailwindcss-animated": "1.0.1",
         "tailwindcss-themer": "4.0.0",
+        "terser": "5.26.0",
         "tsx": "4.6.2",
         "typescript": "5.3.2",
         "unist-util-visit": "5.0.0",

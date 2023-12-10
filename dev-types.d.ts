@@ -28,7 +28,7 @@ declare var __PREFRESH__: object;
 /**
  * Declares virtual brand config file.
  */
-declare module 'virtual:brand-config' {
+declare module 'virtual:brand/config' {
     import { $type } from '@clevercanyon/utilities';
     export default {} as Partial<$type.BrandRawProps>;
 }
