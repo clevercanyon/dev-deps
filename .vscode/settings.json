@@ -7,7 +7,7 @@
  * @note This entire file will be updated automatically.
  * @note Instead of editing here, please review `./settings.mjs`.
  *
- * Last generated using `./settings.mjs` Dec 10, 2023 6:54 AM UTC.
+ * Last generated using `./settings.mjs` Dec 12, 2023 1:57 AM UTC.
  */
 {
     "editor.formatOnType": false,
@@ -72,11 +72,12 @@
         "**/CODEOWNERS": "ignore",
         "**/tsconfig.{json,×××××××}": "jsonc",
         "**/.vscode/*.{json,×××××××}": "jsonc",
+        "**/src/cargo/.well-known/**/*.{json,×××××××}": "jsonc",
         "**/dist/_headers": "plaintext",
         "**/src/cargo/_headers": "plaintext",
         "**/dist/_redirects": "plaintext",
         "**/src/cargo/_redirects": "plaintext",
-        "**/dist/_routes.{json,×××××××}": "jsonc",
+        "**/src/cargo/manifest.{json,×××××××}": "jsonc",
         "**/src/cargo/_routes.{json,×××××××}": "jsonc"
     },
     "files.exclude": {
@@ -131,6 +132,7 @@
         "**/Network Trash Folder": true,
         "**/Temporary Items": true,
         ".*": true,
+        ".well-known": false,
         "*.tsbuildinfo": true,
         "*.config.*": true,
         "wrangler.*": true,
@@ -155,6 +157,7 @@
     "search.useParentIgnoreFiles": false,
     "search.exclude": {
         "/.*": true,
+        "/!**/.well-known": true,
         "/*.tsbuildinfo": true,
         "/*.config.*": true,
         "/wrangler.*": true,
@@ -315,7 +318,7 @@
     "markdown.preview.fontSize": 16,
     "markdown.preview.lineHeight": 1.5,
     "markdown.preview.typographer": true,
-    "markdown.preview.fontFamily": "Georama, ui-sans-serif, sans-serif",
+    "markdown.preview.fontFamily": "Georama, sans-serif, 'Apple Color Emoji'",
     "markdown.validate.enabled": false,
     "mdx.server.enable": false,
     "prettier.ignorePath": ".prettierignore",
