@@ -167,12 +167,11 @@ export default /* not async compatible */ ({ themesConfig } = {}) => {
                  * - In our Tailwind implementation, class `p` = `prose`.
                  * - In our Tailwind implementation, a much shorter `_` = `not-p` = `not-prose`.
                  * - In our basic styles implementation, `_` = `not-p` = `not-prose` = `not-basic`.
-                 *
-                 * Also worth noting that in our Tailwind prose implementation, the `~` class means prose colors should
-                 * be inherited from the parent containing the `~` class; e.g., if a component applies colors that
-                 * differ from prose colors, then it needs to make sure any prose it contains will inherit the colors it
-                 * has assigned, and not use the default prose colors. So `~` is an alternative to `_`, indicating that
-                 * prose is to be allowed, but it must use inherited coloration.
+                 * - In our Tailwind prose implementation, `~` = prose colors should be inherited from a parent containing
+                 *   the special `~` class; e.g., if a component applies colors that differ from prose colors, it needs
+                 *   to make sure any prose it contains will inherit the colors it has assigned, and not use the default
+                 *   prose colors. So `~` is an alternative to `_`, indicating prose is allowed, but it must use
+                 *   inherited coloration.
                  */
                 typography: {
                     DEFAULT: {
