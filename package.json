@@ -3,7 +3,7 @@
     "publishConfig": {
         "access": "public"
     },
-    "version": "1.0.310",
+    "version": "1.0.311",
     "license": "GPL-3.0-or-later",
     "name": "@clevercanyon/dev-deps",
     "description": "Dev dependencies for Clever Canyon projects.",
@@ -52,6 +52,7 @@
         "@eslint/js": "8.48.0",
         "@iarna/toml": "2.2.5",
         "@iconify/json": "2.2.146",
+        "@logtail/types": "0.4.14",
         "@mdx-js/esbuild": "3.0.0",
         "@mdx-js/mdx": "3.0.0",
         "@mdx-js/rollup": "3.0.0",
