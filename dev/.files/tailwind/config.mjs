@@ -233,6 +233,16 @@ export default /* not async compatible */ ({ themesConfig } = {}) => {
                                 ...pluginTypographyStyles.DEFAULT.css[0]['a strong'],
                                 color: null, // Explicitly remove; see notes above.
                             },
+                            ':where(a, .link)[target="_blank"]:not(:has(> *))::after': {
+                                content: "''",
+                                width: '.575em',
+                                height: '.575em',
+                                marginLeft: '.25em',
+                                display: 'inline-block',
+                                background: 'currentColor',
+                                '--x-prose-external-link-icon': `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M320 0a32 32 0 1 0 0 64h83L201 265a32 32 0 0 0 46 46l201-202v83a32 32 0 1 0 64 0V32c0-18-14-32-32-32H320zM80 32C36 32 0 68 0 112v320c0 44 36 80 80 80h320c44 0 80-36 80-80V320a32 32 0 1 0-64 0v112c0 9-7 16-16 16H80c-9 0-16-7-16-16V112c0-9 7-16 16-16h112a32 32 0 1 0 0-64H80z'/%3E%3C/svg%3E")`,
+                                maskImage: 'var(--x-prose-external-link-icon)',
+                            },
 
                             // Auto-linked headings with `~`-prefixed IDs.
                             '[id^=\\~]': {
