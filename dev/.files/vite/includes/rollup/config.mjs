@@ -41,9 +41,8 @@ export default async ({ projDir, srcDir, distDir, a16sDir, appType, appEntries, 
             }, // {@see https://o5p.me/7YF2NU}.
         },
         external: [
-            ...(['lib'].includes(appType) ? [/^(?![./~#]|file:|data:|virtual:).*$/iu] : []),
+            ...(['lib'].includes(appType) ? [/^(?![./~#]|file:|data:|virtual:|cloudflare:).*$/iu] : []),
             ...peerDepKeys.map((pkgName) => new RegExp('^' + $str.escRegExp(pkgName) + '(?:$|[/?])', 'u')),
-            ...[/^__STATIC_CONTENT_MANIFEST(?:$|[/?])/u], // Cloudflare worker sites use this for static assets.
         ],
         output: {
             interop: 'auto', // Matches TypeScript configuration.
