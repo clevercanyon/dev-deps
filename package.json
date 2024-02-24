@@ -3,7 +3,7 @@
     "publishConfig": {
         "access": "public"
     },
-    "version": "1.0.358",
+    "version": "1.0.359",
     "license": "GPL-3.0-or-later",
     "name": "@clevercanyon/dev-deps",
     "description": "Dev dependencies for Clever Canyon projects.",
@@ -43,11 +43,11 @@
         }
     },
     "dependencies": {
-        "@clevercanyon/madrun": "^1.0.178",
-        "@clevercanyon/utilities": "^1.0.832",
-        "@clevercanyon/utilities.bash": "^1.0.192",
-        "@clevercanyon/utilities.cfp": "^1.0.211",
-        "@clevercanyon/utilities.node": "^1.0.187",
+        "@clevercanyon/madrun": "^1.0.179",
+        "@clevercanyon/utilities": "^1.0.853",
+        "@clevercanyon/utilities.bash": "^1.0.193",
+        "@clevercanyon/utilities.cfp": "^1.0.214",
+        "@clevercanyon/utilities.node": "^1.0.188",
         "@cloudflare/workers-types": "4.20240208.0",
         "@eslint/js": "8.48.0",
         "@iarna/toml": "2.2.5",
