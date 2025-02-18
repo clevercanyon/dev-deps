@@ -3,7 +3,7 @@
     "publishConfig": {
         "access": "public"
     },
-    "version": "1.0.386",
+    "version": "1.0.387",
     "license": "GPL-3.0-or-later",
     "name": "@clevercanyon/dev-deps",
     "description": "Dev dependencies for Clever Canyon projects.",
@@ -47,8 +47,8 @@
         "@clevercanyon/utilities": "^1.0.970",
         "@clevercanyon/utilities.bash": "^1.0.216",
         "@clevercanyon/utilities.cfp": "^1.0.260",
-        "@clevercanyon/utilities.node": "^1.0.216",
-        "@cloudflare/workers-types": "4.20241224.0",
+        "@clevercanyon/utilities.node": "^1.0.217",
+        "@cloudflare/workers-types": "4.20250214.0",
         "@eslint/js": "8.48.0",
         "@iarna/toml": "2.2.5",
         "@iconify/json": "2.2.146",
@@ -67,7 +67,7 @@
         "@tailwindcss/typography": "0.5.10",
         "@testing-library/preact": "3.2.3",
         "@types/archiver": "5.3.4",
-        "@types/cloudflare-turnstile": "0.1.3",
+        "@types/cloudflare-turnstile": "0.2.2",
         "@types/libsodium-wrappers": "0.7.13",
         "@types/mdx": "2.0.10",
         "@types/micromatch": "4.0.6",
@@ -149,7 +149,7 @@
         "vite-plugin-minify": "1.5.2",
         "vitest": "1.4.0",
         "vitest-environment-miniflare": "2.14.2",
-        "wrangler": "3.25.0"
+        "wrangler": "3.109.1"
     },
     "peerDependencies": {},
     "peerDependenciesMeta": {},
