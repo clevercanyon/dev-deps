@@ -44,29 +44,6 @@ export default async ({ srcDir, logsDir, targetEnv, vitestSandboxEnable, vitestE
             ...exclusions.adhocExIgnores, // Deliberate ad-hoc exclusions.
         ]),
     ];
-    const vitestWatchExcludes = [
-        ...new Set([
-            ...exclusions.localIgnores,
-            ...exclusions.logIgnores,
-            ...exclusions.backupIgnores,
-            ...exclusions.patchIgnores,
-            ...exclusions.editorIgnores,
-            ...exclusions.toolingIgnores,
-            ...exclusions.pkgIgnores,
-            ...exclusions.vcsIgnores,
-            ...exclusions.osIgnores,
-            ...exclusions.dotIgnores,
-            ...exclusions.dtsIgnores,
-            ...exclusions.configIgnores,
-            ...exclusions.lockIgnores,
-            ...exclusions.devIgnores,
-            ...exclusions.distIgnores,
-            ...exclusions.docIgnores,
-            ...(vitestSandboxEnable ? [] : [...exclusions.sandboxIgnores]),
-            ...(vitestExamplesEnable ? [] : [...exclusions.exampleIgnores]),
-            // ...exclusions.adhocExIgnores -- Excluded from tests, but still watch.
-        ]),
-    ];
     const vitestIncludes =
         vitestSandboxEnable || vitestExamplesEnable
             ? [
@@ -138,10 +115,8 @@ export default async ({ srcDir, logsDir, targetEnv, vitestSandboxEnable, vitestE
         root: srcDir,
 
         include: vitestIncludes,
-        css: { include: /.+/u },
-
         exclude: vitestExcludes,
-        watchExclude: vitestWatchExcludes,
+        css: { include: /.+/u, exclude: [] },
 
         restoreMocks: true, // Remove all mocks before a test begins.
         unstubEnvs: true, // Remove all env stubs before a test begins.
@@ -152,8 +127,10 @@ export default async ({ srcDir, logsDir, targetEnv, vitestSandboxEnable, vitestE
 			: ['node', 'any'].includes(targetEnv) ? 'node' // <https://o5p.me/Gf9Cy5>.
 			: /* fallback */ 'node', // prettier-ignore
 
+        // `environmentOptions` was deprecated in Vitest v3.0.0, but it might be undeprecated in the future; {@see https://o5p.me/I5Asl0}.
         ...(['cfp', 'cfw'].includes(targetEnv) ? { environmentOptions: { kvNamespaces: ['RT_KV', 'KV'] } } : {}),
 
+        // `environmentMatchGlobs` was deprecated in Vitest v3.0.0, but it might be undeprecated in the future; {@see https://o5p.me/I5Asl0}.
         // See: <https://o5p.me/8Pjw1d> for `environment`, `environmentMatchGlobs` precedence.
         environmentMatchGlobs: [
             ['**/*.{cfp,web}.{test,tests,spec,specs}.' + extensions.asBracedGlob([...extensions.byDevGroup.allJavaScript, ...extensions.byDevGroup.allTypeScript]), 'jsdom'],
@@ -193,18 +170,8 @@ export default async ({ srcDir, logsDir, targetEnv, vitestSandboxEnable, vitestE
             include: vitestTypecheckIncludes,
             exclude: vitestExcludes,
         },
-        coverage: {
-            all: true, // All of the below.
-            extension: [...extensions.byDevGroup.allJavaScript, ...extensions.byDevGroup.allTypeScript],
-            include: ['**/*.' + extensions.asBracedGlob([...extensions.byDevGroup.allJavaScript, ...extensions.byDevGroup.allTypeScript])],
-            exclude: [...new Set([...vitestExcludes, ...vitestIncludes, ...vitestTypecheckIncludes, ...vitestBenchIncludes])],
-
-            reporter: ['text', 'html', 'clover', 'json'], // Produces all report formats.
-            reportsDirectory: path.resolve(logsDir, './coverage/vitest'),
-        },
         benchmark: {
             include: vitestBenchIncludes,
-            includeSource: vitestIncludes,
             exclude: vitestExcludes,
 
             outputFile: {
@@ -212,6 +179,16 @@ export default async ({ srcDir, logsDir, targetEnv, vitestSandboxEnable, vitestE
                 junit: path.resolve(logsDir, './benchmarks/vitest.junit'),
                 html: path.resolve(logsDir, './benchmarks/vitest.html'),
             },
+        },
+        coverage: {
+            all: true, // All of the below.
+            extension: [...extensions.byDevGroup.allJavaScript, ...extensions.byDevGroup.allTypeScript],
+
+            include: ['**/*.' + extensions.asBracedGlob([...extensions.byDevGroup.allJavaScript, ...extensions.byDevGroup.allTypeScript])],
+            exclude: [...new Set([...vitestExcludes, ...vitestIncludes, ...vitestTypecheckIncludes, ...vitestBenchIncludes])],
+
+            reporter: ['text', 'html', 'clover', 'json'], // Produces all report formats.
+            reportsDirectory: path.resolve(logsDir, './coverage/vitest'),
         },
     };
 };
