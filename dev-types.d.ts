@@ -97,14 +97,20 @@ declare module 'virtual:brand/config' {
 }
 
 /**
- * Declares Cloudflare runtime modules.
+ * Declares extracted Cloudflare runtime modules.
  *
- * @lastUpdate `@cloudflare/workers-types/experimental@4.20250224.0`
+ * @lastExtractedFrom `@cloudflare/workers-types/experimental@4.20250224.0`
  *
- * These are exact copies from `@cloudflare/workers-types/experimental`. We extract because there is simply no other way
- * to get at them, short of including the full set of Cloudflare types globally and polluting global TypeScript types.
- * The only changes are formatting and that internal types referenced by these modules are prefixed with `cfw.`, and
- * pulled from `@cloudflare/workers-types/experimental` — see import at top of this file.
+ * These are exact copies from `@cloudflare/workers-types/experimental`. We extract because there is simply no other
+ * way to get at them, short of including the full set of Cloudflare types globally and polluting global TypeScript types.
+ * The only changes from originals are related to whitespace formatting, and that internal types referenced by these modules
+ * are prefixed with `cfw.` for proper scoping, as they are pulled from `@cloudflare/workers-types` — see import atop this file.
+ *
+ * In addition to these ambient module declarations, we also have `@cloudflare/vitest-pool-workers` in our TypeScript config,
+ * which provides an ambient module declaration for `cloudflare:test`, so we merely augment the existing declaration here.
+ *
+ * There are some others, such as `cloudflare:ai`, `cloudflare:br`, `cloudflare:vectorize`, for which we do not yet have types,
+ * or that have since been deprecated by Cloudflare. Please review these when performing any future updates.
  */
 declare module 'cloudflare:email' {
     /**
@@ -209,6 +215,17 @@ declare module 'cloudflare:workflows' {
     export class NonRetryableError extends Error {
         public constructor(message: string, name?: string);
     }
+}
+declare module 'cloudflare:test' {
+    /**
+     * Imports utilities.
+     */
+    import { $type } from '@clevercanyon/utilities';
+
+    /**
+     * Extends env provided by `@cloudflare/vitest-pool-workers`.
+     */
+    interface ProvidedEnv extends $type.$cfw.Environment {}
 }
 
 /*
