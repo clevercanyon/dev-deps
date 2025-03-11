@@ -295,8 +295,8 @@ export default async () => {
         'eslint.runtime': 'node',
         'eslint.useESLintClass': true,
 
+        'eslint.useFlatConfig': true,
         'eslint.codeActionsOnSave.mode': 'all',
-        'eslint.experimental.useFlatConfig': true,
         'eslint.workingDirectories': [{ 'mode': 'auto' }],
 
         'eslint.probe': [
