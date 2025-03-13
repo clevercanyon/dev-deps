@@ -3,7 +3,7 @@
     "publishConfig": {
         "access": "public"
     },
-    "version": "1.0.409",
+    "version": "1.0.410",
     "license": "GPL-3.0-or-later",
     "name": "@clevercanyon/dev-deps",
     "description": "Dev dependencies for Clever Canyon projects.",
@@ -149,7 +149,7 @@
         "typescript": "5.8.2",
         "unist-util-visit": "5.0.0",
         "unplugin-icons": "22.1.0",
-        "vite": "5.2.6",
+        "vite": "6.2.1",
         "vite-plugin-dts": "3.7.3",
         "vite-plugin-ejs": "1.7.0",
         "vite-plugin-minify": "2.1.0",
