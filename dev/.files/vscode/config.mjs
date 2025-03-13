@@ -393,11 +393,6 @@ export default async () => {
         'prettier.ignorePath': '.prettierignore',
 
         /**
-         * TOML formatting options.
-         */
-        'evenBetterToml.formatter.indentString': ' '.repeat(prettierConfig.tabWidth),
-
-        /**
          * Documents.
          */
 
@@ -591,7 +586,7 @@ export default async () => {
             'editor.codeActionsOnSave': {
                 'source.fixAll': 'explicit',
             },
-            'editor.defaultFormatter': 'tamasfe.even-better-toml',
+            'editor.defaultFormatter': 'esbenp.prettier-vscode',
         },
         '[yaml]': {
             'editor.tabSize': prettierConfig.tabWidth,
