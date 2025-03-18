@@ -3,7 +3,7 @@
     "publishConfig": {
         "access": "public"
     },
-    "version": "1.0.410",
+    "version": "1.0.411",
     "license": "GPL-3.0-or-later",
     "name": "@clevercanyon/dev-deps",
     "description": "Dev dependencies for Clever Canyon projects.",
@@ -43,12 +43,12 @@
         }
     },
     "dependencies": {
-        "@clevercanyon/madrun": "^1.0.204",
-        "@clevercanyon/utilities": "^1.0.1028",
-        "@clevercanyon/utilities.bash": "^1.0.217",
-        "@clevercanyon/utilities.cfp": "^1.0.268",
-        "@clevercanyon/utilities.cfw": "^1.0.356",
-        "@clevercanyon/utilities.node": "^1.0.227",
+        "@clevercanyon/madrun": "^1.0.205",
+        "@clevercanyon/utilities": "^1.0.1034",
+        "@clevercanyon/utilities.bash": "^1.0.218",
+        "@clevercanyon/utilities.cfp": "^1.0.269",
+        "@clevercanyon/utilities.cfw": "^1.0.357",
+        "@clevercanyon/utilities.node": "^1.0.228",
         "@cloudflare/vitest-pool-workers": "0.7.8",
         "@cloudflare/workers-types": "4.20250311.0",
         "@eslint/js": "9.22.0",
@@ -165,8 +165,8 @@
     "cpu": ["x64", "arm64"],
     "os": ["darwin", "linux"],
     "engines": {
-        "node": "^20.5.0 || ^20.9.0 || ^21.6.2",
-        "npm": "^9.8.0 || ^10.1.0 || ^10.2.4"
+        "node": "^20.9.0 || ^21.6.2 || ^22.9.0",
+        "npm": "^10.1.0 || ^10.2.4 || ^10.8.3"
     },
     "config": {
         "c10n": {
@@ -192,11 +192,11 @@
                         "architects": "push"
                     },
                     "labels": {},
-                    "configVersion": "1.0.9",
+                    "configVersion": "1.0.10",
                     "envsVersion": ""
                 },
                 "npmjs": {
-                    "configVersions": "1.0.9,1.0.9"
+                    "configVersions": "1.0.10,1.0.10"
                 }
             }
         }
