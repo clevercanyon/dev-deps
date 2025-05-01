@@ -49,7 +49,7 @@
         "@clevercanyon/utilities.cfp": "^1.0.269",
         "@clevercanyon/utilities.cfw": "^1.0.357",
         "@clevercanyon/utilities.node": "^1.0.228",
-        "@cloudflare/vitest-pool-workers": "0.7.8",
+        "@cloudflare/vitest-pool-workers": "0.8.23",
         "@cloudflare/workers-types": "4.20250311.0",
         "@eslint/js": "9.22.0",
         "@iarna/toml": "2.2.5",
@@ -154,7 +154,7 @@
         "vite-plugin-ejs": "1.7.0",
         "vite-plugin-minify": "2.1.0",
         "vitest": "3.0.8",
-        "wrangler": "3.114.1"
+        "wrangler": "4.13.2"
     },
     "peerDependencies": {},
     "peerDependenciesMeta": {},
