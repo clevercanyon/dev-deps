@@ -100,7 +100,7 @@
         "jsdom": "26.0.0",
         "libsodium-wrappers": "0.7.15",
         "lightningcss": "1.29.2",
-        "mdast-util-to-hast": "13.2.0",
+        "mdast-util-to-hast": "13.2.1",
         "mdast-util-toc": "7.1.0",
         "postcss": "8.5.3",
         "postcss-import": "16.1.0",
